@@ -1,0 +1,32 @@
+using System.Collections.Generic;
+using UtilityToolkit.Runtime;
+
+namespace Game.Models
+{
+    public class Deck
+    {
+        private Stack<Card> Cards { get; } = new();
+
+        public Deck()
+        {
+            Reshuffle();
+        }
+        
+        public Card Draw()
+        {
+            if (Cards.Count == 0) Reshuffle();
+            
+            return Cards.Pop();
+        }
+
+        public void Reshuffle()
+        { 
+            Cards.Clear();
+
+            foreach (Card card in Card.FullDeck.Shuffle())
+            {
+                Cards.Push(card);
+            }
+        }
+    }
+}
