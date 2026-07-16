@@ -9,6 +9,14 @@
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
     aspect-ratio: 0.67;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
 }
 
 .row {
