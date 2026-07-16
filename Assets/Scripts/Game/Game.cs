@@ -36,9 +36,9 @@ namespace Game
         private void HandleCardClicked(Card card)
         {
             bool contains = CurrentTeamHand.Contains(card);
+
             if (!contains)
             {
-                Debug.LogWarning($"Card {card} was not in hand. Hand: {string.Join(", ", CurrentTeamHand.GetCards())}");
                 return;
             }
 
@@ -50,10 +50,6 @@ namespace Game
 
             if (canAddPin)
             {
-                Debug.Log($"Team {_currentTeam} placed a pin on {position} with card {card}");
-                
-                // if so, put a pin in it, check for sequence, draw a new card and pass the turn
-                
                 int newSequenceCount = _board.SequenceCount(_currentTeam);
 
                 int difference = newSequenceCount - previousSequenceCount;
@@ -64,6 +60,7 @@ namespace Game
                 }
                 
                 CurrentTeamHand.TryRemove(card);
+                
                 CurrentTeamHand.TryAdd(_deck.Draw());
                 
                 _boardPresenter.Mark(position, _currentTeam);

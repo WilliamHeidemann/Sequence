@@ -16,8 +16,7 @@ namespace Game
 
         public Action<Card> OnCardClicked;
 
-        private Dictionary<Position, Button> _buttons = new();
-        private Dictionary<Position, Card> _cards = new();
+        private readonly Dictionary<Position, Button> _buttons = new();
 
         private void OnEnable()
         {
@@ -27,37 +26,33 @@ namespace Game
 
             Row[] rows = BoardLayout.AllRows();
 
-            foreach (var rowPair in visualRows.Zip(rows, (visualRow, row) => new { visualRow, row }))
-            {
-                List<Button> slots = rowPair.visualRow.Query<Button>("Slot").ToList();
+            var rowPairs = visualRows.Zip(rows, (visualRow, row) => new { visualRow, row });
 
+            foreach (var rowPair in rowPairs)
+            {
+                Row row = rowPair.row;
+
+                List<Button> slots = rowPair.visualRow.Query<Button>("Slot").ToList();
+                
                 Column[] columns = BoardLayout.AllColumns();
 
-                Row row = rowPair.row;
-                
                 foreach (var slotPair in slots.Zip(columns, (visualSlot, column) => new { visualSlot, column }))
                 {
-                    Button slot = slotPair.visualSlot;
-                    
                     Column column = slotPair.column;
 
+                    Button slot = slotPair.visualSlot;
+
                     Card card = BoardLayout.Get(row, column);
-                    
+
                     Sprite sprite = _cardSprites.Get(card);
 
                     slot.style.backgroundImage = new StyleBackground(sprite);
 
-                    slot.clicked += () =>
-                    {
-                        Debug.Log(card);
-                        OnCardClicked?.Invoke(card);
-                    };
+                    slot.clicked += () => OnCardClicked?.Invoke(card);
 
                     Position position = new(rowPair.row, slotPair.column);
 
                     _buttons[position] = slot;
-
-                    _cards[position] = card;
                 }
             }
         }
@@ -65,6 +60,15 @@ namespace Game
         public void Mark(Position position, Team team)
         {
             _buttons[position].AddToClassList(team == Team.Red ? "red" : "yellow");
+        }
+
+        public void ClearMarks()
+        {
+            foreach (Button button in _buttons.Values)
+            {
+                button.RemoveFromClassList("red");
+                button.RemoveFromClassList("yellow");
+            }
         }
     }
 }
