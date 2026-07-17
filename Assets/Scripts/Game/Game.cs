@@ -63,7 +63,7 @@ namespace Game
 
                 CurrentTeamHand.TryAdd(_deck.Draw());
 
-                _boardPresenter.Mark(position, _currentTeam);
+                _boardPresenter.Pin(position, _currentTeam);
 
                 _redHand.TryRemove(card);
                 

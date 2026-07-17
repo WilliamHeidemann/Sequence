@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.Models;
 using LitMotion;
+using LitMotion.Extensions;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Column = Game.Models.Column;
@@ -15,7 +16,9 @@ namespace Game
         [SerializeField] private UIDocument _uiDocument;
         [SerializeField] private CardSprites _cardSprites;
         [SerializeField] private Material _cardShader;
-        [SerializeField] private Game _game;
+        [SerializeField] private Transform _redPinPrefab;
+        [SerializeField] private Transform _pinStartTRS;
+        [SerializeField] private Transform _pinEndRotationScale;
 
         public Action<Card> OnCardClicked;
 
@@ -83,9 +86,24 @@ namespace Game
                 .AddTo(gameObject);
         }
 
-        public void Mark(Position position, Team team)
+        public void Pin(Position position, Team team)
         {
-            _buttons[position].AddToClassList(team == Team.Red ? "red" : "yellow");
+            var pin = Instantiate(_redPinPrefab, _pinStartTRS.position, _pinStartTRS.rotation);
+            pin.localScale = _pinStartTRS.localScale;
+
+            var endPosition = _buttons[position].worldTransform.GetPosition();
+            
+            LMotion.Create(pin.position, endPosition, 0.5f)
+                .WithEase(Ease.InOutCubic)
+                .BindToPosition(pin);
+            
+            LMotion.Create(pin.rotation, _pinEndRotationScale.rotation, 0.5f)
+                .WithEase(Ease.InOutCubic)
+                .BindToRotation(pin);
+            
+            LMotion.Create(pin.localScale, _pinEndRotationScale.localScale, 0.5f)
+                .WithEase(Ease.InOutCubic)
+                .BindToLocalScale(pin);
         }
 
         public void ClearMarks()
