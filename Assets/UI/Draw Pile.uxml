@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Card Back" src="project://database/Assets/UI/Card%20Back.uxml?fileID=9197481963319205126&amp;guid=6b0ab9635308c4fbaa7b58bbc4fba47b&amp;type=3#Card Back"/>
+    <ui:VisualElement name="Container" style="flex-grow: 1;">
+        <ui:Instance template="Card Back" style="flex-grow: 1;"/>
+    </ui:VisualElement>
+</ui:UXML>
