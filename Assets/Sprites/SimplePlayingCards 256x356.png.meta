@@ -1,0 +1,1331 @@
+fileFormatVersion: 2
+guid: b3e10aefbb7974743bb67e86c3814f8d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3112116800628330630
+    second: SimplePlayingCards 256x356_0
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6801af0ddb5703b20800000000000000
+      internalID: 3112116800628330630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 121c0ab0d9c7d4a97b7aca202b99f8de
+      internalID: 1475065001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c443bba6e15b64eac9f1b1ae45e97cea
+      internalID: 483322330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_3
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7ac72cbece424f4484c8697807d4240
+      internalID: 164580494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_4
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06bb8e86e345747459bf90eb438e9818
+      internalID: -1492039933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_5
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d86bd58c935c9427b903bb8ceaf47341
+      internalID: -1975284383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_6
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98a3f9ed58b194b81a623b48e51f1f53
+      internalID: 332734083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_7
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 117b5b42507cd42a089ad27f45431876
+      internalID: 1578228684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_8
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8c126ec5cd08469184b6ae8f91d289d
+      internalID: 1477915563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_9
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d6c0b5fd7e634140b102d1afa8ca811
+      internalID: 1681148083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_10
+      rect:
+        serializedVersion: 2
+        x: 2560
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29d33138436dd4fae8725ec5fd7f101d
+      internalID: 952057719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_11
+      rect:
+        serializedVersion: 2
+        x: 2816
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac633b38b396d4a2fbc23cc1076c0fb2
+      internalID: 780105506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_12
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 1068
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ac961ec865094a538d6e4cc66337cb8
+      internalID: -72418180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1a3ee287e660466789ad0e8e07fb68a
+      internalID: -668873808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_14
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d26032749e2154fcd959637dc9cfddc6
+      internalID: -1309576955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_15
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19ac561613c57474e875cef5fbe92c44
+      internalID: -2017723787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_16
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b3059e1dd9484da1882ff5eb2c8bec8
+      internalID: -425913911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_17
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8934df778ee684456af3f10e5da45250
+      internalID: -1526648853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_18
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1795aa5f057446309753bb3324b21a7
+      internalID: -2084884682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_19
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 751ae8759ddd74d6d90eb2008bde97ff
+      internalID: -548428013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_20
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3217e1313e35a47279ceee4ac6a4b394
+      internalID: 1891349003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_21
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be8cc6644a52c4e8f8a4086c836d19f7
+      internalID: -1152947592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_22
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d44dd6e88bf9940e7952add5b1dda47a
+      internalID: 890450457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_23
+      rect:
+        serializedVersion: 2
+        x: 2560
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89e74f54aa078419eb045b3c8842ec1e
+      internalID: 1538576076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_24
+      rect:
+        serializedVersion: 2
+        x: 2816
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b64543d2256a842ebba888571e2d56b3
+      internalID: -1876989989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_25
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 712
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1bd696e5168dd4a21bda7edc43163f36
+      internalID: 1212508301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_26
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6de9e5009c5df46929fbe769a36ba2a2
+      internalID: -59763105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_27
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b97d8458202f4d619cdb24e1d73b676
+      internalID: 748053327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_28
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 585673631ffcb4651b112465d06823a9
+      internalID: -872474688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_29
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b70421be19b34507a4e46e42c3b5313
+      internalID: 233776482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_30
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f06192636aefa4c9094907077b7a9980
+      internalID: 985278410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_31
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 632de9ec9eb95458b906854e65e203f3
+      internalID: -371892250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_32
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3ffb2b284dd24bb29ddada7f2059398
+      internalID: 596114858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_33
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b60d6ef2d8c22401ea4bb81329b4f91c
+      internalID: 503710166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_34
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4feef6cf347364080ad7eca258cd0020
+      internalID: -1747400422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_35
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8cc670b98065451b994ba904edfbcbf
+      internalID: 632573409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_36
+      rect:
+        serializedVersion: 2
+        x: 2560
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91d4bd024abfa49eca3002f372c89457
+      internalID: 1538612330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_37
+      rect:
+        serializedVersion: 2
+        x: 2816
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d72a404a7fbd04ab7ace0e43d90408ed
+      internalID: -1095318496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_38
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 356
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db3d4f5a208634ba28aef889ebeb232e
+      internalID: 62633351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_39
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de03732117ef84a5e971b8fbb8127348
+      internalID: -2132124987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_40
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00c9cf123c0e94d1f8211056dd22bac3
+      internalID: -1494909675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_41
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e7d5a560f1a443eb88c38a0312759e9
+      internalID: 2141097585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_42
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac0adf0cf189e4e4fa89ad2218525571
+      internalID: -813577185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_43
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7dd3950043814cb99ebf1b609dd8507
+      internalID: -1362506564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_44
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3e0b2d1a39d142ffb4838ef94cdf7f0
+      internalID: -190055599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_45
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6b9ffba359bf46e0b7c33770b5537e2
+      internalID: -1381046864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_46
+      rect:
+        serializedVersion: 2
+        x: 1792
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1bca884e82f754267805e66fea271008
+      internalID: 70182896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_47
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ca6d37db5f2a4402b8dc42cca3d0c95
+      internalID: -1674289818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_48
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0865a21904a52473b9a7c55594ab7315
+      internalID: 119129174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_49
+      rect:
+        serializedVersion: 2
+        x: 2560
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 338952c4dbba543a6a7c66a9ab03268c
+      internalID: 1022691982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_50
+      rect:
+        serializedVersion: 2
+        x: 2816
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efb6f58ede63a4442b4bc608aeb452b6
+      internalID: 938670067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SimplePlayingCards 256x356_51
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 0
+        width: 256
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31f3c87a8ebe745a8887504fff6998fb
+      internalID: 1156236320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 8ecffe6dd174f4ef39e92ba0453f1870
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":13.0,"y":4.0},"gridSpriteSize":{"x":256.0,"y":356.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      SimplePlayingCards 256x356_0: 3112116800628330630
+      SimplePlayingCards 256x356_1: 1475065001
+      SimplePlayingCards 256x356_10: 952057719
+      SimplePlayingCards 256x356_11: 780105506
+      SimplePlayingCards 256x356_12: -72418180
+      SimplePlayingCards 256x356_13: -668873808
+      SimplePlayingCards 256x356_14: -1309576955
+      SimplePlayingCards 256x356_15: -2017723787
+      SimplePlayingCards 256x356_16: -425913911
+      SimplePlayingCards 256x356_17: -1526648853
+      SimplePlayingCards 256x356_18: -2084884682
+      SimplePlayingCards 256x356_19: -548428013
+      SimplePlayingCards 256x356_2: 483322330
+      SimplePlayingCards 256x356_20: 1891349003
+      SimplePlayingCards 256x356_21: -1152947592
+      SimplePlayingCards 256x356_22: 890450457
+      SimplePlayingCards 256x356_23: 1538576076
+      SimplePlayingCards 256x356_24: -1876989989
+      SimplePlayingCards 256x356_25: 1212508301
+      SimplePlayingCards 256x356_26: -59763105
+      SimplePlayingCards 256x356_27: 748053327
+      SimplePlayingCards 256x356_28: -872474688
+      SimplePlayingCards 256x356_29: 233776482
+      SimplePlayingCards 256x356_3: 164580494
+      SimplePlayingCards 256x356_30: 985278410
+      SimplePlayingCards 256x356_31: -371892250
+      SimplePlayingCards 256x356_32: 596114858
+      SimplePlayingCards 256x356_33: 503710166
+      SimplePlayingCards 256x356_34: -1747400422
+      SimplePlayingCards 256x356_35: 632573409
+      SimplePlayingCards 256x356_36: 1538612330
+      SimplePlayingCards 256x356_37: -1095318496
+      SimplePlayingCards 256x356_38: 62633351
+      SimplePlayingCards 256x356_39: -2132124987
+      SimplePlayingCards 256x356_4: -1492039933
+      SimplePlayingCards 256x356_40: -1494909675
+      SimplePlayingCards 256x356_41: 2141097585
+      SimplePlayingCards 256x356_42: -813577185
+      SimplePlayingCards 256x356_43: -1362506564
+      SimplePlayingCards 256x356_44: -190055599
+      SimplePlayingCards 256x356_45: -1381046864
+      SimplePlayingCards 256x356_46: 70182896
+      SimplePlayingCards 256x356_47: -1674289818
+      SimplePlayingCards 256x356_48: 119129174
+      SimplePlayingCards 256x356_49: 1022691982
+      SimplePlayingCards 256x356_5: -1975284383
+      SimplePlayingCards 256x356_50: 938670067
+      SimplePlayingCards 256x356_51: 1156236320
+      SimplePlayingCards 256x356_6: 332734083
+      SimplePlayingCards 256x356_7: 1578228684
+      SimplePlayingCards 256x356_8: 1477915563
+      SimplePlayingCards 256x356_9: 1681148083
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
