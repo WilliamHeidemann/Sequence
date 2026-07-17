@@ -23,7 +23,6 @@ namespace Game
             TemplateContainer card = _cardBack.Instantiate();
             card.style.flexGrow = 1f;
             _drawPile.Add(card);
-            Debug.Log("Card Drawn!");
         }
     }
 }

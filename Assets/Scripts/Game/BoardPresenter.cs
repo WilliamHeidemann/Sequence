@@ -13,6 +13,7 @@ namespace Game
     {
         [SerializeField] private UIDocument _uiDocument;
         [SerializeField] private CardSprites _cardSprites;
+        [SerializeField] private Material _cardShader;
 
         public Action<Card> OnCardClicked;
 
@@ -33,7 +34,7 @@ namespace Game
                 Row row = rowPair.row;
 
                 List<Button> slots = rowPair.visualRow.Query<Button>("Slot").ToList();
-                
+
                 Column[] columns = BoardLayout.AllColumns();
 
                 foreach (var slotPair in slots.Zip(columns, (visualSlot, column) => new { visualSlot, column }))
@@ -46,7 +47,13 @@ namespace Game
 
                     Sprite sprite = _cardSprites.Get(card);
 
-                    slot.style.backgroundImage = new StyleBackground(sprite);
+                    // slot.style.backgroundImage = new StyleBackground(sprite);
+
+                    Material material = new Material(_cardShader);
+                    
+                    material.SetTexture("_MainTex", sprite.texture);
+                    
+                    slot.style.unityMaterial = material;
 
                     slot.clicked += () => OnCardClicked?.Invoke(card);
 
