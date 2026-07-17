@@ -7,7 +7,7 @@ namespace Game
     public class Game : MonoBehaviour
     {
         [SerializeField] private BoardPresenter _boardPresenter;
-        [SerializeField] private HandPresenter _handPresenter;
+        [SerializeField] private CardDrawAnimator _cardDrawAnimator;
         
         private Team _currentTeam = Team.Red;
         private readonly Hand _redHand = new();
@@ -20,16 +20,15 @@ namespace Game
         private void Start()
         {
             _boardPresenter.OnCardClicked += HandleCardClicked;
-            _handPresenter.Bind(_redHand);
             Fill(_redHand);
-            Fill(_yellowHand);
+            // Fill(_yellowHand);
         }
 
-        private void Fill(Hand hand)
+        private async Awaitable Fill(Hand hand)
         {
-            while(hand.Count < 7)
+            while(hand.TryAdd(_deck.Draw(out Card card)))
             {
-                hand.TryAdd(_deck.Draw());
+                await _cardDrawAnimator.Draw(card);
             }
         }
 
@@ -66,8 +65,6 @@ namespace Game
                 _boardPresenter.Mark(position, _currentTeam);
                 
                 _currentTeam = _currentTeam == Team.Red ? Team.Yellow : Team.Red;
-                
-                _handPresenter.Bind(CurrentTeamHand);
             }
             else
             {

@@ -119,90 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &269357030
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 269357032}
-  - component: {fileID: 269357031}
-  - component: {fileID: 269357033}
-  - component: {fileID: 269357034}
-  m_Layer: 5
-  m_Name: Hand
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &269357031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 269357030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
-  m_PanelSettings: {fileID: 11400000, guid: 0a8ce1c17dd9f4390ab92f07079dddc0, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 09cb15f73959b44239389a2e716452a1, type: 3}
-  m_SortingOrder: 1
-  m_Position: 0
-  m_WorldSpaceSizeMode: 1
-  m_WorldSpaceWidth: 580.9
-  m_WorldSpaceHeight: 100
-  m_PivotReferenceSize: 0
-  m_Pivot: 0
-  m_WorldSpaceCollider: {fileID: 0}
---- !u!4 &269357032
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 269357030}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4.62, z: -0.79}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &269357033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 269357030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e60f454a928e40ff8e592aa08106e22a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Game::Game.HandPresenter
-  _uiDocument: {fileID: 269357031}
-  _cardSprites: {fileID: 11400000, guid: 025669167c8e14af299b7d136124e73c, type: 2}
---- !u!114 &269357034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 269357030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db5d44290b0d340f5b2ce7b68db2251a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  _hand: {fileID: 269357031}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,7 +366,7 @@ Transform:
   m_GameObject: {fileID: 633789976}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.06202341, w: 0.9980747}
-  m_LocalPosition: {x: 0.49966675, y: -4.68676, z: -0.04}
+  m_LocalPosition: {x: 0.4397067, y: -4.60014, z: -0.04}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -505,9 +421,9 @@ Transform:
   m_GameObject: {fileID: 780068797}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.1238388, w: 0.99230236}
-  m_LocalPosition: {x: 0.9995835, y: -4.7599244, z: -0.049999997}
+  m_LocalPosition: {x: 0.8796334, y: -4.709887, z: -0.049999997}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -545,7 +461,7 @@ GameObject:
   - component: {fileID: 802132156}
   - component: {fileID: 802132157}
   m_Layer: 0
-  m_Name: Hand
+  m_Name: Card Aligner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -579,10 +495,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.HandPresenter2
   _origin: {fileID: 802132156}
-  _spacing: 0.44
+  _spacing: 0.4
   _curve: 0.3
   _angle: -21.35
-  _cardsInScene:
+  _previewCards:
   - {fileID: 2030820324}
   - {fileID: 1052219827}
   - {fileID: 1731054054}
@@ -590,6 +506,7 @@ MonoBehaviour:
   - {fileID: 633789977}
   - {fileID: 780068798}
   - {fileID: 927048357}
+  _cards: []
 --- !u!1 &927048356
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,7 +533,7 @@ Transform:
   m_GameObject: {fileID: 927048356}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.18517683, w: 0.98270524}
-  m_LocalPosition: {x: 1.4995, y: -4.859895, z: -0.06}
+  m_LocalPosition: {x: 1.3195599, y: -4.8598433, z: -0.06}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -742,7 +659,7 @@ Transform:
   m_GameObject: {fileID: 1052219826}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.1239004, w: 0.99229467}
-  m_LocalPosition: {x: -1.0000833, y: -4.760015, z: -0.01}
+  m_LocalPosition: {x: -0.88007325, y: -4.710023, z: -0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -797,7 +714,7 @@ Transform:
   m_GameObject: {fileID: 1564673131}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.000031050065, w: 1}
-  m_LocalPosition: {x: -0.00024998188, y: -4.6600003, z: -0.03}
+  m_LocalPosition: {x: -0.00021998404, y: -4.56, z: -0.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -933,7 +850,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1626219985
 Transform:
   m_ObjectHideFlags: 0
@@ -962,7 +879,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Game
   _boardPresenter: {fileID: 1023429320}
-  _handPresenter: {fileID: 269357033}
+  _cardDrawAnimator: {fileID: 1883750586}
 --- !u!1 &1681766135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,7 +949,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _drawPileDocument: {fileID: 1681766137}
-  _cardBack: {fileID: 9197481963319205126, guid: 6b0ab9635308c4fbaa7b58bbc4fba47b, type: 3}
+  _cardSprites: {fileID: 0}
+  _cardPrefab: {fileID: 0}
+  _showDisplayTransform: {fileID: 0}
+  _cardAligner: {fileID: 0}
+  _durationToDisplay: 0.2
+  _displayDuration: 0.4
 --- !u!1 &1731054053
 GameObject:
   m_ObjectHideFlags: 0
@@ -1059,7 +981,7 @@ Transform:
   m_GameObject: {fileID: 1731054053}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.062085383, w: 0.9980709}
-  m_LocalPosition: {x: -0.50016665, y: -4.6868124, z: -0.02}
+  m_LocalPosition: {x: -0.4401466, y: -4.600219, z: -0.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1088,6 +1010,88 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
+--- !u!1 &1735991318
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1735991319}
+  m_Layer: 0
+  m_Name: Card Display Transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1735991319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735991318}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.77, y: 0.6, z: -0.1}
+  m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1883750585
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1883750587}
+  - component: {fileID: 1883750586}
+  m_Layer: 0
+  m_Name: Card Draw Animator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1883750586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883750585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f3c9e167eadd41888dab9127f00c1c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::Game.CardDrawAnimator
+  _drawPileDocument: {fileID: 1681766137}
+  _cardSprites: {fileID: 11400000, guid: 025669167c8e14af299b7d136124e73c, type: 2}
+  _cardPrefab: {fileID: 5067188956579171738, guid: 7f4184a29e94c418794c985bf66cc0c8, type: 3}
+  _showDisplayTransform: {fileID: 1735991319}
+  _cardAligner: {fileID: 802132157}
+  _durationToDisplay: 0.5
+  _displayDuration: 0.4
+--- !u!4 &1883750587
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883750585}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2030820323
 GameObject:
   m_ObjectHideFlags: 0
@@ -1114,7 +1118,7 @@ Transform:
   m_GameObject: {fileID: 2030820323}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.18523785, w: 0.98269373}
-  m_LocalPosition: {x: -1.5, y: -4.86, z: 0}
+  m_LocalPosition: {x: -1.3199999, y: -4.86, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1151,7 +1155,6 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 1023429318}
-  - {fileID: 269357032}
   - {fileID: 1681766136}
   - {fileID: 1606585650}
   - {fileID: 2030820324}
@@ -1162,3 +1165,5 @@ SceneRoots:
   - {fileID: 780068798}
   - {fileID: 927048357}
   - {fileID: 802132156}
+  - {fileID: 1883750587}
+  - {fileID: 1735991319}

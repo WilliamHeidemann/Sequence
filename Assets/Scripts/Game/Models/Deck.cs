@@ -19,6 +19,12 @@ namespace Game.Models
             return Cards.Pop();
         }
 
+        public Card Draw(out Card card)
+        {
+            card = Draw();
+            return card;
+        }
+
         public void Reshuffle()
         { 
             Cards.Clear();

@@ -1,4 +1,7 @@
 using System;
+using Game.Models;
+using LitMotion;
+using LitMotion.Extensions;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
@@ -8,21 +11,65 @@ namespace Game
     public class CardDrawAnimator : MonoBehaviour
     {
         [SerializeField] private UIDocument _drawPileDocument;
-        [SerializeField] private VisualTreeAsset _cardBack;
-                
-        private VisualElement _drawPile;
-        
-        private void OnEnable()
-        {
-            _drawPile = _drawPileDocument.rootVisualElement.Q<VisualElement>("Container");
-            DrawCard();
-        }
+        [SerializeField] private CardSprites _cardSprites;
+        [SerializeField] private UIDocument _cardPrefab;
+        [SerializeField] private Transform _showDisplayTransform;
+        [SerializeField] private CardAligner _cardAligner;
 
-        public void DrawCard()
+        [Header("Parameters")] [SerializeField]
+        private float _durationToDisplay = 0.2f;
+
+        [SerializeField] private float _displayDuration = 0.4f;
+
+
+        public async Awaitable Draw(Card card)
         {
-            TemplateContainer card = _cardBack.Instantiate();
-            card.style.flexGrow = 1f;
-            _drawPile.Add(card);
+            var cardGameObject = Instantiate(_cardPrefab);
+            var cardTransform = cardGameObject.transform;
+
+            cardTransform.SetPositionAndRotation(
+                _drawPileDocument.transform.position,
+                _drawPileDocument.transform.rotation);
+
+            LMotion.Create(cardTransform.position, _showDisplayTransform.position, _durationToDisplay)
+                .WithEase(Ease.InOutCubic)
+                .BindToPosition(cardTransform);
+
+            Quaternion halfWayRotation = Quaternion.Lerp(cardTransform.rotation, _showDisplayTransform.rotation, .5f) *
+                                         Quaternion.Euler(0, -180, 0);
+
+            LMotion.Create(cardTransform.rotation, halfWayRotation, _durationToDisplay / 2)
+                .WithEase(Ease.InCubic)
+                .WithOnComplete(() =>
+                {
+                    cardGameObject.rootVisualElement.Q<VisualElement>("Card").style.backgroundImage =
+                        new StyleBackground(_cardSprites.Get(card));
+                    LMotion.Create(halfWayRotation, _showDisplayTransform.rotation, _durationToDisplay / 2)
+                        .WithEase(Ease.OutCubic)
+                        .BindToRotation(cardTransform);
+                })
+                .BindToRotation(cardTransform);
+
+            // LMotion.Create(cardTransform.rotation, _showDisplayTransform.rotation, _durationToDisplay)
+            //     .WithEase(Ease.InOutCubic)
+            //     .BindToRotation(cardTransform);
+
+            LMotion.Create(cardTransform.localScale, _showDisplayTransform.localScale, _durationToDisplay)
+                .WithEase(Ease.InOutCubic)
+                .BindToLocalScale(cardTransform);
+
+            Debug.Log("Waiting...");
+            await Awaitable.WaitForSecondsAsync(_durationToDisplay + _displayDuration);
+            Debug.Log("Done waiting!");
+            _cardAligner.AddCard(cardTransform);
+
+            // if a card has just been drawn, wait a little bit
+
+            // spawn a card at the deck, rotate it upwards and scale it up and move it up to show it. Ease in out cubic
+            // then pass it to the card aligner
+
+
+            // throw new NotImplementedException();
         }
     }
 }

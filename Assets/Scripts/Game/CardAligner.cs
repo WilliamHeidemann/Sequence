@@ -4,6 +4,7 @@ using System.Linq;
 using LitMotion;
 using LitMotion.Extensions;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UtilityToolkit.Editor;
 
 namespace Game
@@ -15,17 +16,13 @@ namespace Game
         [SerializeField] private float _curve;
         [SerializeField] private float _angle;
 
-        [SerializeField] private Transform[] _cardsInScene;
+        [SerializeField] private Transform[] _previewCards;
 
-
-        private List<Transform> _cards = new();
+        [SerializeField] private List<Transform> _cards = new();
 
         private void Start()
         {
-            foreach (Transform transform1 in _cardsInScene)
-            {
-                AddCard(transform1);
-            }
+            _previewCards.ToList().ForEach(card => card.gameObject.SetActive(false));
         }
 
         public void AddCard(Transform card)
@@ -66,13 +63,17 @@ namespace Game
                 LMotion.Create(startRotation, targetRotation, .2f)
                     .WithEase(Ease.InOutCubic)
                     .BindToRotation(cards[i]);
+                
+                LMotion.Create(cards[i].localScale, Vector3.one, .2f)
+                    .WithEase(Ease.InOutCubic)
+                    .BindToLocalScale(cards[i]);
             }
         }
 
         [Button]
-        public void AlignEditMode()
+        private void AlignEditMode()
         {
-            AlignCards(_cardsInScene.ToList());
+            AlignCards(_previewCards.ToList());
         }
     }
 }
