@@ -1,7 +1,5 @@
-using System;
 using Game.Models;
 using UnityEngine;
-using UtilityToolkit.Runtime;
 
 namespace Game
 {
@@ -67,6 +65,11 @@ namespace Game
 
                 _boardPresenter.Mark(position, _currentTeam);
 
+                _redHand.TryRemove(card);
+                
+                // animate card being discarded
+                // currently there is no link between the cards logically in the hand and the visual cards in the scene.
+                
                 _currentTeam = _currentTeam == Team.Red ? Team.Yellow : Team.Red;
             }
             else

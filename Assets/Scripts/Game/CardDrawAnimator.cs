@@ -1,9 +1,7 @@
-using System;
 using Game.Models;
 using LitMotion;
 using LitMotion.Extensions;
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.UIElements;
 
 namespace Game
@@ -15,6 +13,7 @@ namespace Game
         [SerializeField] private UIDocument _cardPrefab;
         [SerializeField] private Transform _showDisplayTransform;
         [SerializeField] private CardAligner _cardAligner;
+        [SerializeField] private Transform _discardPileTransform;
 
         [Header("Parameters")] [SerializeField]
         private float _durationToDisplay = 0.2f;
