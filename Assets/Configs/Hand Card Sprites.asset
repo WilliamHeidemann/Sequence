@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 690c429c705749309b6b381fbc57f41d, type: 3}
-  m_Name: CardSprites
+  m_Name: Hand Card Sprites
   m_EditorClassIdentifier: Assembly-CSharp::Models.CardSprites
   _twoOfClubs: {fileID: 21300000, guid: 009c531bf39dc4060888b8358811f72c, type: 3}
   _twoOfDiamonds: {fileID: 21300000, guid: b761aabb139d743de907fd4d969d588a, type: 3}

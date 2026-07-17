@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 690c429c705749309b6b381fbc57f41d, type: 3}
+  m_Name: Board Card Sprites
+  m_EditorClassIdentifier: Game::Game.CardSprites
+  _twoOfClubs: {fileID: 1475065001, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _twoOfDiamonds: {fileID: -1494909675, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _twoOfHearts: {fileID: -1309576955, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _twoOfSpades: {fileID: 748053327, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _threeOfClubs: {fileID: 483322330, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _threeOfDiamonds: {fileID: 2141097585, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _threeOfHearts: {fileID: -2017723787, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _threeOfSpades: {fileID: -872474688, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _fourOfClubs: {fileID: 164580494, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _fourOfDiamonds: {fileID: -813577185, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _fourOfHearts: {fileID: -425913911, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _fourOfSpades: {fileID: 233776482, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _fiveOfClubs: {fileID: -1492039933, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _fiveOfDiamonds: {fileID: -1362506564, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _fiveOfHearts: {fileID: -1526648853, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _fiveOfSpades: {fileID: 985278410, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _sixOfClubs: {fileID: -1975284383, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _sixOfDiamonds: {fileID: -190055599, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _sixOfHearts: {fileID: -2084884682, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _sixOfSpades: {fileID: -371892250, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _sevenOfClubs: {fileID: 332734083, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _sevenOfDiamonds: {fileID: -1381046864, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _sevenOfHearts: {fileID: -548428013, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _sevenOfSpades: {fileID: 596114858, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _eightOfClubs: {fileID: 1578228684, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _eightOfDiamonds: {fileID: 70182896, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _eightOfHearts: {fileID: 1891349003, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _eightOfSpades: {fileID: 503710166, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _nineOfClubs: {fileID: 1477915563, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _nineOfDiamonds: {fileID: -1674289818, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _nineOfHearts: {fileID: -1152947592, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _nineOfSpades: {fileID: -1747400422, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _tenOfClubs: {fileID: 1681148083, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _tenOfDiamonds: {fileID: 119129174, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _tenOfHearts: {fileID: 890450457, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _tenOfSpades: {fileID: 632573409, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _jackOfClubs: {fileID: 952057719, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _jackOfDiamonds: {fileID: 1022691982, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _jackOfHearts: {fileID: 1538576076, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _jackOfSpades: {fileID: 1538612330, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _queenOfClubs: {fileID: 780105506, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _queenOfDiamonds: {fileID: 938670067, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _queenOfHearts: {fileID: -1876989989, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _queenOfSpades: {fileID: -1095318496, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _kingOfClubs: {fileID: -72418180, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _kingOfDiamonds: {fileID: 1156236320, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _kingOfHearts: {fileID: 1212508301, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _kingOfSpades: {fileID: 62633351, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _aceOfClubs: {fileID: 3112116800628330630, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _aceOfDiamonds: {fileID: -2132124987, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _aceOfHearts: {fileID: -668873808, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
+  _aceOfSpades: {fileID: -59763105, guid: b3e10aefbb7974743bb67e86c3814f8d, type: 3}
