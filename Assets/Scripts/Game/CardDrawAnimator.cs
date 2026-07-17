@@ -21,7 +21,6 @@ namespace Game
 
         [SerializeField] private float _displayDuration = 0.4f;
 
-
         public async Awaitable Draw(Card card)
         {
             var cardGameObject = Instantiate(_cardPrefab);
@@ -50,26 +49,12 @@ namespace Game
                 })
                 .BindToRotation(cardTransform);
 
-            // LMotion.Create(cardTransform.rotation, _showDisplayTransform.rotation, _durationToDisplay)
-            //     .WithEase(Ease.InOutCubic)
-            //     .BindToRotation(cardTransform);
-
             LMotion.Create(cardTransform.localScale, _showDisplayTransform.localScale, _durationToDisplay)
                 .WithEase(Ease.InOutCubic)
                 .BindToLocalScale(cardTransform);
 
-            Debug.Log("Waiting...");
             await Awaitable.WaitForSecondsAsync(_durationToDisplay + _displayDuration);
-            Debug.Log("Done waiting!");
             _cardAligner.AddCard(cardTransform);
-
-            // if a card has just been drawn, wait a little bit
-
-            // spawn a card at the deck, rotate it upwards and scale it up and move it up to show it. Ease in out cubic
-            // then pass it to the card aligner
-
-
-            // throw new NotImplementedException();
         }
     }
 }

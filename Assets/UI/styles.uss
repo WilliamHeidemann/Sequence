@@ -3,7 +3,6 @@
 
 .slot {
     flex-grow: 1;
-    background-image: url("project://database/Assets/Sprites/PNG-cards-1.3/9_of_spades.png?fileID=2800000&guid=bcd271fdc1a434e77bf0af4630a0bba5&type=3#9_of_spades");
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
@@ -17,7 +16,11 @@
     border-right-color: rgb(0, 0, 0);
     border-top-color: rgb(0, 0, 0);
     border-bottom-color: rgb(0, 0, 0);
-    -unity-material: url("project://database/Assets/Shaders/Hole%20UI.mat?fileID=2100000&guid=ec38d395c469742b792b40151f599116&type=2#Hole UI") prop("_MainTex" url("project://database/Assets/Sprites/PNG-cards-1.3/2_of_diamonds.png?fileID=2800000&guid=b761aabb139d743de907fd4d969d588a&type=3#2_of_diamonds"));
+    -unity-material: url("project://database/Assets/Shaders/Hole%20UI.mat?fileID=2100000&guid=ec38d395c469742b792b40151f599116&type=2#Hole UI") prop("_MainTex" url("project://database/Assets/Configs/Board%20Card%20Sprites_Extracted/Queen%20of%20Hearts.png?fileID=2800000&guid=e450758a8c7b746b49ba343960d225ec&type=3#Queen of Hearts"));
+    margin-top: 8px;
+    margin-right: 4px;
+    margin-bottom: 8px;
+    margin-left: 4px;
 }
 
 .row {

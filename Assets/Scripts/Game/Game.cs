@@ -1,6 +1,7 @@
 using System;
 using Game.Models;
 using UnityEngine;
+using UtilityToolkit.Runtime;
 
 namespace Game
 {
@@ -8,7 +9,7 @@ namespace Game
     {
         [SerializeField] private BoardPresenter _boardPresenter;
         [SerializeField] private CardDrawAnimator _cardDrawAnimator;
-        
+
         private Team _currentTeam = Team.Red;
         private readonly Hand _redHand = new();
         private readonly Hand _yellowHand = new();
@@ -26,22 +27,24 @@ namespace Game
 
         private async Awaitable Fill(Hand hand)
         {
-            while(hand.TryAdd(_deck.Draw(out Card card)))
+            while (hand.TryAdd(_deck.Draw(out Card card)))
             {
                 await _cardDrawAnimator.Draw(card);
             }
         }
 
-        private void HandleCardClicked(Card card)
+        public void HandleCardClicked(Card card)
         {
             bool contains = CurrentTeamHand.Contains(card);
 
+            Position position = BoardLayout.Get(card);
+
             if (!contains)
             {
+                Debug.LogWarning($"Team {_currentTeam} does not have card {card} in hand.");
+                _boardPresenter.Shake(position);
                 return;
             }
-
-            Position position = BoardLayout.Get(card);
 
             int previousSequenceCount = _board.SequenceCount(_currentTeam);
 
@@ -57,18 +60,18 @@ namespace Game
                 {
                     Debug.Log("SEQUENCE!");
                 }
-                
+
                 CurrentTeamHand.TryRemove(card);
-                
+
                 CurrentTeamHand.TryAdd(_deck.Draw());
-                
+
                 _boardPresenter.Mark(position, _currentTeam);
-                
+
                 _currentTeam = _currentTeam == Team.Red ? Team.Yellow : Team.Red;
             }
             else
             {
-                Debug.LogWarning($"Card {card} was not placed on {position} by {_currentTeam}");
+                Debug.LogWarning($"Card {card} is already pinned.");
             }
         }
     }
