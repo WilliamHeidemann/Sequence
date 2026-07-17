@@ -140,5 +140,71 @@ namespace Game
                 _ => throw new ArgumentException($"No sprite found for card: {card.Suit} {card.Rank}")
             };
         }
+
+        public void Set(Card card, Sprite sprite)
+        {
+            switch (card.Suit, card.Rank)
+            {
+                // Hearts
+                case (Suit.Hearts, Rank.Ace): _aceOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Two): _twoOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Three): _threeOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Four): _fourOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Five): _fiveOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Six): _sixOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Seven): _sevenOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Eight): _eightOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Nine): _nineOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Ten): _tenOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Jack): _jackOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.Queen): _queenOfHearts = sprite; break;
+                case (Suit.Hearts, Rank.King): _kingOfHearts = sprite; break;
+
+                // Diamonds
+                case (Suit.Diamonds, Rank.Ace): _aceOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Two): _twoOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Three): _threeOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Four): _fourOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Five): _fiveOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Six): _sixOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Seven): _sevenOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Eight): _eightOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Nine): _nineOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Ten): _tenOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Jack): _jackOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.Queen): _queenOfDiamonds = sprite; break;
+                case (Suit.Diamonds, Rank.King): _kingOfDiamonds = sprite; break;
+
+                // Clubs
+                case (Suit.Clubs, Rank.Ace): _aceOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Two): _twoOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Three): _threeOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Four): _fourOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Five): _fiveOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Six): _sixOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Seven): _sevenOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Eight): _eightOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Nine): _nineOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Ten): _tenOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Jack): _jackOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.Queen): _queenOfClubs = sprite; break;
+                case (Suit.Clubs, Rank.King): _kingOfClubs = sprite; break;
+
+                // Spades
+                case (Suit.Spades, Rank.Ace): _aceOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Two): _twoOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Three): _threeOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Four): _fourOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Five): _fiveOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Six): _sixOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Seven): _sevenOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Eight): _eightOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Nine): _sixOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Ten): _tenOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Jack): _jackOfSpades = sprite; break;
+                case (Suit.Spades, Rank.Queen): _queenOfSpades = sprite; break;
+                case (Suit.Spades, Rank.King): _kingOfSpades = sprite; break;
+            }
+        }
     }
 }

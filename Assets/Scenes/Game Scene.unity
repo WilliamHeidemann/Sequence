@@ -631,7 +631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _uiDocument: {fileID: 1023429319}
-  _cardSprites: {fileID: 11400000, guid: 025669167c8e14af299b7d136124e73c, type: 2}
+  _cardSprites: {fileID: 11400000, guid: 08dca0da180074a54a5ffbdb9641675c, type: 2}
   _cardShader: {fileID: 2100000, guid: ec38d395c469742b792b40151f599116, type: 2}
 --- !u!1 &1052219826
 GameObject:
