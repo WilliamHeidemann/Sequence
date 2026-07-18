@@ -12,7 +12,6 @@ namespace Game
         [SerializeField] private CardSprites _cardSprites;
         [SerializeField] private UIDocument _cardPrefab;
         [SerializeField] private Transform _showDisplayTransform;
-        [SerializeField] private CardAligner _cardAligner;
         [SerializeField] private Transform _discardPileTransform;
 
         [Header("Parameters")] [SerializeField]
@@ -20,9 +19,13 @@ namespace Game
 
         [SerializeField] private float _displayDuration = 0.4f;
 
-        public async Awaitable Draw(Card card)
+        public UIDocument InstantiateCardFaceDown()
         {
-            var cardGameObject = Instantiate(_cardPrefab);
+            return Instantiate(_cardPrefab);
+        }
+        
+        public async Awaitable Draw(Card card, UIDocument cardGameObject)
+        {
             var cardTransform = cardGameObject.transform;
 
             cardTransform.SetPositionAndRotation(
@@ -53,7 +56,6 @@ namespace Game
                 .BindToLocalScale(cardTransform);
 
             await Awaitable.WaitForSecondsAsync(_durationToDisplay + _displayDuration);
-            _cardAligner.AddCard(cardTransform);
         }
     }
 }

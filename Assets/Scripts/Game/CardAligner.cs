@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Models;
 using LitMotion;
 using LitMotion.Extensions;
 using UnityEngine;
@@ -17,16 +18,31 @@ namespace Game
         [SerializeField] private Transform[] _previewCards;
 
         [SerializeField] private List<Transform> _cards = new();
+        private Dictionary<Card, Transform> _lookup = new();
 
         private void Start()
         {
             _previewCards.ToList().ForEach(card => card.gameObject.SetActive(false));
         }
 
-        public void AddCard(Transform card)
+        public void AddCard(Card card, Transform cardTransform)
         {
-            _cards.Add(card);
+            _cards.Add(cardTransform);
+            _lookup.Add(card, cardTransform);
             AlignCards(_cards);
+        }
+
+        public bool RemoveCard(Card card, out Transform cardTransform)
+        {
+            if (_lookup.TryGetValue(card, out cardTransform))
+            {
+                _cards.Remove(cardTransform);
+                _lookup.Remove(card);
+                AlignCards(_cards);
+                return true;
+            }
+            
+            return false;
         }
 
         private void AlignCards(List<Transform> cards)
@@ -57,11 +73,11 @@ namespace Game
                 float angle = Mathf.Lerp(-_angle, _angle, t);
                 Quaternion startRotation = cards[i].rotation;
                 Quaternion targetRotation = Quaternion.Euler(0f, 0f, angle);
-                
+
                 LMotion.Create(startRotation, targetRotation, .2f)
                     .WithEase(Ease.InOutCubic)
                     .BindToRotation(cards[i]);
-                
+
                 LMotion.Create(cards[i].localScale, Vector3.one, .2f)
                     .WithEase(Ease.InOutCubic)
                     .BindToLocalScale(cards[i]);

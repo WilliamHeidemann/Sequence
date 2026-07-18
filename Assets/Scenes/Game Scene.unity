@@ -874,7 +874,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ba6aea2eaa8745978d0ddae1e50d1af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _uiDocument: {fileID: 820946021}
+  _discardPile: {fileID: 820946021}
+  _discardDuration: 0.5
 --- !u!1 &927048356
 GameObject:
   m_ObjectHideFlags: 0
@@ -1251,6 +1252,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::Game.Game
   _boardPresenter: {fileID: 1023429320}
   _cardDrawAnimator: {fileID: 1883750586}
+  _cardAligner: {fileID: 802132157}
+  _discardPile: {fileID: 820946023}
 --- !u!1 &1681766135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,7 +1428,6 @@ MonoBehaviour:
   _cardSprites: {fileID: 11400000, guid: 025669167c8e14af299b7d136124e73c, type: 2}
   _cardPrefab: {fileID: 5067188956579171738, guid: 7f4184a29e94c418794c985bf66cc0c8, type: 3}
   _showDisplayTransform: {fileID: 1735991319}
-  _cardAligner: {fileID: 802132157}
   _discardPileTransform: {fileID: 820946022}
   _durationToDisplay: 0.5
   _displayDuration: 0.4

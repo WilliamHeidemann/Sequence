@@ -79,11 +79,29 @@ namespace Game
             LMotion.Shake.Create(Vector3.zero, new Vector3(6f, 6f, 0f), 0.15f)
                 .WithFrequency(10) // High frequency = very fast shake
                 .WithDampingRatio(1f) // Smoothly dampens out to zero
-                .Bind(offset =>
-                {
-                    element.style.translate = new Translate(offset.x, offset.y, 0f);
-                })
+                .Bind(offset => { element.style.translate = new Translate(offset.x, offset.y, 0f); })
                 .AddTo(gameObject);
+        }
+
+        public void Pop(Position position)
+        {
+            Button slot = _buttons[position];
+            slot.style.transformOrigin = new TransformOrigin(Length.Percent(50), Length.Percent(50));
+
+            Vector2 normalScale = Vector2.one;
+            Vector2 stretchedScale = new Vector2(1.2f, 1.2f);
+
+            slot.style.scale = new Scale(normalScale);
+            
+            LMotion.Create(normalScale, stretchedScale, 0.1f)
+                .WithEase(Ease.OutQuad)
+                .WithOnComplete(() =>
+                {
+                    LMotion.Create(stretchedScale, normalScale, 0.2f)
+                        .WithEase(Ease.OutElastic)
+                        .Bind(val => slot.style.scale = new Scale(val));
+                })
+                .Bind(val => slot.style.scale = new Scale(val));
         }
 
         public void Pin(Position position, Team team)
@@ -92,16 +110,18 @@ namespace Game
             pin.localScale = _pinStartTRS.localScale;
 
             var endPosition = _buttons[position].worldTransform.GetPosition();
+
+            const float duration = 1f;
             
-            LMotion.Create(pin.position, endPosition, 0.5f)
+            LMotion.Create(pin.position, endPosition, duration)
                 .WithEase(Ease.InOutCubic)
                 .BindToPosition(pin);
-            
-            LMotion.Create(pin.rotation, _pinEndRotationScale.rotation, 0.5f)
+
+            LMotion.Create(pin.rotation, _pinEndRotationScale.rotation, duration)
                 .WithEase(Ease.InOutCubic)
                 .BindToRotation(pin);
-            
-            LMotion.Create(pin.localScale, _pinEndRotationScale.localScale, 0.5f)
+
+            LMotion.Create(pin.localScale, _pinEndRotationScale.localScale, duration)
                 .WithEase(Ease.InOutCubic)
                 .BindToLocalScale(pin);
         }

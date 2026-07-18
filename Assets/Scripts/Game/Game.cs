@@ -1,5 +1,7 @@
 using Game.Models;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Position = Game.Models.Position;
 
 namespace Game
 {
@@ -7,7 +9,9 @@ namespace Game
     {
         [SerializeField] private BoardPresenter _boardPresenter;
         [SerializeField] private CardDrawAnimator _cardDrawAnimator;
-
+        [SerializeField] private CardAligner _cardAligner;
+        [SerializeField] private DiscardPile _discardPile;
+        
         private Team _currentTeam = Team.Red;
         private readonly Hand _redHand = new();
         private readonly Hand _yellowHand = new();
@@ -19,7 +23,7 @@ namespace Game
         private void Start()
         {
             _boardPresenter.OnCardClicked += HandleCardClicked;
-            Fill(_redHand);
+            _ = Fill(_redHand);
             // Fill(_yellowHand);
         }
 
@@ -27,7 +31,9 @@ namespace Game
         {
             while (hand.TryAdd(_deck.Draw(out Card card)))
             {
-                await _cardDrawAnimator.Draw(card);
+                UIDocument cardUIDocument = _cardDrawAnimator.InstantiateCardFaceDown();
+                await _cardDrawAnimator.Draw(card, cardUIDocument);
+                _cardAligner.AddCard(card, cardUIDocument.transform);
             }
         }
 
@@ -39,16 +45,15 @@ namespace Game
 
             if (!contains)
             {
-                Debug.LogWarning($"Team {_currentTeam} does not have card {card} in hand.");
                 _boardPresenter.Shake(position);
                 return;
             }
 
             int previousSequenceCount = _board.SequenceCount(_currentTeam);
 
-            bool canAddPin = _board.TryAddPin(position, _currentTeam);
+            bool hasAddedPin = _board.TryAddPin(position, _currentTeam);
 
-            if (canAddPin)
+            if (hasAddedPin)
             {
                 int newSequenceCount = _board.SequenceCount(_currentTeam);
 
@@ -60,22 +65,33 @@ namespace Game
                 }
 
                 CurrentTeamHand.TryRemove(card);
-
-                CurrentTeamHand.TryAdd(_deck.Draw());
-
-                _boardPresenter.Pin(position, _currentTeam);
-
-                _redHand.TryRemove(card);
                 
-                // animate card being discarded
-                // currently there is no link between the cards logically in the hand and the visual cards in the scene.
+                _ = SuccessfulPlayAnimation(card, position);
                 
-                _currentTeam = _currentTeam == Team.Red ? Team.Yellow : Team.Red;
+                // _currentTeam = _currentTeam == Team.Red ? Team.Yellow : Team.Red;
             }
             else
             {
                 Debug.LogWarning($"Card {card} is already pinned.");
             }
+        }
+
+        private async Awaitable SuccessfulPlayAnimation(Card card, Position position)
+        {
+            _boardPresenter.Pop(position);
+
+            _boardPresenter.Pin(position, _currentTeam);
+
+            await Awaitable.WaitForSecondsAsync(0.5f);
+            
+            if (_cardAligner.RemoveCard(card, out Transform cardTransform))
+            {
+                _discardPile.Discard(cardTransform);
+            }
+            
+            await Awaitable.WaitForSecondsAsync(1f);
+            
+            _ = Fill(_redHand);
         }
     }
 }

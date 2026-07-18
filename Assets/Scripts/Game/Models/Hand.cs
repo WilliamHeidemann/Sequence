@@ -8,7 +8,7 @@ namespace Game.Models
 
         public bool TryAdd(Card card)
         {
-            if (Cards.Count > 7)
+            if (Cards.Count >= 7)
                 return false;
             
             Cards.Add(card);
