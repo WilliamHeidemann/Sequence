@@ -19,6 +19,7 @@ namespace Game
         [SerializeField] private Transform _redPinPrefab;
         [SerializeField] private Transform _pinStartTRS;
         [SerializeField] private Transform _pinEndRotationScale;
+        [SerializeField] private PinGrid _pinGrid;
 
         public Action<Card> OnCardClicked;
 
@@ -109,7 +110,8 @@ namespace Game
             var pin = Instantiate(_redPinPrefab, _pinStartTRS.position, _pinStartTRS.rotation);
             pin.localScale = _pinStartTRS.localScale;
 
-            var endPosition = _buttons[position].worldTransform.GetPosition();
+            // var endPosition = _buttons[position].worldTransform.GetPosition();
+            var endPosition = _pinGrid.Get(position);
 
             const float duration = 1f;
             

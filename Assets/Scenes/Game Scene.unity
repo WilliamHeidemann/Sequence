@@ -1005,6 +1005,7 @@ MonoBehaviour:
   _redPinPrefab: {fileID: 3263963994508758000, guid: 4b2899faef4764aec9cf10e6a5b8a3f3, type: 3}
   _pinStartTRS: {fileID: 272884480}
   _pinEndRotationScale: {fileID: 16290605}
+  _pinGrid: {fileID: 1734935967}
 --- !u!1 &1052219826
 GameObject:
   m_ObjectHideFlags: 0
@@ -1364,6 +1365,52 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
+--- !u!1 &1734935965
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1734935966}
+  - component: {fileID: 1734935967}
+  m_Layer: 0
+  m_Name: Pin Grid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1734935966
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734935965}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1734935967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1734935965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3e7f73eca96403ba82f2e92ab7d3db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _spacing: {x: 0.541, y: -0.87}
+  _offset: {x: -1.89, y: 3.11}
 --- !u!1 &1735991318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1389,7 +1436,7 @@ Transform:
   m_GameObject: {fileID: 1735991318}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.77, y: 0.6, z: -0.1}
+  m_LocalPosition: {x: 0.77, y: 0.6, z: -5}
   m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1587,3 +1634,4 @@ SceneRoots:
   - {fileID: 122947184}
   - {fileID: 272884479}
   - {fileID: 16290604}
+  - {fileID: 1734935966}
