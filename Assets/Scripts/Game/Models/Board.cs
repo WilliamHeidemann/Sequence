@@ -10,6 +10,8 @@ namespace Game.Models
 
         public bool TryAddPin(Position position, Team team) => TakenSpaces.TryAdd(position, team);
 
+        public bool Fits(Position position) => !TakenSpaces.ContainsKey(position);
+
         public bool HasSequence(Team team) =>
             BoardLayout.AllSequencePatterns().Any(pattern => IsSequence(pattern, team));
 
@@ -30,7 +32,7 @@ namespace Game.Models
             {
                 if (!TakenSpaces.TryAdd(move.Position, move.Team))
                 {
-                    Debug.LogError($"Duplicate move at {move.Position}");
+                    Debug.LogError($"Duplicate move at {BoardLayout.Get(move.Position)}");
                     return;
                 }
             }

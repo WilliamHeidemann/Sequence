@@ -11,9 +11,9 @@ namespace Game
         public Board Board { get; }
         public MoveHistory MoveHistory { get; }
 
-        public GameState()
+        public GameState(Team team)
         {
-            MyTeam = Team.Red;
+            MyTeam = team;
             
             Deck = new Deck();
         

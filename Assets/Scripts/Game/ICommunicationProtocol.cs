@@ -6,7 +6,7 @@ namespace Game
 {
     public interface ICommunicationProtocol
     {
-        void SendGameState(GameStateData gameStateData);
+        void PassGameState(GameStateData gameStateData);
     }
 
     public class Move

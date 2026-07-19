@@ -24,7 +24,7 @@ namespace Game
 
         private bool _isMyTurn = true;
 
-        private GameState _gameState = new();
+        private GameState _gameState = new(Team.Red);
 
         public ICommunicationProtocol Opponent { get; set; }
 
@@ -32,6 +32,7 @@ namespace Game
         {
             _boardPresenter.OnCardClicked += HandleCardClicked;
             _ = PlayDrawAnimation(MyHand.GetCards());
+            Opponent = new Bot(this, Team.Yellow);
         }
 
         private void HandleCardClicked(Card card)
@@ -41,6 +42,7 @@ namespace Game
             if (!_isMyTurn)
             {
                 _boardPresenter.Shake(position);
+                Debug.Log("Not my turn.");
                 return;
             }
 
@@ -48,6 +50,7 @@ namespace Game
 
             if (!hasCardInHand)
             {
+                Debug.Log("I don't have that card.");
                 _boardPresenter.Shake(position);
                 return;
             }
@@ -66,6 +69,7 @@ namespace Game
             if (!wasPositionFree)
             {
                 _boardPresenter.Shake(position);
+                Debug.Log("That position is not free.");
                 return;
             }
 
@@ -97,8 +101,8 @@ namespace Game
 
             if (Opponent != null)
             {
-                Opponent.SendGameState(_gameState.ToData());
                 _isMyTurn = false;
+                Opponent.PassGameState(_gameState.ToData());
             }
         }
 
@@ -132,15 +136,7 @@ namespace Game
             await PlayDrawAnimation(drawnCards);
         }
 
-        public void SendMove(Move move)
-        {
-            // Received move ^
-            MoveHistory.Add(move);
-            _boardPresenter.Pin(move.Position, move.Team);
-            _isMyTurn = true;
-        }
-
-        public void SendGameState(GameStateData gameStateData)
+        public void PassGameState(GameStateData gameStateData)
         {
             MoveHistory.Set(gameStateData.Moves);
             Deck.Set(gameStateData.Deck);

@@ -23,5 +23,12 @@ namespace Game
         {
             if (option.IsSome(out T value)) action(value);
         }
+
+        public static Option<T2> Map<T1, T2>(this Option<T1> option, Func<T1, T2> func)
+        {
+            return option.IsSome(out T1 value) 
+                ? Option<T2>.Some(func(value)) 
+                : Option<T2>.None;
+        }
     }
 }
