@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Game.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,68 +13,60 @@ namespace Game
         [SerializeField] private CardDrawAnimator _cardDrawAnimator;
         [SerializeField] private CardAligner _cardAligner;
         [SerializeField] private DiscardPile _discardPile;
-        
-        private Team _currentTeam = Team.Red;
-        private readonly Hand _redHand = new();
-        private readonly Hand _yellowHand = new();
-        private readonly Deck _deck = new();
-        private readonly Board _board = new();
 
-        private Hand CurrentTeamHand => _currentTeam == Team.Red ? _redHand : _yellowHand;
+        private Team MyTeam => _gameState.MyTeam;
+        private Hand MyHand => _gameState.MyHand;
+        private Hand OpponentHand => _gameState.OpponentHand;
+        private Deck Deck => _gameState.Deck;
+        private Board Board => _gameState.Board;
+        private MoveHistory MoveHistory => _gameState.MoveHistory;
+
+        private GameState _gameState = new();
+
+        public ICommunicationProtocol CommunicationProtocol { get; set; }
 
         private void Start()
         {
             _boardPresenter.OnCardClicked += HandleCardClicked;
-            _ = Fill(_redHand);
-            // Fill(_yellowHand);
+            _ = PlayDrawAnimation(MyHand.GetCards());
         }
 
-        private async Awaitable Fill(Hand hand)
-        {
-            while (hand.TryAdd(_deck.Draw(out Card card)))
-            {
-                UIDocument cardUIDocument = _cardDrawAnimator.InstantiateCardFaceDown();
-                await _cardDrawAnimator.Draw(card, cardUIDocument);
-                _cardAligner.AddCard(card, cardUIDocument.transform);
-            }
-        }
-
-        public void HandleCardClicked(Card card)
+        private void HandleCardClicked(Card card)
         {
             Position position = BoardLayout.Get(card);
 
-            bool hasCardInHand = CurrentTeamHand.Contains(card) || CurrentTeamHand.Contains(card.Equivalent);
+            bool hasCardInHand = MyHand.Contains(card) || MyHand.Contains(card.Equivalent);
 
             if (!hasCardInHand)
             {
                 _boardPresenter.Shake(position);
                 return;
             }
-            
-            bool onlyHasEquivalent = !CurrentTeamHand.Contains(card) && CurrentTeamHand.Contains(card.Equivalent);
-            
+
+            bool onlyHasEquivalent = !MyHand.Contains(card) && MyHand.Contains(card.Equivalent);
+
             if (onlyHasEquivalent)
             {
                 card = card.Equivalent;
             }
 
-            int sequenceCountBefore = _board.SequenceCount(_currentTeam);
+            int sequenceCountBefore = Board.SequenceCount(MyTeam);
 
-            bool wasPositionFree = _board.TryAddPin(position, _currentTeam);
+            bool wasPositionFree = Board.TryAddPin(position, MyTeam);
 
             if (!wasPositionFree)
             {
                 _boardPresenter.Shake(position);
                 return;
             }
-            
-            if (!CurrentTeamHand.TryRemove(card))
+
+            if (!MyHand.TryRemove(card))
             {
                 Debug.LogError($"Unexpected behavior: {card} could not be removed from the hand.");
                 return;
             }
-            
-            int sequenceCountAfter = _board.SequenceCount(_currentTeam);
+
+            int sequenceCountAfter = Board.SequenceCount(MyTeam);
 
             int sequenceCountDelta = sequenceCountAfter - sequenceCountBefore;
 
@@ -80,28 +74,53 @@ namespace Game
             {
                 Debug.Log("SEQUENCE!");
             }
-            
+
             _ = SuccessfulPlayAnimation(card, position);
-            
-            // _currentTeam = _currentTeam == Team.Red ? Team.Yellow : Team.Red;
+
+            var move = new Move()
+            {
+                Card = card,
+                Position = position,
+                Team = MyTeam
+            };
+
+            MoveHistory.Add(move);
+
+            if (CommunicationProtocol != null)
+            {
+                CommunicationProtocol.SendMove(move);
+                CommunicationProtocol.SendGameState(_gameState.ToData());
+            }
+        }
+
+        private async Awaitable PlayDrawAnimation(IEnumerable<Card> cards)
+        {
+            foreach (Card card in cards)
+            {
+                UIDocument cardUIDocument = _cardDrawAnimator.InstantiateCardFaceDown();
+                await _cardDrawAnimator.AnimateDrawing(card, cardUIDocument);
+                _cardAligner.AddCard(card, cardUIDocument.transform);
+            }
         }
 
         private async Awaitable SuccessfulPlayAnimation(Card card, Position position)
         {
             _boardPresenter.Pop(position);
 
-            _boardPresenter.Pin(position, _currentTeam);
+            _boardPresenter.Pin(position, MyTeam);
 
             await Awaitable.WaitForSecondsAsync(0.5f);
-            
+
             if (_cardAligner.RemoveCard(card, out Transform cardTransform))
             {
                 _discardPile.Discard(cardTransform);
             }
-            
+
             await Awaitable.WaitForSecondsAsync(1f);
-            
-            _ = Fill(_redHand);
+
+            var drawnCards = MyHand.DrawUntilFull(Deck);
+
+            await PlayDrawAnimation(drawnCards);
         }
     }
 }

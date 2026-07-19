@@ -19,6 +19,16 @@ namespace Game.Models
         {
             return Cards.Remove(card);
         }
+
+        public IEnumerable<Card> DrawUntilFull(Deck deck)
+        {
+            while (Cards.Count < 7)
+            {
+                var card = deck.Draw();
+                Cards.Add(card);
+                yield return card;
+            }
+        }
         
         public bool Contains(Card card) => Cards.Contains(card);
         

@@ -24,7 +24,7 @@ namespace Game
             return Instantiate(_cardPrefab);
         }
         
-        public async Awaitable Draw(Card card, UIDocument cardGameObject)
+        public async Awaitable AnimateDrawing(Card card, UIDocument cardGameObject)
         {
             var cardTransform = cardGameObject.transform;
 

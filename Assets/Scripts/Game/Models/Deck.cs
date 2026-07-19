@@ -33,5 +33,10 @@ namespace Game.Models
                 Cards.Push(card);
             }
         }
+        
+        public Card[] GetCards()
+        {
+            return Cards.ToArray();
+        }
     }
 }
