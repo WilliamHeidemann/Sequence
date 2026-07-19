@@ -56,34 +56,34 @@ namespace Game
                 card = card.Equivalent;
             }
 
-            int previousSequenceCount = _board.SequenceCount(_currentTeam);
+            int sequenceCountBefore = _board.SequenceCount(_currentTeam);
 
-            bool hasAddedPin = _board.TryAddPin(position, _currentTeam);
+            bool wasPositionFree = _board.TryAddPin(position, _currentTeam);
 
-            if (hasAddedPin)
+            if (!wasPositionFree)
             {
-                int newSequenceCount = _board.SequenceCount(_currentTeam);
-
-                int difference = newSequenceCount - previousSequenceCount;
-
-                if (difference > 0)
-                {
-                    Debug.Log("SEQUENCE!");
-                }
-
-                if (!CurrentTeamHand.TryRemove(card))
-                {
-                    Debug.LogError($"{card} could not be removed from the hand.");
-                }
-                
-                _ = SuccessfulPlayAnimation(card, position);
-                
-                // _currentTeam = _currentTeam == Team.Red ? Team.Yellow : Team.Red;
+                _boardPresenter.Shake(position);
+                return;
             }
-            else
+            
+            if (!CurrentTeamHand.TryRemove(card))
             {
-                Debug.LogWarning($"Card {card} is already pinned.");
+                Debug.LogError($"Unexpected behavior: {card} could not be removed from the hand.");
+                return;
             }
+            
+            int sequenceCountAfter = _board.SequenceCount(_currentTeam);
+
+            int sequenceCountDelta = sequenceCountAfter - sequenceCountBefore;
+
+            if (sequenceCountDelta > 0)
+            {
+                Debug.Log("SEQUENCE!");
+            }
+            
+            _ = SuccessfulPlayAnimation(card, position);
+            
+            // _currentTeam = _currentTeam == Team.Red ? Team.Yellow : Team.Red;
         }
 
         private async Awaitable SuccessfulPlayAnimation(Card card, Position position)
