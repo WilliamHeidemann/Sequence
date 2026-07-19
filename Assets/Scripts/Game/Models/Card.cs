@@ -138,6 +138,9 @@ namespace Game.Models
                 _ => throw new ArgumentOutOfRangeException()
             }, Rank);
 
+        public bool IsWild => Rank is Rank.Jack && Suit is Suit.Clubs or Suit.Diamonds;
+        public bool IsRemove => Rank is Rank.Jack && Suit is Suit.Spades or Suit.Hearts;
+
         public bool Equals(Card other)
         {
             return Suit == other.Suit && Rank == other.Rank;

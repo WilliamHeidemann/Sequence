@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Game.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -24,6 +25,7 @@ namespace Game
         private MoveHistory MoveHistory => _gameState.MoveHistory;
 
         private bool _isMyTurn = true;
+        private Option<Card> _selectedCard = Option<Card>.None; // = Option<Card>.Some(Card.JackOfClubs);
 
         private GameState _gameState = new(Team.Red);
 
@@ -36,9 +38,9 @@ namespace Game
             Opponent = new Bot(this, Team.Yellow);
         }
 
-        private async Awaitable HandleCardClicked(Card card)
+        private async Awaitable HandleCardClicked(Card tabbedCard)
         {
-            Position position = BoardLayout.Get(card);
+            Position position = BoardLayout.Get(tabbedCard);
 
             if (!_isMyTurn)
             {
@@ -47,6 +49,53 @@ namespace Game
                 return;
             }
 
+            if (_selectedCard.IsSome(out Card cardInHand) && cardInHand.IsWild)
+            {
+                await PlayWild(cardInHand, position);
+            }
+            else
+            {
+                await PlayCard(tabbedCard, position);
+            }
+        }
+
+        private async Awaitable PlayWild(Card cardInHand, Position position)
+        {
+            bool wasPositionFree = Board.TryAddPin(position, MyTeam);
+
+            if (!wasPositionFree)
+            {
+                _boardPresenter.Shake(position);
+                Debug.Log("That position is not free.");
+                return;
+            }
+            
+            if (!MyHand.TryRemove(cardInHand))
+            {
+                Debug.LogError($"Unexpected behavior: {cardInHand} could not be removed from the hand.");
+                return;
+            }
+            
+            await SuccessfulPlayAnimation(cardInHand, position);
+
+            var move = new Move()
+            {
+                Card = cardInHand,
+                Position = position,
+                Team = MyTeam
+            };
+
+            MoveHistory.Add(move);
+
+            if (Opponent != null)
+            {
+                _isMyTurn = false;
+                Opponent.PassGameState(_gameState.ToData());
+            }
+        }
+
+        private async Awaitable PlayCard(Card card, Position position)
+        {
             bool hasCardInHand = MyHand.Contains(card) || MyHand.Contains(card.Equivalent);
 
             if (!hasCardInHand)
