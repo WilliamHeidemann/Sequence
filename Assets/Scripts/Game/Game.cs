@@ -14,6 +14,7 @@ namespace Game
         [SerializeField] private CardDrawAnimator _cardDrawAnimator;
         [SerializeField] private CardAligner _cardAligner;
         [SerializeField] private DiscardPile _discardPile;
+        [SerializeField] private OpponentHandAnimator _opponentHandAnimator;
 
         private Team MyTeam => _gameState.MyTeam;
         private Hand MyHand => _gameState.MyHand;
@@ -135,7 +136,7 @@ namespace Game
 
             MyHand.TryAdd(draw);
 
-            await PlayDrawAnimation(new [] { draw });
+            await PlayDrawAnimation(new[] { draw });
         }
 
         public void PassGameState(GameStateData gameStateData)
@@ -151,7 +152,10 @@ namespace Game
             // display all cards (no animation)
 
             gameStateData.Moves.LastOption().Try(lastMove =>
-                _boardPresenter.Pin(lastMove.Position, lastMove.Team));
+            {
+                _opponentHandAnimator.AnimatePlay(lastMove.Card);
+                _boardPresenter.Pin(lastMove.Position, lastMove.Team);
+            });
 
             _isMyTurn = true;
         }

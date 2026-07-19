@@ -1294,6 +1294,7 @@ MonoBehaviour:
   _cardDrawAnimator: {fileID: 1883750586}
   _cardAligner: {fileID: 802132157}
   _discardPile: {fileID: 820946023}
+  _opponentHandAnimator: {fileID: 2135924202}
 --- !u!1 &1681766135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1587,6 +1588,53 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
+--- !u!1 &2135924200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2135924201}
+  - component: {fileID: 2135924202}
+  m_Layer: 0
+  m_Name: Opponent Hand
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2135924201
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135924200}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 5.28, z: -0.42}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2135924202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135924200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ccd7fc6b0be4aa5a04bbddff8dd015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _cardPrefab: {fileID: 5067188956579171738, guid: 7f4184a29e94c418794c985bf66cc0c8, type: 3}
+  _discardPile: {fileID: 820946023}
+  _cardSprites: {fileID: 11400000, guid: 025669167c8e14af299b7d136124e73c, type: 2}
 --- !u!1001 &2702880321720100816
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1668,3 +1716,4 @@ SceneRoots:
   - {fileID: 272884479}
   - {fileID: 16290604}
   - {fileID: 1734935966}
+  - {fileID: 2135924201}
