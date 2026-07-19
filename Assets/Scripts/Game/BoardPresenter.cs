@@ -22,7 +22,7 @@ namespace Game
         [SerializeField] private Transform _pinEndRotationScale;
         [SerializeField] private PinGrid _pinGrid;
 
-        public Action<Card> OnCardClicked;
+        public Func<Card, Awaitable> OnCardClicked;
 
         private readonly Dictionary<Position, Button> _buttons = new();
 
@@ -106,7 +106,7 @@ namespace Game
                 .Bind(val => slot.style.scale = new Scale(val));
         }
 
-        public void Pin(Position position, Team team)
+        public async Awaitable Pin(Position position, Team team)
         {
             var prefab = team == Team.Red ? _redPinPrefab : _yellowPinPrefab;
             var pin = Instantiate(prefab, _pinStartTRS.position, _pinStartTRS.rotation);
@@ -127,6 +127,8 @@ namespace Game
             LMotion.Create(pin.localScale, _pinEndRotationScale.localScale, duration)
                 .WithEase(Ease.InOutCubic)
                 .BindToLocalScale(pin);
+            
+            await Awaitable.WaitForSecondsAsync(duration);
         }
     }
 }

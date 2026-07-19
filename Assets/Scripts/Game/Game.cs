@@ -36,7 +36,7 @@ namespace Game
             Opponent = new Bot(this, Team.Yellow);
         }
 
-        private void HandleCardClicked(Card card)
+        private async Awaitable HandleCardClicked(Card card)
         {
             Position position = BoardLayout.Get(card);
 
@@ -89,7 +89,7 @@ namespace Game
                 Debug.Log("SEQUENCE!");
             }
 
-            _ = SuccessfulPlayAnimation(card, position);
+            await SuccessfulPlayAnimation(card, position);
 
             var move = new Move()
             {
@@ -121,16 +121,12 @@ namespace Game
         {
             _boardPresenter.Pop(position);
 
-            _boardPresenter.Pin(position, MyTeam);
-
-            await Awaitable.WaitForSecondsAsync(0.5f);
-
             if (_cardAligner.RemoveCard(card, out Transform cardTransform))
             {
-                _discardPile.Discard(cardTransform);
+                await _discardPile.Discard(cardTransform);
             }
-
-            await Awaitable.WaitForSecondsAsync(1f);
+            
+            await _boardPresenter.Pin(position, MyTeam);
 
             Card draw = Deck.Draw();
 
@@ -151,13 +147,16 @@ namespace Game
             // set my hand
             // display all cards (no animation)
 
-            gameStateData.Moves.LastOption().Try(lastMove =>
-            {
-                _opponentHandAnimator.AnimatePlay(lastMove.Card);
-                _boardPresenter.Pin(lastMove.Position, lastMove.Team);
-            });
+            gameStateData.Moves.LastOption().Try(AnimateOpponentPlay);
 
             _isMyTurn = true;
+        }
+
+        private async void AnimateOpponentPlay(Move move)
+        {
+            await Awaitable.WaitForSecondsAsync(1f); // simulate thinking time.
+            await _opponentHandAnimator.AnimatePlay(move.Card);
+            await _boardPresenter.Pin(move.Position, move.Team);
         }
     }
 }

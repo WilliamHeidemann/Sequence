@@ -10,7 +10,7 @@ namespace Game
         [SerializeField] private DiscardPile _discardPile;
         [SerializeField] private CardSprites _cardSprites;
 
-        public void AnimatePlay(Card card)
+        public async Awaitable AnimatePlay(Card card)
         {
             Quaternion startingRotation = Quaternion.Euler(new Vector3(0, 0, Random.Range(0f, 360f)));
         
@@ -19,7 +19,7 @@ namespace Game
             document.rootVisualElement.Q<VisualElement>("Card").style.backgroundImage =
                 new StyleBackground(_cardSprites.Get(card));
 
-            _discardPile.Discard(document.transform);
+            await _discardPile.Discard(document.transform);
         }
     }
 }
