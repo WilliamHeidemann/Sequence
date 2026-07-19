@@ -9,7 +9,7 @@ namespace Game
     {
         private readonly ICommunicationProtocol _opponent;
         private readonly Team _team;
-        private GameState _gameState = new(Team.Yellow);
+        private readonly GameState _gameState = new(Team.Yellow);
 
         public Bot(ICommunicationProtocol opponent, Team team)
         {
@@ -24,9 +24,29 @@ namespace Game
             Play(move);
         }
 
+
+        private void SetGameState(GameStateData gameStateData)
+        {
+            _gameState.MoveHistory.Set(gameStateData.Moves);
+            _gameState.Deck.Set(gameStateData.Deck);
+
+            if (_team == Team.Red)
+            {
+                _gameState.MyHand.Set(gameStateData.RedHand);
+                _gameState.OpponentHand.Set(gameStateData.YellowHand);
+            }
+            else
+            {
+                _gameState.MyHand.Set(gameStateData.YellowHand);
+                _gameState.OpponentHand.Set(gameStateData.RedHand);
+            }
+
+            _gameState.Board.Set(gameStateData.Moves);
+        }
+
         private Move DecideMove()
         {
-            var card = _gameState.MyHand.GetCards().Where(card => card.Rank != Rank.Jack).RandomElement();
+            Card card = _gameState.MyHand.GetCards().Where(card => card.Rank != Rank.Jack).RandomElement();
             Position position = BoardLayout.Get(card);
 
             if (!_gameState.Board.Fits(position))
@@ -48,33 +68,17 @@ namespace Game
         private void Play(Move move)
         {
             _gameState.Board.TryAddPin(move.Position, _team);
-            
+
             _gameState.MyHand.TryRemove(move.Card);
-            
+
             _gameState.MoveHistory.Add(move);
-            
-            _ = _gameState.MyHand.DrawUntilFull(_gameState.Deck);
+
+            while (!_gameState.MyHand.IsFull)
+            {
+                _gameState.MyHand.TryAdd(_gameState.Deck.Draw());
+            }
 
             _opponent.PassGameState(_gameState.ToData());
-        }
-
-        private void SetGameState(GameStateData gameStateData)
-        {
-            _gameState.MoveHistory.Set(gameStateData.Moves);
-            _gameState.Deck.Set(gameStateData.Deck);
-
-            if (_team == Team.Red)
-            {
-                _gameState.MyHand.Set(gameStateData.RedHand);
-                _gameState.OpponentHand.Set(gameStateData.YellowHand);
-            }
-            else
-            {
-                _gameState.MyHand.Set(gameStateData.YellowHand);
-                _gameState.OpponentHand.Set(gameStateData.RedHand);
-            }
-
-            _gameState.Board.Set(gameStateData.Moves);
         }
     }
 }

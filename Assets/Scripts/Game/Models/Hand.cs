@@ -9,7 +9,7 @@ namespace Game.Models
 
         public bool TryAdd(Card card)
         {
-            if (Cards.Count >= 7)
+            if (IsFull)
                 return false;
             
             Cards.Add(card);
@@ -20,20 +20,11 @@ namespace Game.Models
         {
             return Cards.Remove(card);
         }
-
-        public IEnumerable<Card> DrawUntilFull(Deck deck)
-        {
-            while (Cards.Count < 7)
-            {
-                var card = deck.Draw();
-                Cards.Add(card);
-                yield return card;
-            }
-        }
         
         public bool Contains(Card card) => Cards.Contains(card);
         
         public int Count => Cards.Count;
+        public bool IsFull => Count == 7;
 
         public Card[] GetCards() => Cards.ToArray();
 

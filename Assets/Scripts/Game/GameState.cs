@@ -18,10 +18,16 @@ namespace Game
             Deck = new Deck();
         
             MyHand = new Hand();
-            while (MyHand.TryAdd(Deck.Draw(out Card card))) { }
+            while (!MyHand.IsFull)
+            {
+                MyHand.TryAdd(Deck.Draw());
+            }
         
             OpponentHand = new Hand();
-            while (OpponentHand.TryAdd(Deck.Draw(out Card card))) { }
+            while (!OpponentHand.IsFull)
+            {
+                OpponentHand.TryAdd(Deck.Draw());
+            }
         
             Board = new Board();
         

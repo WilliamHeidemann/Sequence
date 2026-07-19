@@ -131,9 +131,11 @@ namespace Game
 
             await Awaitable.WaitForSecondsAsync(1f);
 
-            var drawnCards = MyHand.DrawUntilFull(Deck);
+            Card draw = Deck.Draw();
 
-            await PlayDrawAnimation(drawnCards);
+            MyHand.TryAdd(draw);
+
+            await PlayDrawAnimation(new [] { draw });
         }
 
         public void PassGameState(GameStateData gameStateData)
