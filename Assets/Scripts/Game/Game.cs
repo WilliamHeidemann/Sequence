@@ -39,14 +39,21 @@ namespace Game
 
         public void HandleCardClicked(Card card)
         {
-            bool contains = CurrentTeamHand.Contains(card);
-
             Position position = BoardLayout.Get(card);
 
-            if (!contains)
+            bool hasCardInHand = CurrentTeamHand.Contains(card) || CurrentTeamHand.Contains(card.Equivalent);
+
+            if (!hasCardInHand)
             {
                 _boardPresenter.Shake(position);
                 return;
+            }
+            
+            bool onlyHasEquivalent = !CurrentTeamHand.Contains(card) && CurrentTeamHand.Contains(card.Equivalent);
+            
+            if (onlyHasEquivalent)
+            {
+                card = card.Equivalent;
             }
 
             int previousSequenceCount = _board.SequenceCount(_currentTeam);
@@ -64,7 +71,10 @@ namespace Game
                     Debug.Log("SEQUENCE!");
                 }
 
-                CurrentTeamHand.TryRemove(card);
+                if (!CurrentTeamHand.TryRemove(card))
+                {
+                    Debug.LogError($"{card} could not be removed from the hand.");
+                }
                 
                 _ = SuccessfulPlayAnimation(card, position);
                 

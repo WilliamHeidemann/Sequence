@@ -17,7 +17,7 @@ namespace Game.Models
         public static Card QueenOfClubs => new(Suit.Clubs, Rank.Queen);
         public static Card KingOfClubs => new(Suit.Clubs, Rank.King);
         public static Card AceOfClubs => new(Suit.Clubs, Rank.Ace);
-    
+
         public static Card TwoOfDiamonds => new(Suit.Diamonds, Rank.Two);
         public static Card ThreeOfDiamonds => new(Suit.Diamonds, Rank.Three);
         public static Card FourOfDiamonds => new(Suit.Diamonds, Rank.Four);
@@ -45,7 +45,7 @@ namespace Game.Models
         public static Card QueenOfHearts => new(Suit.Hearts, Rank.Queen);
         public static Card KingOfHearts => new(Suit.Hearts, Rank.King);
         public static Card AceOfHearts => new(Suit.Hearts, Rank.Ace);
-    
+
         public static Card TwoOfSpades => new(Suit.Spades, Rank.Two);
         public static Card ThreeOfSpades => new(Suit.Spades, Rank.Three);
         public static Card FourOfSpades => new(Suit.Spades, Rank.Four);
@@ -75,7 +75,7 @@ namespace Game.Models
             QueenOfClubs,
             KingOfClubs,
             AceOfClubs,
-        
+
             TwoOfDiamonds,
             ThreeOfDiamonds,
             FourOfDiamonds,
@@ -89,7 +89,7 @@ namespace Game.Models
             QueenOfDiamonds,
             KingOfDiamonds,
             AceOfDiamonds,
-        
+
             TwoOfHearts,
             ThreeOfHearts,
             FourOfHearts,
@@ -103,7 +103,7 @@ namespace Game.Models
             QueenOfHearts,
             KingOfHearts,
             AceOfHearts,
-        
+
             TwoOfSpades,
             ThreeOfSpades,
             FourOfSpades,
@@ -118,7 +118,7 @@ namespace Game.Models
             KingOfSpades,
             AceOfSpades,
         };
-    
+
         private Card(Suit suit, Rank rank)
         {
             Suit = suit;
@@ -127,6 +127,16 @@ namespace Game.Models
 
         public Suit Suit { get; }
         public Rank Rank { get; }
+
+        public Card Equivalent => new(
+            Suit switch
+            {
+                Suit.Clubs => Suit.Spades,
+                Suit.Diamonds => Suit.Hearts,
+                Suit.Hearts => Suit.Diamonds,
+                Suit.Spades => Suit.Clubs,
+                _ => throw new ArgumentOutOfRangeException()
+            }, Rank);
 
         public bool Equals(Card other)
         {

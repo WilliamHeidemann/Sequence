@@ -17,6 +17,7 @@ namespace Game
         [SerializeField] private CardSprites _cardSprites;
         [SerializeField] private Material _cardShader;
         [SerializeField] private Transform _redPinPrefab;
+        [SerializeField] private Transform _yellowPinPrefab;
         [SerializeField] private Transform _pinStartTRS;
         [SerializeField] private Transform _pinEndRotationScale;
         [SerializeField] private PinGrid _pinGrid;
@@ -107,10 +108,10 @@ namespace Game
 
         public void Pin(Position position, Team team)
         {
-            var pin = Instantiate(_redPinPrefab, _pinStartTRS.position, _pinStartTRS.rotation);
+            var prefab = team == Team.Red ? _redPinPrefab : _yellowPinPrefab;
+            var pin = Instantiate(prefab, _pinStartTRS.position, _pinStartTRS.rotation);
             pin.localScale = _pinStartTRS.localScale;
 
-            // var endPosition = _buttons[position].worldTransform.GetPosition();
             var endPosition = _pinGrid.Get(position);
 
             const float duration = 1f;
@@ -126,15 +127,6 @@ namespace Game
             LMotion.Create(pin.localScale, _pinEndRotationScale.localScale, duration)
                 .WithEase(Ease.InOutCubic)
                 .BindToLocalScale(pin);
-        }
-
-        public void ClearMarks()
-        {
-            foreach (Button button in _buttons.Values)
-            {
-                button.RemoveFromClassList("red");
-                button.RemoveFromClassList("yellow");
-            }
         }
     }
 }
