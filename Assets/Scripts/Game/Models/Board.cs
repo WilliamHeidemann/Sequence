@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Game.Models
 {
@@ -21,6 +22,19 @@ namespace Game.Models
 
 
         public void Clear() => TakenSpaces.Clear();
+
+        public void Set(Move[] moves)
+        {
+            Clear();
+            foreach (var move in moves)
+            {
+                if (!TakenSpaces.TryAdd(move.Position, move.Team))
+                {
+                    Debug.LogError($"Duplicate move at {move.Position}");
+                    return;
+                }
+            }
+        }
     }
 
     public enum Team

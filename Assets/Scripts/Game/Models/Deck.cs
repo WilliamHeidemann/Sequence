@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using UtilityToolkit.Runtime;
 
 namespace Game.Models
 {
     public class Deck
     {
-        private Stack<Card> Cards { get; } = new();
+        private Stack<Card> Cards { get; set; } = new();
 
         public Deck()
         {
@@ -37,6 +38,11 @@ namespace Game.Models
         public Card[] GetCards()
         {
             return Cards.ToArray();
+        }
+
+        public void Set(Card[] deck)
+        {
+            Cards = deck.ToStack();
         }
     }
 }

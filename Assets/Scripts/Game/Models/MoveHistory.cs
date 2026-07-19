@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game.Models
 {
     public class MoveHistory
     {
-        private List<Move> Moves { get; } = new();
+        private List<Move> Moves { get; set; } = new();
 
         public void Add(Move move)
         {
@@ -19,6 +20,11 @@ namespace Game.Models
         public Move[] GetMoves()
         {
             return Moves.ToArray();
+        }
+
+        public void Set(Move[] moves)
+        {
+            Moves = moves.ToList();
         }
     }
 }

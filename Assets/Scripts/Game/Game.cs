@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Game.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UtilityToolkit.Runtime;
 using Position = Game.Models.Position;
 
 namespace Game
 {
-    public class Game : MonoBehaviour
+    public class Game : MonoBehaviour, ICommunicationProtocol
     {
         [SerializeField] private BoardPresenter _boardPresenter;
         [SerializeField] private CardDrawAnimator _cardDrawAnimator;
@@ -21,9 +22,11 @@ namespace Game
         private Board Board => _gameState.Board;
         private MoveHistory MoveHistory => _gameState.MoveHistory;
 
+        private bool _isMyTurn = true;
+
         private GameState _gameState = new();
 
-        public ICommunicationProtocol CommunicationProtocol { get; set; }
+        public ICommunicationProtocol Opponent { get; set; }
 
         private void Start()
         {
@@ -34,6 +37,12 @@ namespace Game
         private void HandleCardClicked(Card card)
         {
             Position position = BoardLayout.Get(card);
+
+            if (!_isMyTurn)
+            {
+                _boardPresenter.Shake(position);
+                return;
+            }
 
             bool hasCardInHand = MyHand.Contains(card) || MyHand.Contains(card.Equivalent);
 
@@ -86,10 +95,10 @@ namespace Game
 
             MoveHistory.Add(move);
 
-            if (CommunicationProtocol != null)
+            if (Opponent != null)
             {
-                CommunicationProtocol.SendMove(move);
-                CommunicationProtocol.SendGameState(_gameState.ToData());
+                Opponent.SendGameState(_gameState.ToData());
+                _isMyTurn = false;
             }
         }
 
@@ -121,6 +130,32 @@ namespace Game
             var drawnCards = MyHand.DrawUntilFull(Deck);
 
             await PlayDrawAnimation(drawnCards);
+        }
+
+        public void SendMove(Move move)
+        {
+            // Received move ^
+            MoveHistory.Add(move);
+            _boardPresenter.Pin(move.Position, move.Team);
+            _isMyTurn = true;
+        }
+
+        public void SendGameState(GameStateData gameStateData)
+        {
+            MoveHistory.Set(gameStateData.Moves);
+            Deck.Set(gameStateData.Deck);
+            Board.Set(gameStateData.Moves);
+            Card[] opponentHand = MyTeam == Team.Red ? gameStateData.YellowHand : gameStateData.RedHand;
+            OpponentHand.Set(opponentHand);
+
+            // if game just loaded:
+            // set my hand
+            // display all cards (no animation)
+
+            gameStateData.Moves.LastOption().Try(lastMove =>
+                _boardPresenter.Pin(lastMove.Position, lastMove.Team));
+
+            _isMyTurn = true;
         }
     }
 }

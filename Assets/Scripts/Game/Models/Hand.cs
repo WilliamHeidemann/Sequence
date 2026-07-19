@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Game.Models
 {
     public class Hand
     {
-        private List<Card> Cards { get; } = new();
+        private List<Card> Cards { get; set; } = new();
 
         public bool TryAdd(Card card)
         {
@@ -39,6 +40,11 @@ namespace Game.Models
         public override string ToString()
         {
             return string.Join(", ", GetCards());
+        }
+
+        public void Set(Card[] opponentHand)
+        {
+            Cards = opponentHand.ToList();
         }
     }
 }

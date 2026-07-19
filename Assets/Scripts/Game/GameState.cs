@@ -13,6 +13,8 @@ namespace Game
 
         public GameState()
         {
+            MyTeam = Team.Red;
+            
             Deck = new Deck();
         
             MyHand = new Hand();

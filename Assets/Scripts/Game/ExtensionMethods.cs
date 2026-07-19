@@ -1,4 +1,5 @@
 using System;
+using UtilityToolkit.Runtime;
 
 namespace Game
 {
@@ -16,6 +17,11 @@ namespace Game
             }
 
             return array;
+        }
+
+        public static void Try<T>(this Option<T> option, Action<T> action)
+        {
+            if (option.IsSome(out T value)) action(value);
         }
     }
 }
