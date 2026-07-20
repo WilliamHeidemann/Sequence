@@ -50,15 +50,19 @@ namespace Game
 
                     Button slot = slotPair.visualSlot;
 
+                    Label label = slot.Q<Label>();
+                    
                     Card card = BoardLayout.Get(row, column);
 
-                    Sprite sprite = _cardSprites.Get(card);
+                    label.text = card.Rank.AsSingleDigit();
+                    
+                    // Sprite sprite = _cardSprites.Get(card);
 
-                    Material material = new(_cardShader);
-
-                    material.SetTexture("_MainTex", sprite.texture);
-
-                    slot.style.unityMaterial = material;
+                    // Material material = new(_cardShader);
+                    //
+                    // material.SetTexture("_MainTex", sprite.texture);
+                    //
+                    // slot.style.unityMaterial = material;
 
                     slot.clicked += () => OnCardClicked?.Invoke(card);
 

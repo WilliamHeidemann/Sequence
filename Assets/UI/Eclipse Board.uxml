@@ -1,0 +1,66 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Eclipse Card Simple" src="project://database/Assets/UI/Eclipse%20Card%20Simple.uxml?fileID=9197481963319205126&amp;guid=08eb67137be0f4c5f9fffdf5fe1f6725&amp;type=3#Eclipse Card Simple"/>
+    <Style src="project://database/Assets/UI/styles.uss?fileID=7433441132597879392&amp;guid=cb1d2706049614e018463c0d001025a6&amp;type=3#styles"/>
+    <ui:VisualElement name="Container" style="flex-grow: 1; justify-content: center; margin-right: 5%; margin-left: 5%;">
+        <ui:VisualElement name="Row" class="eclipse-row">
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="Row" class="eclipse-row">
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="Row" class="eclipse-row">
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="Row" class="eclipse-row">
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="Row" class="eclipse-row">
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="Row" class="eclipse-row">
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+            <ui:Instance template="Eclipse Card Simple" name="Slot" class="eclipse-slot"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -205,6 +205,82 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3263963994508758000, guid: 4b2899faef4764aec9cf10e6a5b8a3f3, type: 3}
   m_PrefabInstance: {fileID: 16290604}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &105310680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 105310683}
+  - component: {fileID: 105310682}
+  - component: {fileID: 105310681}
+  m_Layer: 0
+  m_Name: 'Eclipse Board '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &105310681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105310680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f02a65d508d44fb940c7b004b42cd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _uiDocument: {fileID: 105310682}
+  _cardSprites: {fileID: 11400000, guid: 08dca0da180074a54a5ffbdb9641675c, type: 2}
+  _cardShader: {fileID: 2100000, guid: ec38d395c469742b792b40151f599116, type: 2}
+  _redPinPrefab: {fileID: 3263963994508758000, guid: 4b2899faef4764aec9cf10e6a5b8a3f3, type: 3}
+  _yellowPinPrefab: {fileID: 3263963994508758000, guid: 1b0a62a616fd7451b84a09fcdc516a6b, type: 3}
+  _pinStartTRS: {fileID: 272884480}
+  _pinEndRotationScale: {fileID: 16290605}
+  _pinGrid: {fileID: 1734935967}
+--- !u!114 &105310682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105310680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
+  m_PanelSettings: {fileID: 11400000, guid: 0a8ce1c17dd9f4390ab92f07079dddc0, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 951b7748ca01840cfb13b7f67e678bde, type: 3}
+  m_SortingOrder: 0
+  m_Position: 0
+  m_WorldSpaceSizeMode: 0
+  m_WorldSpaceWidth: 1920
+  m_WorldSpaceHeight: 1080
+  m_PivotReferenceSize: 0
+  m_Pivot: 0
+  m_WorldSpaceCollider: {fileID: 0}
+--- !u!4 &105310683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105310680}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.92, z: 0}
+  m_LocalScale: {x: 1.5892938, y: 1.5892938, z: 1.5892938}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &122947181
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,7 +575,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215688, g: 0.4745098, b: 0.2617502, a: 0}
+  m_BackGroundColor: {r: 0.119313106, g: 0.11614455, b: 0.2830189, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -948,7 +1024,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1023429318
 Transform:
   m_ObjectHideFlags: 0
@@ -1171,7 +1247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &1606585649
 SpriteRenderer:
   serializedVersion: 2
@@ -1705,6 +1781,7 @@ SceneRoots:
   - {fileID: 619394802}
   - {fileID: 2702880321720100816}
   - {fileID: 1023429318}
+  - {fileID: 105310683}
   - {fileID: 1681766136}
   - {fileID: 820946022}
   - {fileID: 1219153347}
