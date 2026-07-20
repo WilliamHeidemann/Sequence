@@ -1,6 +1,6 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/styles.uss?fileID=7433441132597879392&amp;guid=cb1d2706049614e018463c0d001025a6&amp;type=3#styles"/>
-    <ui:VisualElement name="Card" class="card" style="background-image: url(&quot;project://database/Assets/Sprites/Standard%20Cards/card%20back%20red.png?fileID=2800000&amp;guid=0d08505b63a9642f8b92886489404121&amp;type=3#card back red&quot;); aspect-ratio: 0.67; align-self: center;">
+    <ui:VisualElement name="Card" class="card" style="background-image: url(&quot;project://database/Assets/Sprites/Eclipse%20cards/Eclipse%20cardback.png?fileID=2800000&amp;guid=d189fc3cb9e054c0c8eb4e98bd29b5a2&amp;type=3#Eclipse cardback&quot;); aspect-ratio: 0.67; align-self: center;">
         <ui:Label text="" style="-unity-text-align: middle-left; -unity-font-definition: url(&quot;project://database/Assets/Font/HelveticaNeue-main/HelveticaNeue-CondensedBlack.ttf?fileID=12800000&amp;guid=e62e3fe37f8654dfda7536581863965d&amp;type=3#HelveticaNeue-CondensedBlack&quot;); font-size: 45px; top: 15%; color: rgb(210, 180, 81); left: 5%;"/>
     </ui:VisualElement>
 </ui:UXML>
