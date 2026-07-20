@@ -22,7 +22,10 @@ namespace Game
         [SerializeField] private Transform _pinEndRotationScale;
         [SerializeField] private PinGrid _pinGrid;
 
-        public Func<Card, Awaitable> OnCardClicked;
+        [SerializeField] private Sprite _sunCard;
+        [SerializeField] private Sprite _moonCard;
+
+        public event Func<Card, Awaitable> OnCardClicked;
 
         private readonly Dictionary<Position, Button> _buttons = new();
 
@@ -40,7 +43,7 @@ namespace Game
             {
                 Row row = rowPair.row;
 
-                List<Button> slots = rowPair.visualRow.Query<Button>("Slot").ToList();
+                List<VisualElement> slots = rowPair.visualRow.Query<VisualElement>("CardSlot").ToList();
 
                 Column[] columns = BoardLayout.AllColumns();
 
@@ -48,22 +51,23 @@ namespace Game
                 {
                     Column column = slotPair.column;
 
-                    Button slot = slotPair.visualSlot;
+                    Button slot = slotPair.visualSlot.Q<Button>("Slot");
+
+                    Card card = BoardLayout.Get(row, column);
+
+                    Symbol symbol = card.Symbol;
+
+                    slot.style.backgroundImage = new StyleBackground(symbol switch
+                    {
+                        Symbol.Sun => _sunCard,
+                        Symbol.Moon => _moonCard,
+                        _ => throw new ArgumentOutOfRangeException()
+                    });
 
                     Label label = slot.Q<Label>();
-                    
-                    Card card = BoardLayout.Get(row, column);
 
                     label.text = card.Rank.AsSingleDigit();
                     
-                    // Sprite sprite = _cardSprites.Get(card);
-
-                    // Material material = new(_cardShader);
-                    //
-                    // material.SetTexture("_MainTex", sprite.texture);
-                    //
-                    // slot.style.unityMaterial = material;
-
                     slot.clicked += () => OnCardClicked?.Invoke(card);
 
                     Position position = new(rowPair.row, slotPair.column);
@@ -98,7 +102,7 @@ namespace Game
             Vector2 stretchedScale = new Vector2(1.2f, 1.2f);
 
             slot.style.scale = new Scale(normalScale);
-            
+
             LMotion.Create(normalScale, stretchedScale, 0.1f)
                 .WithEase(Ease.OutQuad)
                 .WithOnComplete(() =>
@@ -119,7 +123,7 @@ namespace Game
             var endPosition = _pinGrid.Get(position);
 
             const float duration = 1f;
-            
+
             LMotion.Create(pin.position, endPosition, duration)
                 .WithEase(Ease.InOutCubic)
                 .BindToPosition(pin);
@@ -131,7 +135,7 @@ namespace Game
             LMotion.Create(pin.localScale, _pinEndRotationScale.localScale, duration)
                 .WithEase(Ease.InOutCubic)
                 .BindToLocalScale(pin);
-            
+
             await Awaitable.WaitForSecondsAsync(duration);
         }
     }

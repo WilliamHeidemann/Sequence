@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2c50738f5b41c405fa34b9733bb0efec
+guid: 6efcaac0ad40e4992a6e2c7d5481330f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7445472779566565881
-    second: Eclipse card no boarder-41_0
+      213: -6153540585575423611
+    second: red card_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Eclipse card no boarder-41_0
+      name: red card_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9f9c7e29b02a35760800000000000000
-      internalID: 7445472779566565881
+      spriteID: 581e3d5b07b3a9aa0800000000000000
+      internalID: -6153540585575423611
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Eclipse card no boarder-41_0: 7445472779566565881
+      red card_0: -6153540585575423611
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

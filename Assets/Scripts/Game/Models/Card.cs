@@ -127,6 +127,14 @@ namespace Game.Models
 
         public Suit Suit { get; }
         public Rank Rank { get; }
+        public Symbol Symbol => Suit switch
+        {
+            Suit.Clubs => Symbol.Moon,
+            Suit.Diamonds => Symbol.Moon,
+            Suit.Hearts => Symbol.Sun,
+            Suit.Spades => Symbol.Sun,
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
         public Card Equivalent => new(
             Suit switch
@@ -185,6 +193,12 @@ namespace Game.Models
         Jack,
         Queen,
         King
+    }
+
+    public enum Symbol
+    {
+        Sun,
+        Moon
     }
 
     public static class EnumExtensions
