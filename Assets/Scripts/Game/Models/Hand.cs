@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UtilityToolkit.Runtime;
 
 namespace Game.Models
 {
@@ -36,6 +37,18 @@ namespace Game.Models
         public void Set(Card[] opponentHand)
         {
             Cards = opponentHand.ToList();
+        }
+
+        public Option<Card> FindCard(Card cardToCover, bool isOpenSpace)
+        {
+            if (isOpenSpace)
+            {
+                if (Contains(cardToCover)) return Option<Card>.Some(cardToCover);
+                if (Contains(cardToCover.Equivalent)) return Option<Card>.Some(cardToCover.Equivalent);
+                return Cards.FirstOption(c => c.IsWild);
+            }
+
+            return Cards.FirstOption(c => c.IsRemover);
         }
     }
 }

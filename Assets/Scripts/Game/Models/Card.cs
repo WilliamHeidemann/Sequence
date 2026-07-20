@@ -139,15 +139,15 @@ namespace Game.Models
         public Card Equivalent => new(
             Suit switch
             {
-                Suit.Clubs => Suit.Spades,
-                Suit.Diamonds => Suit.Hearts,
-                Suit.Hearts => Suit.Diamonds,
-                Suit.Spades => Suit.Clubs,
+                Suit.Clubs => Suit.Diamonds,
+                Suit.Diamonds => Suit.Clubs,
+                Suit.Hearts => Suit.Spades,
+                Suit.Spades => Suit.Hearts,
                 _ => throw new ArgumentOutOfRangeException()
             }, Rank);
 
-        public bool IsWild => Rank is Rank.Jack && Suit is Suit.Clubs or Suit.Diamonds;
-        public bool IsRemove => Rank is Rank.Jack && Suit is Suit.Spades or Suit.Hearts;
+        public bool IsWild => Rank is Rank.Jack && Symbol is Symbol.Sun;
+        public bool IsRemover => Rank is Rank.Jack && Symbol is Symbol.Moon;
 
         public bool Equals(Card other)
         {

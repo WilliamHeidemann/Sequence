@@ -1596,6 +1596,8 @@ MonoBehaviour:
   _cardPrefab: {fileID: 5067188956579171738, guid: 7f4184a29e94c418794c985bf66cc0c8, type: 3}
   _showDisplayTransform: {fileID: 1735991319}
   _discardPileTransform: {fileID: 820946022}
+  _sunCard: {fileID: 21300000, guid: 6efcaac0ad40e4992a6e2c7d5481330f, type: 3}
+  _moonCard: {fileID: 21300000, guid: 3031d263737fa4a5a826e6102d464fdf, type: 3}
   _durationToDisplay: 0.5
   _displayDuration: 0.4
 --- !u!4 &1883750587
@@ -1715,6 +1717,8 @@ MonoBehaviour:
   _cardPrefab: {fileID: 5067188956579171738, guid: 7f4184a29e94c418794c985bf66cc0c8, type: 3}
   _discardPile: {fileID: 820946023}
   _cardSprites: {fileID: 11400000, guid: 025669167c8e14af299b7d136124e73c, type: 2}
+  _sunCard: {fileID: 21300000, guid: 6efcaac0ad40e4992a6e2c7d5481330f, type: 3}
+  _moonCard: {fileID: 21300000, guid: 3031d263737fa4a5a826e6102d464fdf, type: 3}
 --- !u!1001 &2702880321720100816
 PrefabInstance:
   m_ObjectHideFlags: 0

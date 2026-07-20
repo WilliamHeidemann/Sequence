@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Game.Models;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace Game
         private MoveHistory MoveHistory => _gameState.MoveHistory;
 
         private bool _isMyTurn = true;
-        private Option<Card> _selectedCard = Option<Card>.None; // = Option<Card>.Some(Card.JackOfClubs);
+        // private Option<Card> _selectedCard = Option<Card>.None; // = Option<Card>.Some(Card.JackOfClubs);
 
         private GameState _gameState = new(Team.Red);
 
@@ -40,34 +41,40 @@ namespace Game
 
         private async Awaitable HandleCardClicked(Card tabbedCard)
         {
+            Debug.Log(string.Join(", ", MyHand.GetCards()));
+            
             Position position = BoardLayout.Get(tabbedCard);
 
             if (!_isMyTurn)
             {
                 _boardPresenter.Shake(position);
-                Debug.Log("Not my turn.");
                 return;
             }
-
-            if (_selectedCard.IsSome(out Card cardInHand) && cardInHand.IsWild)
-            {
-                await PlayWild(cardInHand, position);
-            }
-            else
-            {
-                await PlayCard(tabbedCard, position);
-            }
-        }
-
-        private async Awaitable PlayWild(Card cardInHand, Position position)
-        {
-            bool wasPositionFree = Board.TryAddPin(position, MyTeam);
-
-            if (!wasPositionFree)
+            
+            bool isOpenSpace = Board.Fits(position);
+            
+            Option<Card> requiredCard = MyHand.FindCard(tabbedCard, isOpenSpace);
+            
+            if (!requiredCard.IsSome(out Card cardInHand))
             {
                 _boardPresenter.Shake(position);
-                Debug.Log("That position is not free.");
                 return;
+            }
+            
+            int sequenceCountBefore = Board.SequenceCount(MyTeam);
+            
+            if (!Board.TryAddPin(position, MyTeam))
+            {
+                Debug.LogError($"Unexpected behavior: {position} could not be pinned.");
+            }
+            
+            int sequenceCountAfter = Board.SequenceCount(MyTeam);
+
+            int sequenceCountDelta = sequenceCountAfter - sequenceCountBefore;
+
+            if (sequenceCountDelta > 0)
+            {
+                Debug.Log("SEQUENCE!");
             }
             
             if (!MyHand.TryRemove(cardInHand))
@@ -78,77 +85,15 @@ namespace Game
             
             await SuccessfulPlayAnimation(cardInHand, position);
 
-            var move = new Move()
+            Move move = new()
             {
                 Card = cardInHand,
                 Position = position,
                 Team = MyTeam
             };
-
+            
             MoveHistory.Add(move);
-
-            if (Opponent != null)
-            {
-                _isMyTurn = false;
-                Opponent.PassGameState(_gameState.ToData());
-            }
-        }
-
-        private async Awaitable PlayCard(Card card, Position position)
-        {
-            bool hasCardInHand = MyHand.Contains(card) || MyHand.Contains(card.Equivalent);
-
-            if (!hasCardInHand)
-            {
-                Debug.Log("I don't have that card.");
-                _boardPresenter.Shake(position);
-                return;
-            }
-
-            bool onlyHasEquivalent = !MyHand.Contains(card) && MyHand.Contains(card.Equivalent);
-
-            if (onlyHasEquivalent)
-            {
-                card = card.Equivalent;
-            }
-
-            int sequenceCountBefore = Board.SequenceCount(MyTeam);
-
-            bool wasPositionFree = Board.TryAddPin(position, MyTeam);
-
-            if (!wasPositionFree)
-            {
-                _boardPresenter.Shake(position);
-                Debug.Log("That position is not free.");
-                return;
-            }
-
-            if (!MyHand.TryRemove(card))
-            {
-                Debug.LogError($"Unexpected behavior: {card} could not be removed from the hand.");
-                return;
-            }
-
-            int sequenceCountAfter = Board.SequenceCount(MyTeam);
-
-            int sequenceCountDelta = sequenceCountAfter - sequenceCountBefore;
-
-            if (sequenceCountDelta > 0)
-            {
-                Debug.Log("SEQUENCE!");
-            }
-
-            await SuccessfulPlayAnimation(card, position);
-
-            var move = new Move()
-            {
-                Card = card,
-                Position = position,
-                Team = MyTeam
-            };
-
-            MoveHistory.Add(move);
-
+            
             if (Opponent != null)
             {
                 _isMyTurn = false;

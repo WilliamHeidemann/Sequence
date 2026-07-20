@@ -1,3 +1,4 @@
+using System;
 using Game.Models;
 using LitMotion;
 using LitMotion.Extensions;
@@ -13,6 +14,8 @@ namespace Game
         [SerializeField] private UIDocument _cardPrefab;
         [SerializeField] private Transform _showDisplayTransform;
         [SerializeField] private Transform _discardPileTransform;
+        [SerializeField] private Sprite _sunCard;
+        [SerializeField] private Sprite _moonCard;
 
         [Header("Parameters")] [SerializeField]
         private float _durationToDisplay = 0.2f;
@@ -43,8 +46,14 @@ namespace Game
                 .WithEase(Ease.InCubic)
                 .WithOnComplete(() =>
                 {
-                    cardGameObject.rootVisualElement.Q<VisualElement>("Card").style.backgroundImage =
-                        new StyleBackground(_cardSprites.Get(card));
+                    Sprite sprite = card.Symbol switch {
+                        Symbol.Sun => _sunCard,
+                        Symbol.Moon => _moonCard,
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                    VisualElement root = cardGameObject.rootVisualElement;
+                    root.Q<VisualElement>("Card").style.backgroundImage = new StyleBackground(sprite);
+                    root.Q<Label>().text = card.Rank.AsSingleDigit();
                     LMotion.Create(halfWayRotation, _showDisplayTransform.rotation, _durationToDisplay / 2)
                         .WithEase(Ease.OutCubic)
                         .BindToRotation(cardTransform);
