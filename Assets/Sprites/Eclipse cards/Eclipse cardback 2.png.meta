@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: d189fc3cb9e054c0c8eb4e98bd29b5a2
+guid: bf39d75c17ca242c5b28be3985bf0b5c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7248622300140360812
-    second: Eclipse cardback_0
+      213: -1053082386189245252
+    second: Eclipse cardback 2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Eclipse cardback_0
+      name: Eclipse cardback 2_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 200
-        height: 301
+        width: 832
+        height: 1249
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 49ba8214c68b76b90800000000000000
-      internalID: -7248622300140360812
+      spriteID: cb428f33623b261f0800000000000000
+      internalID: -1053082386189245252
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Eclipse cardback_0: -7248622300140360812
+      Eclipse cardback 2_0: -1053082386189245252
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

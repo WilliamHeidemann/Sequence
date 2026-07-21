@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace Game
 {
-    public class CardDrawAnimator : MonoBehaviour
+    public class DrawAnimator : MonoBehaviour
     {
         [SerializeField] private UIDocument _drawPileDocument;
         [SerializeField] private CardSprites _cardSprites;

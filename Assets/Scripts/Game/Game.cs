@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Game.Models;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using UtilityToolkit.Runtime;
 using Position = Game.Models.Position;
@@ -13,7 +14,7 @@ namespace Game
     public class Game : MonoBehaviour, ICommunicationProtocol
     {
         [SerializeField] private BoardPresenter _boardPresenter;
-        [SerializeField] private CardDrawAnimator _cardDrawAnimator;
+        [FormerlySerializedAs("_cardDrawAnimator")] [SerializeField] private DrawAnimator _drawAnimator;
         [SerializeField] private CardAligner _cardAligner;
         [SerializeField] private DiscardPile _discardPile;
         [SerializeField] private OpponentHandAnimator _opponentHandAnimator;
@@ -41,8 +42,6 @@ namespace Game
 
         private async Awaitable HandleCardClicked(Card tabbedCard)
         {
-            Debug.Log(string.Join(", ", MyHand.GetCards()));
-            
             Position position = BoardLayout.Get(tabbedCard);
 
             if (!_isMyTurn)
@@ -83,8 +82,10 @@ namespace Game
                 return;
             }
             
-            await SuccessfulPlayAnimation(cardInHand, position);
+            Card drawnCard = Deck.Draw();
 
+            MyHand.TryAdd(drawnCard);
+            
             Move move = new()
             {
                 Card = cardInHand,
@@ -93,6 +94,8 @@ namespace Game
             };
             
             MoveHistory.Add(move);
+            
+            await SuccessfulPlayAnimation(cardInHand, position, drawnCard);
             
             if (Opponent != null)
             {
@@ -105,28 +108,24 @@ namespace Game
         {
             foreach (Card card in cards)
             {
-                UIDocument cardUIDocument = _cardDrawAnimator.InstantiateCardFaceDown();
-                await _cardDrawAnimator.AnimateDrawing(card, cardUIDocument);
+                UIDocument cardUIDocument = _drawAnimator.InstantiateCardFaceDown();
+                await _drawAnimator.AnimateDrawing(card, cardUIDocument);
                 _cardAligner.AddCard(card, cardUIDocument.transform);
             }
         }
 
-        private async Awaitable SuccessfulPlayAnimation(Card card, Position position)
+        private async Awaitable SuccessfulPlayAnimation(Card playedCard, Position position, Card drawnCard)
         {
             _boardPresenter.Pop(position);
 
-            if (_cardAligner.RemoveCard(card, out Transform cardTransform))
+            if (_cardAligner.RemoveCard(playedCard, out Transform cardTransform))
             {
                 await _discardPile.Discard(cardTransform);
             }
             
             await _boardPresenter.Pin(position, MyTeam);
 
-            Card draw = Deck.Draw();
-
-            MyHand.TryAdd(draw);
-
-            await PlayDrawAnimation(new[] { draw });
+            await PlayDrawAnimation(new[] { drawnCard });
         }
 
         public void PassGameState(GameStateData gameStateData)
