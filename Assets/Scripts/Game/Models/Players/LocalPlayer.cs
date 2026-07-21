@@ -57,32 +57,28 @@ namespace Game.Models.Players
                 return false;
             }
 
-            int sequenceCountBefore = Board.SequenceCount(MyTeam);
-
-            if (!Board.TryAddPin(position, MyTeam))
+            if (cardInHand.IsRemover)
             {
-                Debug.LogError($"Unexpected behavior: {position} could not be pinned.");
+                if (!Board.Remove(position))
+                {
+                    throw new Exception($"Unexpected behavior: {position} could not be removed from.");
+                }
             }
-
-            int sequenceCountAfter = Board.SequenceCount(MyTeam);
-
-            int sequenceCountDelta = sequenceCountAfter - sequenceCountBefore;
-
-            if (sequenceCountDelta > 0)
+            else if (!Board.TryAddPin(position, MyTeam))
             {
-                Debug.Log("SEQUENCE!");
+                throw new Exception($"Unexpected behavior: {position} could not be pinned.");
             }
 
             if (!MyHand.TryRemove(cardInHand))
             {
-                throw new ArgumentOutOfRangeException($"Unexpected behavior: {cardInHand} was not in the hand.");
+                throw new Exception($"Unexpected behavior: {cardInHand} was not in the hand.");
             }
 
             Card drawnCard = Deck.Draw();
 
             if (!MyHand.TryAdd(drawnCard))
             {
-                throw new ArgumentOutOfRangeException($"Unexpected behavior: {drawnCard} could not be added.");
+                throw new Exception($"Unexpected behavior: {drawnCard} could not be added.");
             }
 
             Move move = new()

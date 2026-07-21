@@ -29,14 +29,23 @@ namespace Game.Models
         public void Set(Move[] moves)
         {
             Clear();
-            foreach (var move in moves)
+            foreach (Move move in moves)
             {
-                if (!TakenSpaces.TryAdd(move.Position, move.Team))
+                if (move.Card.IsRemover)
+                {
+                    TakenSpaces.Remove(move.Position);
+                }
+                else if (!TakenSpaces.TryAdd(move.Position, move.Team))
                 {
                     Debug.LogError($"Duplicate move at {BoardLayout.Get(move.Position)}");
                     return;
                 }
             }
+        }
+
+        public bool Remove(Position position)
+        {
+            return TakenSpaces.Remove(position);
         }
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Game.Models;
 using LitMotion;
 using LitMotion.Extensions;
@@ -25,6 +26,7 @@ namespace Game
         public event Action<Position> OnPositionClicked;
 
         private readonly Dictionary<Position, Button> _buttons = new();
+        private readonly Dictionary<Position, Transform> _pins = new();
 
         private void OnEnable()
         {
@@ -110,6 +112,7 @@ namespace Game
             var prefab = team == Team.Red ? _redPinPrefab : _yellowPinPrefab;
             var pin = Instantiate(prefab, _pinStartTRS.position, _pinStartTRS.rotation);
             pin.localScale = _pinStartTRS.localScale;
+            _pins.Add(position, pin);
 
             var endPosition = _pinGrid.Get(position);
 
@@ -128,6 +131,39 @@ namespace Game
                 .BindToLocalScale(pin);
 
             await Awaitable.WaitForSecondsAsync(duration);
+        }
+
+        public async Awaitable RemovePin(Position position)
+        {
+            if (_pins.Remove(position, out Transform pin))
+            {
+                const float duration = 0.5f;
+
+                Vector3 startPosition = pin.position;
+                Vector3 endPosition = _pinStartTRS.position;
+
+                Quaternion startRotation = pin.rotation;
+                Quaternion endRotation = _pinStartTRS.rotation;
+
+                Vector3 startScale = pin.localScale;
+                Vector3 endScale = _pinStartTRS.localScale;
+
+                LMotion.Create(startPosition, endPosition, duration)
+                    .WithEase(Ease.InOutCubic)
+                    .BindToPosition(pin);
+
+                LMotion.Create(startRotation, endRotation, duration)
+                    .WithEase(Ease.InOutCubic)
+                    .BindToRotation(pin);
+
+                LMotion.Create(startScale, endScale, duration)
+                    .WithEase(Ease.InOutCubic)
+                    .BindToLocalScale(pin);
+
+                await Awaitable.WaitForSecondsAsync(duration);
+
+                Destroy(pin.gameObject);
+            }
         }
     }
 }

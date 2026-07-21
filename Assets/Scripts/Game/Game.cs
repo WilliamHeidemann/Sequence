@@ -49,8 +49,21 @@ namespace Game
 
         private void HandlePositionClicked(Position position)
         {
+            int sequenceCountBefore = LocalPlayer.Board.SequenceCount(LocalPlayer.MyTeam);
+            
             bool success = LocalPlayer.AttemptPlay(position);
             if (!success) _boardPresenter.Shake(position);
+            else
+            {
+                int sequenceCountAfter = LocalPlayer.Board.SequenceCount(LocalPlayer.MyTeam);
+
+                int sequenceCountDelta = sequenceCountAfter - sequenceCountBefore;
+
+                if (sequenceCountDelta > 0)
+                {
+                    Debug.Log("SEQUENCE!");
+                }
+            }
         }
 
         private async Awaitable PlayDrawAnimation(IEnumerable<Card> cards)
@@ -72,7 +85,14 @@ namespace Game
                 await _discardPile.Discard(cardTransform);
             }
 
-            await _boardPresenter.Pin(move.Position, move.Team);
+            if (move.Card.IsRemover)
+            {
+                await _boardPresenter.RemovePin(move.Position);
+            }
+            else
+            {
+                await _boardPresenter.Pin(move.Position, move.Team);
+            }
 
             await PlayDrawAnimation(new[] { drawnCard });
         }
@@ -81,7 +101,14 @@ namespace Game
         {
             await Awaitable.WaitForSecondsAsync(1f); // simulate thinking time.
             await _opponentHandAnimator.AnimatePlay(move.Card);
-            await _boardPresenter.Pin(move.Position, move.Team);
+            if (move.Card.IsRemover)
+            {
+                await _boardPresenter.RemovePin(move.Position);
+            }
+            else
+            {
+                await _boardPresenter.Pin(move.Position, move.Team);
+            }
         }
     }
 }

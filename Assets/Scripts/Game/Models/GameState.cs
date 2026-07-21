@@ -1,7 +1,6 @@
-using Game.Models;
 using Game.Models.Players;
 
-namespace Game
+namespace Game.Models
 {
     public class GameState
     {
