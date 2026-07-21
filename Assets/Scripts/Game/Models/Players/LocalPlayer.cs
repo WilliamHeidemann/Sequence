@@ -59,6 +59,11 @@ namespace Game.Models.Players
 
             if (cardInHand.IsRemover)
             {
+                if (Board.Owner(position).IsSome(out Team owner) && owner == MyTeam)
+                {
+                    return false;
+                }
+                
                 if (!Board.Remove(position))
                 {
                     throw new Exception($"Unexpected behavior: {position} could not be removed from.");

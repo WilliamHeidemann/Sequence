@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.Models.Players;
 using UnityEngine;
+using UtilityToolkit.Runtime;
 
 namespace Game.Models
 {
@@ -46,6 +47,13 @@ namespace Game.Models
         public bool Remove(Position position)
         {
             return TakenSpaces.Remove(position);
+        }
+
+        public Option<Team> Owner(Position position)
+        {
+            return TakenSpaces.TryGetValue(position, out Team team) 
+                ? Option<Team>.Some(team) 
+                : Option<Team>.None;
         }
     }
 
