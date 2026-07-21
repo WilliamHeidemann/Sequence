@@ -12,7 +12,7 @@ namespace Game.Models
         {
             if (IsFull)
                 return false;
-            
+
             Cards.Add(card);
             return true;
         }
@@ -21,9 +21,9 @@ namespace Game.Models
         {
             return Cards.Remove(card);
         }
-        
+
         public bool Contains(Card card) => Cards.Contains(card);
-        
+
         public int Count => Cards.Count;
         public bool IsFull => Count == 7;
 
@@ -44,7 +44,6 @@ namespace Game.Models
             if (isOpenSpace)
             {
                 if (Contains(cardToCover)) return Option<Card>.Some(cardToCover);
-                if (Contains(cardToCover.Equivalent)) return Option<Card>.Some(cardToCover.Equivalent);
                 return Cards.FirstOption(c => c.IsWild);
             }
 

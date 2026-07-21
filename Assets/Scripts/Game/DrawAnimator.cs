@@ -46,11 +46,7 @@ namespace Game
                 .WithEase(Ease.InCubic)
                 .WithOnComplete(() =>
                 {
-                    Sprite sprite = card.Symbol switch {
-                        Symbol.Sun => _sunCard,
-                        Symbol.Moon => _moonCard,
-                        _ => throw new ArgumentOutOfRangeException()
-                    };
+                    Sprite sprite = _cardSprites.Get(card);
                     VisualElement root = cardGameObject.rootVisualElement;
                     root.Q<VisualElement>("Card").style.backgroundImage = new StyleBackground(sprite);
                     root.Q<Label>().text = card.Rank.AsSingleDigit();

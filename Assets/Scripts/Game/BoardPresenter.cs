@@ -25,7 +25,7 @@ namespace Game
         [SerializeField] private Sprite _sunCard;
         [SerializeField] private Sprite _moonCard;
 
-        public event Func<Card, Awaitable> OnCardClicked;
+        public event Func<Position, Awaitable> OnPositionClicked;
 
         private readonly Dictionary<Position, Button> _buttons = new();
 
@@ -51,26 +51,20 @@ namespace Game
                 {
                     Column column = slotPair.column;
 
+                    Position position = new(row, column);
+
                     Button slot = slotPair.visualSlot.Q<Button>("Slot");
 
-                    Card card = BoardLayout.Get(row, column);
+                    Card card = BoardLayout.Get(position);
 
-                    Symbol symbol = card.Symbol;
-
-                    slot.style.backgroundImage = new StyleBackground(symbol switch
-                    {
-                        Symbol.Sun => _sunCard,
-                        Symbol.Moon => _moonCard,
-                        _ => throw new ArgumentOutOfRangeException()
-                    });
+                    slot.style.backgroundImage = new StyleBackground(_cardSprites.Get(card));
 
                     Label label = slot.Q<Label>();
 
                     label.text = card.Rank.AsSingleDigit();
-                    
-                    slot.clicked += () => OnCardClicked?.Invoke(card);
 
-                    Position position = new(rowPair.row, slotPair.column);
+
+                    slot.clicked += () => OnPositionClicked?.Invoke(position);
 
                     _buttons[position] = slot;
                 }

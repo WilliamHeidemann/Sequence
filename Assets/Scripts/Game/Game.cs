@@ -14,7 +14,7 @@ namespace Game
     public class Game : MonoBehaviour, ICommunicationProtocol
     {
         [SerializeField] private BoardPresenter _boardPresenter;
-        [FormerlySerializedAs("_cardDrawAnimator")] [SerializeField] private DrawAnimator _drawAnimator;
+        [SerializeField] private DrawAnimator _drawAnimator;
         [SerializeField] private CardAligner _cardAligner;
         [SerializeField] private DiscardPile _discardPile;
         [SerializeField] private OpponentHandAnimator _opponentHandAnimator;
@@ -35,38 +35,38 @@ namespace Game
 
         private void Start()
         {
-            _boardPresenter.OnCardClicked += HandleCardClicked;
+            _boardPresenter.OnPositionClicked += HandlePositionClicked;
             _ = PlayDrawAnimation(MyHand.GetCards());
             Opponent = new Bot(this, Team.Yellow);
         }
 
-        private async Awaitable HandleCardClicked(Card tabbedCard)
+        private async Awaitable HandlePositionClicked(Position position)
         {
-            Position position = BoardLayout.Get(tabbedCard);
+            Card tabbedCard = BoardLayout.Get(position);
 
             if (!_isMyTurn)
             {
                 _boardPresenter.Shake(position);
                 return;
             }
-            
+
             bool isOpenSpace = Board.Fits(position);
-            
+
             Option<Card> requiredCard = MyHand.FindCard(tabbedCard, isOpenSpace);
-            
+
             if (!requiredCard.IsSome(out Card cardInHand))
             {
                 _boardPresenter.Shake(position);
                 return;
             }
-            
+
             int sequenceCountBefore = Board.SequenceCount(MyTeam);
-            
+
             if (!Board.TryAddPin(position, MyTeam))
             {
                 Debug.LogError($"Unexpected behavior: {position} could not be pinned.");
             }
-            
+
             int sequenceCountAfter = Board.SequenceCount(MyTeam);
 
             int sequenceCountDelta = sequenceCountAfter - sequenceCountBefore;
@@ -75,28 +75,28 @@ namespace Game
             {
                 Debug.Log("SEQUENCE!");
             }
-            
+
             if (!MyHand.TryRemove(cardInHand))
             {
                 Debug.LogError($"Unexpected behavior: {cardInHand} could not be removed from the hand.");
                 return;
             }
-            
+
             Card drawnCard = Deck.Draw();
 
             MyHand.TryAdd(drawnCard);
-            
+
             Move move = new()
             {
                 Card = cardInHand,
                 Position = position,
                 Team = MyTeam
             };
-            
+
             MoveHistory.Add(move);
-            
+
             await SuccessfulPlayAnimation(cardInHand, position, drawnCard);
-            
+
             if (Opponent != null)
             {
                 _isMyTurn = false;
@@ -122,7 +122,7 @@ namespace Game
             {
                 await _discardPile.Discard(cardTransform);
             }
-            
+
             await _boardPresenter.Pin(position, MyTeam);
 
             await PlayDrawAnimation(new[] { drawnCard });

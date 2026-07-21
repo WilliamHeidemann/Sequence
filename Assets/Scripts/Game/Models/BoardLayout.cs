@@ -6,144 +6,54 @@ namespace Game.Models
 {
     public static class BoardLayout
     {
-        public static Card Get(Row row, Column column)
+        private static readonly Dictionary<Card, (Position First, Position Second)> CardToPositions = new()
         {
-            return (row, column) switch
-            {
-                // --- Row One ---
-                (Row.One, Column.One) => Card.TwoOfSpades,
-                (Row.One, Column.Two) => Card.ThreeOfSpades,
-                (Row.One, Column.Three) => Card.FourOfSpades,
-                (Row.One, Column.Four) => Card.FiveOfSpades,
-                (Row.One, Column.Five) => Card.SixOfSpades,
-                (Row.One, Column.Six) => Card.SevenOfSpades,
-                (Row.One, Column.Seven) => Card.EightOfSpades,
-                (Row.One, Column.Eight) => Card.NineOfSpades,
+            // --- Sun ---
+            [Card.AceOfSun] = (new Position(Row.Five, Column.Three), new Position(Row.Five, Column.Eight)),
+            [Card.TwoOfSun] = (new Position(Row.One, Column.One), new Position(Row.Four, Column.Three)),
+            [Card.ThreeOfSun] = (new Position(Row.One, Column.Two), new Position(Row.Four, Column.Four)),
+            [Card.FourOfSun] = (new Position(Row.One, Column.Three), new Position(Row.Four, Column.Five)),
+            [Card.FiveOfSun] = (new Position(Row.One, Column.Four), new Position(Row.Four, Column.Six)),
+            [Card.SixOfSun] = (new Position(Row.One, Column.Five), new Position(Row.Three, Column.Six)),
+            [Card.SevenOfSun] = (new Position(Row.One, Column.Six), new Position(Row.Three, Column.Five)),
+            [Card.EightOfSun] = (new Position(Row.One, Column.Seven), new Position(Row.Three, Column.Four)),
+            [Card.NineOfSun] = (new Position(Row.One, Column.Eight), new Position(Row.Three, Column.Three)),
+            [Card.TenOfSun] = (new Position(Row.Two, Column.Eight), new Position(Row.Three, Column.Two)),
+            [Card.QueenOfSun] = (new Position(Row.Three, Column.Eight), new Position(Row.Four, Column.Two)),
+            [Card.KingOfSun] = (new Position(Row.Four, Column.Eight), new Position(Row.Five, Column.Two)),
 
-                // --- Row Two ---
-                (Row.Two, Column.One) => Card.AceOfDiamonds,
-                (Row.Two, Column.Two) => Card.AceOfClubs,
-                (Row.Two, Column.Three) => Card.KingOfClubs,
-                (Row.Two, Column.Four) => Card.QueenOfClubs,
-                (Row.Two, Column.Five) => Card.TenOfClubs,
-                (Row.Two, Column.Six) => Card.NineOfClubs,
-                (Row.Two, Column.Seven) => Card.EightOfClubs,
-                (Row.Two, Column.Eight) => Card.TenOfSpades,
+            // --- Moon ---
+            [Card.AceOfMoon] = (new Position(Row.Two, Column.One), new Position(Row.Two, Column.Two)),
+            [Card.TwoOfMoon] = (new Position(Row.Five, Column.Four), new Position(Row.Six, Column.Eight)),
+            [Card.ThreeOfMoon] = (new Position(Row.Five, Column.Five), new Position(Row.Six, Column.Seven)),
+            [Card.FourOfMoon] = (new Position(Row.Five, Column.Six), new Position(Row.Six, Column.Six)),
+            [Card.FiveOfMoon] = (new Position(Row.Five, Column.Seven), new Position(Row.Six, Column.Five)),
+            [Card.SixOfMoon] = (new Position(Row.Four, Column.Seven), new Position(Row.Six, Column.Four)),
+            [Card.SevenOfMoon] = (new Position(Row.Three, Column.Seven), new Position(Row.Six, Column.Three)),
+            [Card.EightOfMoon] = (new Position(Row.Two, Column.Seven), new Position(Row.Six, Column.Two)),
+            [Card.NineOfMoon] = (new Position(Row.Two, Column.Six), new Position(Row.Six, Column.One)),
+            [Card.TenOfMoon] = (new Position(Row.Two, Column.Five), new Position(Row.Five, Column.One)),
+            [Card.QueenOfMoon] = (new Position(Row.Two, Column.Four), new Position(Row.Four, Column.One)),
+            [Card.KingOfMoon] = (new Position(Row.Two, Column.Three), new Position(Row.Three, Column.One)),
+        };
 
-                // --- Row Three ---
-                (Row.Three, Column.One) => Card.KingOfDiamonds,
-                (Row.Three, Column.Two) => Card.TenOfHearts,
-                (Row.Three, Column.Three) => Card.NineOfHearts,
-                (Row.Three, Column.Four) => Card.EightOfHearts,
-                (Row.Three, Column.Five) => Card.SevenOfHearts,
-                (Row.Three, Column.Six) => Card.SixOfHearts,
-                (Row.Three, Column.Seven) => Card.SevenOfClubs,
-                (Row.Three, Column.Eight) => Card.QueenOfSpades,
+        private static readonly Dictionary<Position, Card> PositionToCard = Invert(CardToPositions);
+        
+        public static Card Get(Position position) => PositionToCard[position];
 
-                // --- Row Four ---
-                (Row.Four, Column.One) => Card.QueenOfDiamonds,
-                (Row.Four, Column.Two) => Card.QueenOfHearts,
-                (Row.Four, Column.Three) => Card.TwoOfHearts,
-                (Row.Four, Column.Four) => Card.ThreeOfHearts,
-                (Row.Four, Column.Five) => Card.FourOfHearts,
-                (Row.Four, Column.Six) => Card.FiveOfHearts,
-                (Row.Four, Column.Seven) => Card.SixOfClubs,
-                (Row.Four, Column.Eight) => Card.KingOfSpades,
-
-                // --- Row Five ---
-                (Row.Five, Column.One) => Card.TenOfDiamonds,
-                (Row.Five, Column.Two) => Card.KingOfHearts,
-                (Row.Five, Column.Three) => Card.AceOfHearts,
-                (Row.Five, Column.Four) => Card.TwoOfClubs,
-                (Row.Five, Column.Five) => Card.ThreeOfClubs,
-                (Row.Five, Column.Six) => Card.FourOfClubs,
-                (Row.Five, Column.Seven) => Card.FiveOfClubs,
-                (Row.Five, Column.Eight) => Card.AceOfSpades,
-
-                // --- Row Six ---
-                (Row.Six, Column.One) => Card.NineOfDiamonds,
-                (Row.Six, Column.Two) => Card.EightOfDiamonds,
-                (Row.Six, Column.Three) => Card.SevenOfDiamonds,
-                (Row.Six, Column.Four) => Card.SixOfDiamonds,
-                (Row.Six, Column.Five) => Card.FiveOfDiamonds,
-                (Row.Six, Column.Six) => Card.FourOfDiamonds,
-                (Row.Six, Column.Seven) => Card.ThreeOfDiamonds,
-                (Row.Six, Column.Eight) => Card.TwoOfDiamonds,
-
-                _ => throw new System.ArgumentOutOfRangeException(nameof(row), "Invalid board coordinates")
-            };
-        }
-
-        public static Card Get(Position position) => Get(position.Row, position.Column);
-
-        public static Position Get(Card card)
+        public static (Position First, Position Second) Get(Card card) => CardToPositions[card];
+        
+        private static Dictionary<Position, Card> Invert(Dictionary<Card, (Position First, Position Second)> source)
         {
-            return (card.Suit, card.Rank) switch
+            Dictionary<Position, Card> result = new();
+            foreach (var (card, (first, second)) in source)
             {
-                // --- Row One ---
-                (Suit.Spades, Rank.Two) => new Position(Row.One, Column.One),
-                (Suit.Spades, Rank.Three) => new Position(Row.One, Column.Two),
-                (Suit.Spades, Rank.Four) => new Position(Row.One, Column.Three),
-                (Suit.Spades, Rank.Five) => new Position(Row.One, Column.Four),
-                (Suit.Spades, Rank.Six) => new Position(Row.One, Column.Five),
-                (Suit.Spades, Rank.Seven) => new Position(Row.One, Column.Six),
-                (Suit.Spades, Rank.Eight) => new Position(Row.One, Column.Seven),
-                (Suit.Spades, Rank.Nine) => new Position(Row.One, Column.Eight),
+                result.Add(first, card);
+                result.Add(second, card);
+            }
 
-                // --- Row Two ---
-                (Suit.Diamonds, Rank.Ace) => new Position(Row.Two, Column.One),
-                (Suit.Clubs, Rank.Ace) => new Position(Row.Two, Column.Two),
-                (Suit.Clubs, Rank.King) => new Position(Row.Two, Column.Three),
-                (Suit.Clubs, Rank.Queen) => new Position(Row.Two, Column.Four),
-                (Suit.Clubs, Rank.Ten) => new Position(Row.Two, Column.Five),
-                (Suit.Clubs, Rank.Nine) => new Position(Row.Two, Column.Six),
-                (Suit.Clubs, Rank.Eight) => new Position(Row.Two, Column.Seven),
-                (Suit.Spades, Rank.Ten) => new Position(Row.Two, Column.Eight),
-
-                // --- Row Three ---
-                (Suit.Diamonds, Rank.King) => new Position(Row.Three, Column.One),
-                (Suit.Hearts, Rank.Ten) => new Position(Row.Three, Column.Two),
-                (Suit.Hearts, Rank.Nine) => new Position(Row.Three, Column.Three),
-                (Suit.Hearts, Rank.Eight) => new Position(Row.Three, Column.Four),
-                (Suit.Hearts, Rank.Seven) => new Position(Row.Three, Column.Five),
-                (Suit.Hearts, Rank.Six) => new Position(Row.Three, Column.Six),
-                (Suit.Clubs, Rank.Seven) => new Position(Row.Three, Column.Seven),
-                (Suit.Spades, Rank.Queen) => new Position(Row.Three, Column.Eight),
-
-                // --- Row Four ---
-                (Suit.Diamonds, Rank.Queen) => new Position(Row.Four, Column.One),
-                (Suit.Hearts, Rank.Queen) => new Position(Row.Four, Column.Two),
-                (Suit.Hearts, Rank.Two) => new Position(Row.Four, Column.Three),
-                (Suit.Hearts, Rank.Three) => new Position(Row.Four, Column.Four),
-                (Suit.Hearts, Rank.Four) => new Position(Row.Four, Column.Five),
-                (Suit.Hearts, Rank.Five) => new Position(Row.Four, Column.Six),
-                (Suit.Clubs, Rank.Six) => new Position(Row.Four, Column.Seven),
-                (Suit.Spades, Rank.King) => new Position(Row.Four, Column.Eight),
-
-                // --- Row Five ---
-                (Suit.Diamonds, Rank.Ten) => new Position(Row.Five, Column.One),
-                (Suit.Hearts, Rank.King) => new Position(Row.Five, Column.Two),
-                (Suit.Hearts, Rank.Ace) => new Position(Row.Five, Column.Three),
-                (Suit.Clubs, Rank.Two) => new Position(Row.Five, Column.Four),
-                (Suit.Clubs, Rank.Three) => new Position(Row.Five, Column.Five),
-                (Suit.Clubs, Rank.Four) => new Position(Row.Five, Column.Six),
-                (Suit.Clubs, Rank.Five) => new Position(Row.Five, Column.Seven),
-                (Suit.Spades, Rank.Ace) => new Position(Row.Five, Column.Eight),
-
-                // --- Row Six ---
-                (Suit.Diamonds, Rank.Nine) => new Position(Row.Six, Column.One),
-                (Suit.Diamonds, Rank.Eight) => new Position(Row.Six, Column.Two),
-                (Suit.Diamonds, Rank.Seven) => new Position(Row.Six, Column.Three),
-                (Suit.Diamonds, Rank.Six) => new Position(Row.Six, Column.Four),
-                (Suit.Diamonds, Rank.Five) => new Position(Row.Six, Column.Five),
-                (Suit.Diamonds, Rank.Four) => new Position(Row.Six, Column.Six),
-                (Suit.Diamonds, Rank.Three) => new Position(Row.Six, Column.Seven),
-                (Suit.Diamonds, Rank.Two) => new Position(Row.Six, Column.Eight),
-
-                _ => throw new ArgumentException("This card does not exist on the board layout.", nameof(card))
-            };
+            return result;
         }
-
 
         public static IEnumerable<Position[]> AllSequencePatterns()
         {

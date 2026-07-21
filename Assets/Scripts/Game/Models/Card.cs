@@ -4,154 +4,79 @@ namespace Game.Models
 {
     public readonly struct Card : IEquatable<Card>
     {
-        public static Card TwoOfClubs => new(Suit.Clubs, Rank.Two);
-        public static Card ThreeOfClubs => new(Suit.Clubs, Rank.Three);
-        public static Card FourOfClubs => new(Suit.Clubs, Rank.Four);
-        public static Card FiveOfClubs => new(Suit.Clubs, Rank.Five);
-        public static Card SixOfClubs => new(Suit.Clubs, Rank.Six);
-        public static Card SevenOfClubs => new(Suit.Clubs, Rank.Seven);
-        public static Card EightOfClubs => new(Suit.Clubs, Rank.Eight);
-        public static Card NineOfClubs => new(Suit.Clubs, Rank.Nine);
-        public static Card TenOfClubs => new(Suit.Clubs, Rank.Ten);
-        public static Card JackOfClubs => new(Suit.Clubs, Rank.Jack);
-        public static Card QueenOfClubs => new(Suit.Clubs, Rank.Queen);
-        public static Card KingOfClubs => new(Suit.Clubs, Rank.King);
-        public static Card AceOfClubs => new(Suit.Clubs, Rank.Ace);
+        public static Card TwoOfMoon => new(Symbol.Moon, Rank.Two);
+        public static Card ThreeOfMoon => new(Symbol.Moon, Rank.Three);
+        public static Card FourOfMoon => new(Symbol.Moon, Rank.Four);
+        public static Card FiveOfMoon => new(Symbol.Moon, Rank.Five);
+        public static Card SixOfMoon => new(Symbol.Moon, Rank.Six);
+        public static Card SevenOfMoon => new(Symbol.Moon, Rank.Seven);
+        public static Card EightOfMoon => new(Symbol.Moon, Rank.Eight);
+        public static Card NineOfMoon => new(Symbol.Moon, Rank.Nine);
+        public static Card TenOfMoon => new(Symbol.Moon, Rank.Ten);
+        public static Card JackOfMoon => new(Symbol.Moon, Rank.Jack);
+        public static Card QueenOfMoon => new(Symbol.Moon, Rank.Queen);
+        public static Card KingOfMoon => new(Symbol.Moon, Rank.King);
+        public static Card AceOfMoon => new(Symbol.Moon, Rank.Ace);
 
-        public static Card TwoOfDiamonds => new(Suit.Diamonds, Rank.Two);
-        public static Card ThreeOfDiamonds => new(Suit.Diamonds, Rank.Three);
-        public static Card FourOfDiamonds => new(Suit.Diamonds, Rank.Four);
-        public static Card FiveOfDiamonds => new(Suit.Diamonds, Rank.Five);
-        public static Card SixOfDiamonds => new(Suit.Diamonds, Rank.Six);
-        public static Card SevenOfDiamonds => new(Suit.Diamonds, Rank.Seven);
-        public static Card EightOfDiamonds => new(Suit.Diamonds, Rank.Eight);
-        public static Card NineOfDiamonds => new(Suit.Diamonds, Rank.Nine);
-        public static Card TenOfDiamonds => new(Suit.Diamonds, Rank.Ten);
-        public static Card JackOfDiamonds => new(Suit.Diamonds, Rank.Jack);
-        public static Card QueenOfDiamonds => new(Suit.Diamonds, Rank.Queen);
-        public static Card KingOfDiamonds => new(Suit.Diamonds, Rank.King);
-        public static Card AceOfDiamonds => new(Suit.Diamonds, Rank.Ace);
-
-        public static Card TwoOfHearts => new(Suit.Hearts, Rank.Two);
-        public static Card ThreeOfHearts => new(Suit.Hearts, Rank.Three);
-        public static Card FourOfHearts => new(Suit.Hearts, Rank.Four);
-        public static Card FiveOfHearts => new(Suit.Hearts, Rank.Five);
-        public static Card SixOfHearts => new(Suit.Hearts, Rank.Six);
-        public static Card SevenOfHearts => new(Suit.Hearts, Rank.Seven);
-        public static Card EightOfHearts => new(Suit.Hearts, Rank.Eight);
-        public static Card NineOfHearts => new(Suit.Hearts, Rank.Nine);
-        public static Card TenOfHearts => new(Suit.Hearts, Rank.Ten);
-        public static Card JackOfHearts => new(Suit.Hearts, Rank.Jack);
-        public static Card QueenOfHearts => new(Suit.Hearts, Rank.Queen);
-        public static Card KingOfHearts => new(Suit.Hearts, Rank.King);
-        public static Card AceOfHearts => new(Suit.Hearts, Rank.Ace);
-
-        public static Card TwoOfSpades => new(Suit.Spades, Rank.Two);
-        public static Card ThreeOfSpades => new(Suit.Spades, Rank.Three);
-        public static Card FourOfSpades => new(Suit.Spades, Rank.Four);
-        public static Card FiveOfSpades => new(Suit.Spades, Rank.Five);
-        public static Card SixOfSpades => new(Suit.Spades, Rank.Six);
-        public static Card SevenOfSpades => new(Suit.Spades, Rank.Seven);
-        public static Card EightOfSpades => new(Suit.Spades, Rank.Eight);
-        public static Card NineOfSpades => new(Suit.Spades, Rank.Nine);
-        public static Card TenOfSpades => new(Suit.Spades, Rank.Ten);
-        public static Card JackOfSpades => new(Suit.Spades, Rank.Jack);
-        public static Card QueenOfSpades => new(Suit.Spades, Rank.Queen);
-        public static Card KingOfSpades => new(Suit.Spades, Rank.King);
-        public static Card AceOfSpades => new(Suit.Spades, Rank.Ace);
+        public static Card TwoOfSun => new(Symbol.Sun, Rank.Two);
+        public static Card ThreeOfSun => new(Symbol.Sun, Rank.Three);
+        public static Card FourOfSun => new(Symbol.Sun, Rank.Four);
+        public static Card FiveOfSun => new(Symbol.Sun, Rank.Five);
+        public static Card SixOfSun => new(Symbol.Sun, Rank.Six);
+        public static Card SevenOfSun => new(Symbol.Sun, Rank.Seven);
+        public static Card EightOfSun => new(Symbol.Sun, Rank.Eight);
+        public static Card NineOfSun => new(Symbol.Sun, Rank.Nine);
+        public static Card TenOfSun => new(Symbol.Sun, Rank.Ten);
+        public static Card JackOfSun => new(Symbol.Sun, Rank.Jack);
+        public static Card QueenOfSun => new(Symbol.Sun, Rank.Queen);
+        public static Card KingOfSun => new(Symbol.Sun, Rank.King);
+        public static Card AceOfSun => new(Symbol.Sun, Rank.Ace);
 
         public static Card[] FullDeck => new[]
         {
-            TwoOfClubs,
-            ThreeOfClubs,
-            FourOfClubs,
-            FiveOfClubs,
-            SixOfClubs,
-            SevenOfClubs,
-            EightOfClubs,
-            NineOfClubs,
-            TenOfClubs,
-            JackOfClubs,
-            QueenOfClubs,
-            KingOfClubs,
-            AceOfClubs,
+            TwoOfMoon,
+            ThreeOfMoon,
+            FourOfMoon,
+            FiveOfMoon,
+            SixOfMoon,
+            SevenOfMoon,
+            EightOfMoon,
+            NineOfMoon,
+            TenOfMoon,
+            JackOfMoon,
+            QueenOfMoon,
+            KingOfMoon,
+            AceOfMoon,
 
-            TwoOfDiamonds,
-            ThreeOfDiamonds,
-            FourOfDiamonds,
-            FiveOfDiamonds,
-            SixOfDiamonds,
-            SevenOfDiamonds,
-            EightOfDiamonds,
-            NineOfDiamonds,
-            TenOfDiamonds,
-            JackOfDiamonds,
-            QueenOfDiamonds,
-            KingOfDiamonds,
-            AceOfDiamonds,
-
-            TwoOfHearts,
-            ThreeOfHearts,
-            FourOfHearts,
-            FiveOfHearts,
-            SixOfHearts,
-            SevenOfHearts,
-            EightOfHearts,
-            NineOfHearts,
-            TenOfHearts,
-            JackOfHearts,
-            QueenOfHearts,
-            KingOfHearts,
-            AceOfHearts,
-
-            TwoOfSpades,
-            ThreeOfSpades,
-            FourOfSpades,
-            FiveOfSpades,
-            SixOfSpades,
-            SevenOfSpades,
-            EightOfSpades,
-            NineOfSpades,
-            TenOfSpades,
-            JackOfSpades,
-            QueenOfSpades,
-            KingOfSpades,
-            AceOfSpades,
+            TwoOfSun,
+            ThreeOfSun,
+            FourOfSun,
+            FiveOfSun,
+            SixOfSun,
+            SevenOfSun,
+            EightOfSun,
+            NineOfSun,
+            TenOfSun,
+            JackOfSun,
+            QueenOfSun,
+            KingOfSun,
+            AceOfSun
         };
 
-        private Card(Suit suit, Rank rank)
+        private Card(Symbol symbol, Rank rank)
         {
-            Suit = suit;
+            Symbol = symbol;
             Rank = rank;
         }
 
-        public Suit Suit { get; }
         public Rank Rank { get; }
-        public Symbol Symbol => Suit switch
-        {
-            Suit.Clubs => Symbol.Moon,
-            Suit.Diamonds => Symbol.Moon,
-            Suit.Hearts => Symbol.Sun,
-            Suit.Spades => Symbol.Sun,
-            _ => throw new ArgumentOutOfRangeException()
-        };
-
-        public Card Equivalent => new(
-            Suit switch
-            {
-                Suit.Clubs => Suit.Diamonds,
-                Suit.Diamonds => Suit.Clubs,
-                Suit.Hearts => Suit.Spades,
-                Suit.Spades => Suit.Hearts,
-                _ => throw new ArgumentOutOfRangeException()
-            }, Rank);
-
+        public Symbol Symbol { get; }
         public bool IsWild => Rank is Rank.Jack && Symbol is Symbol.Sun;
         public bool IsRemover => Rank is Rank.Jack && Symbol is Symbol.Moon;
 
         public bool Equals(Card other)
         {
-            return Suit == other.Suit && Rank == other.Rank;
+            return Rank == other.Rank && Symbol == other.Symbol;
         }
 
         public override bool Equals(object obj)
@@ -161,21 +86,13 @@ namespace Game.Models
 
         public override int GetHashCode()
         {
-            return HashCode.Combine((int)Suit, (int)Rank);
+            return HashCode.Combine((int)Symbol, (int)Rank);
         }
 
         public override string ToString()
         {
-            return $"{Rank} of {Suit}";
+            return $"{Rank} of {Symbol}";
         }
-    }
-
-    public enum Suit
-    {
-        Clubs,
-        Diamonds,
-        Hearts,
-        Spades
     }
 
     public enum Rank

@@ -47,13 +47,11 @@ namespace Game
         private Move DecideMove()
         {
             Card card = _gameState.MyHand.GetCards().Where(card => card.Rank != Rank.Jack).RandomElement();
-            Position position = BoardLayout.Get(card);
+            (Position first, Position second) = BoardLayout.Get(card);
 
-            if (!_gameState.Board.Fits(position))
-            {
-                card = card.Equivalent;
-                position = BoardLayout.Get(card);
-            }
+            if (Random.value < 0.5f) (first, second) = (second, first);
+
+            Position position = _gameState.Board.Fits(first) ? first : second;
 
             Move move = new()
             {
