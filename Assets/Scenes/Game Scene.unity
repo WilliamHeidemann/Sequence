@@ -243,8 +243,6 @@ MonoBehaviour:
   _pinStartTRS: {fileID: 272884480}
   _pinEndRotationScale: {fileID: 16290605}
   _pinGrid: {fileID: 1734935967}
-  _sunCard: {fileID: 21300000, guid: 6efcaac0ad40e4992a6e2c7d5481330f, type: 3}
-  _moonCard: {fileID: 21300000, guid: 3031d263737fa4a5a826e6102d464fdf, type: 3}
 --- !u!114 &105310682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1085,8 +1083,6 @@ MonoBehaviour:
   _pinStartTRS: {fileID: 272884480}
   _pinEndRotationScale: {fileID: 16290605}
   _pinGrid: {fileID: 1734935967}
-  _sunCard: {fileID: 0}
-  _moonCard: {fileID: 0}
 --- !u!1 &1052219826
 GameObject:
   m_ObjectHideFlags: 0
@@ -1371,7 +1367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::Game.Game
   _boardPresenter: {fileID: 105310681}
-  _cardDrawAnimator: {fileID: 1883750586}
+  _drawAnimator: {fileID: 1883750586}
   _cardAligner: {fileID: 802132157}
   _discardPile: {fileID: 820946023}
   _opponentHandAnimator: {fileID: 2135924202}
@@ -1529,8 +1525,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b3e7f73eca96403ba82f2e92ab7d3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _spacing: {x: 0.541, y: -0.87}
-  _offset: {x: -1.89, y: 3.11}
+  _spacing: {x: 0.541, y: -0.78}
+  _offset: {x: -1.89, y: 2.71}
 --- !u!1 &1735991318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1596,8 +1592,6 @@ MonoBehaviour:
   _cardPrefab: {fileID: 5067188956579171738, guid: 7f4184a29e94c418794c985bf66cc0c8, type: 3}
   _showDisplayTransform: {fileID: 1735991319}
   _discardPileTransform: {fileID: 820946022}
-  _sunCard: {fileID: 21300000, guid: 6efcaac0ad40e4992a6e2c7d5481330f, type: 3}
-  _moonCard: {fileID: 21300000, guid: 3031d263737fa4a5a826e6102d464fdf, type: 3}
   _durationToDisplay: 0.5
   _displayDuration: 0.4
 --- !u!4 &1883750587
@@ -1717,8 +1711,6 @@ MonoBehaviour:
   _cardPrefab: {fileID: 5067188956579171738, guid: 7f4184a29e94c418794c985bf66cc0c8, type: 3}
   _discardPile: {fileID: 820946023}
   _cardSprites: {fileID: 11400000, guid: 025669167c8e14af299b7d136124e73c, type: 2}
-  _sunCard: {fileID: 21300000, guid: 6efcaac0ad40e4992a6e2c7d5481330f, type: 3}
-  _moonCard: {fileID: 21300000, guid: 3031d263737fa4a5a826e6102d464fdf, type: 3}
 --- !u!1001 &2702880321720100816
 PrefabInstance:
   m_ObjectHideFlags: 0

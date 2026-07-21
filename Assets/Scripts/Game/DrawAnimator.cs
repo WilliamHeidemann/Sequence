@@ -13,8 +13,6 @@ namespace Game
         [SerializeField] private UIDocument _cardPrefab;
         [SerializeField] private Transform _showDisplayTransform;
         [SerializeField] private Transform _discardPileTransform;
-        [SerializeField] private Sprite _sunCard;
-        [SerializeField] private Sprite _moonCard;
 
         [Header("Parameters")] [SerializeField]
         private float _durationToDisplay = 0.2f;

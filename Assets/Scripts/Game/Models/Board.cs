@@ -13,10 +13,10 @@ namespace Game.Models
         public bool Fits(Position position) => !TakenSpaces.ContainsKey(position);
 
         public bool HasSequence(Team team) =>
-            BoardLayout.AllSequencePatterns().Any(pattern => IsSequence(pattern, team));
+            SequencePatterns.All().Any(pattern => IsSequence(pattern, team));
 
         public int SequenceCount(Team team) =>
-            BoardLayout.AllSequencePatterns().Count(pattern => IsSequence(pattern, team));
+            SequencePatterns.All().Count(pattern => IsSequence(pattern, team));
 
         private bool IsSequence(Position[] positions, Team team) =>
             positions.All(position =>

@@ -10,8 +10,6 @@ namespace Game
         [SerializeField] private UIDocument _cardPrefab;
         [SerializeField] private DiscardPile _discardPile;
         [SerializeField] private CardSprites _cardSprites;
-        [SerializeField] private Sprite _sunCard;
-        [SerializeField] private Sprite _moonCard;
 
         public async Awaitable AnimatePlay(Card card)
         {

@@ -22,9 +22,6 @@ namespace Game
         [SerializeField] private Transform _pinEndRotationScale;
         [SerializeField] private PinGrid _pinGrid;
 
-        [SerializeField] private Sprite _sunCard;
-        [SerializeField] private Sprite _moonCard;
-
         public event Func<Position, Awaitable> OnPositionClicked;
 
         private readonly Dictionary<Position, Button> _buttons = new();
