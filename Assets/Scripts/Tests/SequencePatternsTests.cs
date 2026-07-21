@@ -10,7 +10,7 @@ public class SequencePatternsTests
     [Test]
     public void LengthOfAllPatterns_Is84()
     {
-        var patterns = BoardLayout.AllSequencePatterns().ToArray();
+        var patterns = SequencePatterns.All().ToArray();
         Assert.That(patterns.Length, Is.EqualTo(84));
     }
 }
