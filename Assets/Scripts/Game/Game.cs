@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Game.Models;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using UtilityToolkit.Runtime;
 using Position = Game.Models.Position;
@@ -27,7 +23,6 @@ namespace Game
         private MoveHistory MoveHistory => _gameState.MoveHistory;
 
         private bool _isMyTurn = true;
-        // private Option<Card> _selectedCard = Option<Card>.None; // = Option<Card>.Some(Card.JackOfClubs);
 
         private GameState _gameState = new(Team.Red);
 

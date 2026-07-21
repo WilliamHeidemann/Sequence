@@ -73,7 +73,11 @@ namespace Game
 
             while (!_gameState.MyHand.IsFull)
             {
-                _gameState.MyHand.TryAdd(_gameState.Deck.Draw());
+                if (!_gameState.MyHand.TryAdd(_gameState.Deck.Draw()))
+                {
+                    Debug.LogError("Unexpected behavior: Could not draw card.");
+                    break;
+                }
             }
 
             _opponent.PassGameState(_gameState.ToData());

@@ -1,3 +1,1 @@
 - The "play" logic should not exist in a monobehavior, but its own class so it can be tested. 
-- A new type of card sprites class should be introduced for eclipse cards. 
-It should have just one serialized field Sprite for moon cards, and one card for sun cards. 
