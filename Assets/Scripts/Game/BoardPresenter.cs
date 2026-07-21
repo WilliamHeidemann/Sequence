@@ -22,7 +22,7 @@ namespace Game
         [SerializeField] private Transform _pinEndRotationScale;
         [SerializeField] private PinGrid _pinGrid;
 
-        public event Func<Position, Awaitable> OnPositionClicked;
+        public event Action<Position> OnPositionClicked;
 
         private readonly Dictionary<Position, Button> _buttons = new();
 

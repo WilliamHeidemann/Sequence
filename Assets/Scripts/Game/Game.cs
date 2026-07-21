@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Models;
+using Game.Models.Players;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UtilityToolkit.Runtime;
@@ -7,7 +8,7 @@ using Position = Game.Models.Position;
 
 namespace Game
 {
-    public class Game : MonoBehaviour, ICommunicationProtocol
+    public class Game : MonoBehaviour
     {
         [SerializeField] private BoardPresenter _boardPresenter;
         [SerializeField] private DrawAnimator _drawAnimator;
@@ -15,88 +16,41 @@ namespace Game
         [SerializeField] private DiscardPile _discardPile;
         [SerializeField] private OpponentHandAnimator _opponentHandAnimator;
 
-        private Team MyTeam => _gameState.MyTeam;
-        private Hand MyHand => _gameState.MyHand;
-        private Hand OpponentHand => _gameState.OpponentHand;
-        private Deck Deck => _gameState.Deck;
-        private Board Board => _gameState.Board;
-        private MoveHistory MoveHistory => _gameState.MoveHistory;
-
-        private bool _isMyTurn = true;
-
-        private GameState _gameState = new(Team.Red);
-
-        public ICommunicationProtocol Opponent { get; set; }
+        public LocalPlayer LocalPlayer { get; set; }
+        public IOpponent Opponent { get; set; }
 
         private void Start()
         {
+            LocalPlayer = new LocalPlayer(Team.Red);
+            Opponent = new Bot(Team.Yellow);
+            
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
-            _ = PlayDrawAnimation(MyHand.GetCards());
-            Opponent = new Bot(this, Team.Yellow);
+            
+            LocalPlayer.OnMovePerformed += OnLocalPlayerMovePerformed;
+            
+            Opponent.OnMovePerformed += OnOpponentMovePerformed;
+            
+            _ = PlayDrawAnimation(LocalPlayer.MyHand.GetCards());
         }
 
-        private async Awaitable HandlePositionClicked(Position position)
+        private async void OnLocalPlayerMovePerformed(Move move, GameStateData gameStateData)
         {
-            Card tabbedCard = BoardLayout.Get(position);
+            Card drawnCard = LocalPlayer.MyHand.GetCards()[^1];
+            LocalPlayer.IsMyTurn = false;
+            await SuccessfulPlayAnimation(move, drawnCard);
+            Opponent.PassGameState(LocalPlayer.GetGameStateData());
+        }
+        
+        private async void OnOpponentMovePerformed(Move move, GameStateData gameStateData)
+        {
+            await AnimateOpponentPlay(move);
+            LocalPlayer.PassGameState(gameStateData);
+        }
 
-            if (!_isMyTurn)
-            {
-                _boardPresenter.Shake(position);
-                return;
-            }
-
-            bool isOpenSpace = Board.Fits(position);
-
-            Option<Card> requiredCard = MyHand.FindCard(tabbedCard, isOpenSpace);
-
-            if (!requiredCard.IsSome(out Card cardInHand))
-            {
-                _boardPresenter.Shake(position);
-                return;
-            }
-
-            int sequenceCountBefore = Board.SequenceCount(MyTeam);
-
-            if (!Board.TryAddPin(position, MyTeam))
-            {
-                Debug.LogError($"Unexpected behavior: {position} could not be pinned.");
-            }
-
-            int sequenceCountAfter = Board.SequenceCount(MyTeam);
-
-            int sequenceCountDelta = sequenceCountAfter - sequenceCountBefore;
-
-            if (sequenceCountDelta > 0)
-            {
-                Debug.Log("SEQUENCE!");
-            }
-
-            if (!MyHand.TryRemove(cardInHand))
-            {
-                Debug.LogError($"Unexpected behavior: {cardInHand} could not be removed from the hand.");
-                return;
-            }
-
-            Card drawnCard = Deck.Draw();
-
-            MyHand.TryAdd(drawnCard);
-
-            Move move = new()
-            {
-                Card = cardInHand,
-                Position = position,
-                Team = MyTeam
-            };
-
-            MoveHistory.Add(move);
-
-            await SuccessfulPlayAnimation(cardInHand, position, drawnCard);
-
-            if (Opponent != null)
-            {
-                _isMyTurn = false;
-                Opponent.PassGameState(_gameState.ToData());
-            }
+        private void HandlePositionClicked(Position position)
+        {
+            bool success = LocalPlayer.AttemptPlay(position);
+            if (!success) _boardPresenter.Shake(position);
         }
 
         private async Awaitable PlayDrawAnimation(IEnumerable<Card> cards)
@@ -109,38 +63,21 @@ namespace Game
             }
         }
 
-        private async Awaitable SuccessfulPlayAnimation(Card playedCard, Position position, Card drawnCard)
+        private async Awaitable SuccessfulPlayAnimation(Move move, Card drawnCard)
         {
-            _boardPresenter.Pop(position);
+            _boardPresenter.Pop(move.Position);
 
-            if (_cardAligner.RemoveCard(playedCard, out Transform cardTransform))
+            if (_cardAligner.RemoveCard(move.Card, out Transform cardTransform))
             {
                 await _discardPile.Discard(cardTransform);
             }
 
-            await _boardPresenter.Pin(position, MyTeam);
+            await _boardPresenter.Pin(move.Position, move.Team);
 
             await PlayDrawAnimation(new[] { drawnCard });
         }
 
-        public void PassGameState(GameStateData gameStateData)
-        {
-            MoveHistory.Set(gameStateData.Moves);
-            Deck.Set(gameStateData.Deck);
-            Board.Set(gameStateData.Moves);
-            Card[] opponentHand = MyTeam == Team.Red ? gameStateData.YellowHand : gameStateData.RedHand;
-            OpponentHand.Set(opponentHand);
-
-            // if game just loaded:
-            // set my hand
-            // display all cards (no animation)
-
-            gameStateData.Moves.LastOption().Try(AnimateOpponentPlay);
-
-            _isMyTurn = true;
-        }
-
-        private async void AnimateOpponentPlay(Move move)
+        private async Awaitable AnimateOpponentPlay(Move move)
         {
             await Awaitable.WaitForSecondsAsync(1f); // simulate thinking time.
             await _opponentHandAnimator.AnimatePlay(move.Card);

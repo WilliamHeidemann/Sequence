@@ -1,21 +1,23 @@
+using System;
 using System.Linq;
-using Game.Models;
 using UnityEngine;
 using UtilityToolkit.Runtime;
+using Random = UnityEngine.Random;
 
-namespace Game
+namespace Game.Models.Players
 {
-    public class Bot : ICommunicationProtocol
+    public class Bot : IOpponent
     {
-        private readonly ICommunicationProtocol _opponent;
         private readonly Team _team;
-        private readonly GameState _gameState = new(Team.Yellow);
+        private readonly GameState _gameState;
 
-        public Bot(ICommunicationProtocol opponent, Team team)
+        public Bot(Team team)
         {
-            _opponent = opponent;
             _team = team;
+            _gameState = new GameState(team);
         }
+
+        public event Action<Move, GameStateData> OnMovePerformed;
 
         public void PassGameState(GameStateData gameStateData)
         {
@@ -80,7 +82,7 @@ namespace Game
                 }
             }
 
-            _opponent.PassGameState(_gameState.ToData());
+            OnMovePerformed?.Invoke(move, _gameState.ToData());
         }
     }
 }

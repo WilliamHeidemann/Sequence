@@ -5,6 +5,7 @@ using LitMotion;
 using LitMotion.Extensions;
 using UnityEngine;
 using UtilityToolkit.Editor;
+using UtilityToolkit.Runtime;
 
 namespace Game
 {
@@ -17,8 +18,8 @@ namespace Game
 
         [SerializeField] private Transform[] _previewCards;
 
-        [SerializeField] private List<Transform> _cards = new();
-        private Dictionary<Card, Transform> _lookup = new();
+        private readonly List<Transform> _cards = new();
+        private readonly Dictionary<Card, List<Transform>> _lookup = new();
 
         private void Start()
         {
@@ -28,20 +29,30 @@ namespace Game
         public void AddCard(Card card, Transform cardTransform)
         {
             _cards.Add(cardTransform);
-            _lookup.Add(card, cardTransform);
+            if (_lookup.TryGetValue(card, out List<Transform> cards))
+            {
+                cards.Add(cardTransform);
+            }
+            else
+            {
+                _lookup.Add(card, cards = new List<Transform>());
+                cards.Add(cardTransform);
+            }
             AlignCards(_cards);
         }
 
         public bool RemoveCard(Card card, out Transform cardTransform)
         {
-            if (_lookup.TryGetValue(card, out cardTransform))
+            if (_lookup.TryGetValue(card, out List<Transform> cardList))
             {
+                cardTransform = cardList.RandomElement();
                 _cards.Remove(cardTransform);
                 _lookup.Remove(card);
                 AlignCards(_cards);
                 return true;
             }
             
+            cardTransform = null;
             return false;
         }
 
