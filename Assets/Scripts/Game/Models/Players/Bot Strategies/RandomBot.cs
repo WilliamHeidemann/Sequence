@@ -4,7 +4,7 @@ using UtilityToolkit.Runtime;
 
 namespace Game.Models.Players.Bot_Strategies
 {
-    public class RandomBot : IBot
+    public class RandomBot : IBrain
     {
         public Move DecideMove(GameState gameState)
         {

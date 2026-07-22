@@ -7,9 +7,9 @@ namespace Game.Models.Players
     public class Bot : IOpponent
     {
         private readonly GameState _gameState;
-        private readonly IBot _brain;
+        private readonly IBrain _brain;
 
-        public Bot(Team team, IBot brain)
+        public Bot(Team team, IBrain brain)
         {
             _gameState = new GameState(team);
             _brain = brain;
