@@ -1,20 +1,18 @@
 using System;
-using System.Linq;
+using Game.Models.Players.Bot_Strategies;
 using UnityEngine;
-using UtilityToolkit.Runtime;
-using Random = UnityEngine.Random;
 
 namespace Game.Models.Players
 {
     public class Bot : IOpponent
     {
-        private readonly Team _team;
         private readonly GameState _gameState;
+        private readonly IBot _brain;
 
-        public Bot(Team team)
+        public Bot(Team team, IBot brain)
         {
-            _team = team;
             _gameState = new GameState(team);
+            _brain = brain;
         }
 
         public event Action<Move, GameStateData> OnMovePerformed;
@@ -22,7 +20,7 @@ namespace Game.Models.Players
         public void PassGameState(GameStateData gameStateData)
         {
             SetGameState(gameStateData);
-            Move move = DecideMove();
+            Move move = _brain.DecideMove(_gameState);
             Play(move);
         }
 
@@ -32,7 +30,7 @@ namespace Game.Models.Players
             _gameState.MoveHistory.Set(gameStateData.Moves);
             _gameState.Deck.Set(gameStateData.Deck);
 
-            if (_team == Team.Red)
+            if (_gameState.MyTeam == Team.Red)
             {
                 _gameState.MyHand.Set(gameStateData.RedHand);
                 _gameState.OpponentHand.Set(gameStateData.YellowHand);
@@ -46,28 +44,9 @@ namespace Game.Models.Players
             _gameState.Board.Set(gameStateData.Moves);
         }
 
-        private Move DecideMove()
-        {
-            Card card = _gameState.MyHand.GetCards().Where(card => card.Rank != Rank.Jack).RandomElement();
-            (Position first, Position second) = BoardLayout.Get(card);
-
-            if (Random.value < 0.5f) (first, second) = (second, first);
-
-            Position position = _gameState.Board.Fits(first) ? first : second;
-
-            Move move = new()
-            {
-                Card = card,
-                Position = position,
-                Team = _team
-            };
-
-            return move;
-        }
-
         private void Play(Move move)
         {
-            _gameState.Board.TryAddPin(move.Position, _team);
+            _gameState.Board.TryAddPin(move.Position, _gameState.MyTeam);
 
             _gameState.MyHand.TryRemove(move.Card);
 

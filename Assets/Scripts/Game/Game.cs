@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Models;
 using Game.Models.Players;
+using Game.Models.Players.Bot_Strategies;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UtilityToolkit.Runtime;
@@ -22,7 +23,7 @@ namespace Game
         private void Start()
         {
             LocalPlayer = new LocalPlayer(Team.Red);
-            Opponent = new Bot(Team.Yellow);
+            Opponent = new Bot(Team.Yellow, new CenterBot());
             
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
             
