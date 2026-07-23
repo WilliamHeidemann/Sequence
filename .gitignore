@@ -104,3 +104,9 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Cloud Code module local build artifacts
+/Cloud_Code_Module_Reference/**/[Bb]in/
+/Cloud_Code_Module_Reference/**/[Oo]bj/
+/Cloud_Code_Module_Reference/.idea/
+

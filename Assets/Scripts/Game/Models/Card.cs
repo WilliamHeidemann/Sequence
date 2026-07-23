@@ -63,7 +63,7 @@ namespace Game.Models
             AceOfSun
         };
 
-        private Card(Symbol symbol, Rank rank)
+        public Card(Symbol symbol, Rank rank)
         {
             Symbol = symbol;
             Rank = rank;

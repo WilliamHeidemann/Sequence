@@ -81,7 +81,7 @@ namespace Game.Models
         Eight
     }
 
-    public struct Position : IEquatable<Position>
+    public readonly struct Position : IEquatable<Position>
     {
         public Position(Row row, Column column)
         {
