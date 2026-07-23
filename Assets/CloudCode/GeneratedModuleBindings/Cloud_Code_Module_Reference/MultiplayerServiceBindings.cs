@@ -25,5 +25,28 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 {
                 });
         }
+
+        public async Task<Unity.Services.CloudCode.GeneratedBindings.Game.Models.Players.GameStateData> Get(string matchId)
+        {
+            return await k_Service.CallModuleEndpointAsync<Unity.Services.CloudCode.GeneratedBindings.Game.Models.Players.GameStateData>(
+                "Cloud_Code_Module_Reference",
+                "Get",
+                new Dictionary<string, object>()
+                {
+                    {"matchId", matchId},
+                });
+        }
+
+        public async Task Post(string matchId, Game.Models.Players.GameStateData gameStateData)
+        {
+            await k_Service.CallModuleEndpointAsync(
+                "Cloud_Code_Module_Reference",
+                "Post",
+                new Dictionary<string, object>()
+                {
+                    {"matchId", matchId},
+                    {"gameStateData", gameStateData},
+                });
+        }
     }
 }

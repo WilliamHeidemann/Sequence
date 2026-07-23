@@ -1,6 +1,6 @@
 using System;
 
-namespace Game.Models.Players
+namespace Game.Models
 {
     public class GameStateData
     {

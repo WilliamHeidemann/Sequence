@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using UtilityToolkit.Runtime;
+using UtilityToolkit.CollectionExtensions;
+using UtilityToolkit.Monads;
 
 namespace Game.Models
 {

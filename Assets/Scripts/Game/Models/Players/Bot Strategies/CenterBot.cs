@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Unity.Services.CloudCode.GeneratedBindings;
-using UtilityToolkit.Runtime;
+using UtilityToolkit.CollectionExtensions;
 
 namespace Game.Models.Players.Bot_Strategies
 {

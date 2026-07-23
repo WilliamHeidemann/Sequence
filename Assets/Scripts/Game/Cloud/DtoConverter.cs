@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
 using Game.Models;
-using Game.Models.Players;
 
-namespace Game
+namespace Game.Cloud
 {
     public class DtoConverter
     {

@@ -1,6 +1,6 @@
 using System.Linq;
 using UnityEngine;
-using UtilityToolkit.Runtime;
+using UtilityToolkit.CollectionExtensions;
 
 namespace Game.Models.Players.Bot_Strategies
 {

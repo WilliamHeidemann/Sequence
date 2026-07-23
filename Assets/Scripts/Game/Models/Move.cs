@@ -1,4 +1,4 @@
-namespace Game.Models.Players
+namespace Game.Models
 {
     public class Move
     {
