@@ -25,5 +25,15 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 {
                 });
         }
+
+        public async Task<List<string>> GetExampleData()
+        {
+            return await k_Service.CallModuleEndpointAsync<List<string>>(
+                "Cloud_Code_Module_Reference",
+                "GetExampleData",
+                new Dictionary<string, object>()
+                {
+                });
+        }
     }
 }

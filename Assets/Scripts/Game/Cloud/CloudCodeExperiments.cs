@@ -2,7 +2,7 @@ using System;
 using Unity.Services.Authentication;
 using Unity.Services.CloudCode;
 using Unity.Services.CloudCode.GeneratedBindings;
-using Unity.Services.CloudCode.GeneratedBindings.Game.Models.Players;
+// using Unity.Services.CloudCode.GeneratedBindings.Game.Models.Players;
 using Unity.Services.Core;
 using UnityEngine;
 
@@ -11,7 +11,7 @@ namespace Game.Cloud
     public class CloudCodeExperiments : MonoBehaviour
     {
         private MyModuleBindings _module;
-        private MultiplayerServiceBindings _multiplayerService;
+        // private MultiplayerServiceBindings _multiplayerService;
 
         private async void Start()
         {
@@ -19,9 +19,19 @@ namespace Game.Cloud
             
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-            ExampleServiceBindings module = new();
-            await module.SetExampleData();
-            Debug.Log("Other key set to 2 successfully!");
+            // ExampleServiceBindings module = new();
+            // await module.SetExampleData();
+
+            // ExampleServiceBindings module = new();
+            // var strings = await module.GetExampleData();
+            // foreach (string s in strings)
+            // {
+            //     Debug.Log(s);
+            // }
+            
+            Debug.Log("All strings received!");
+            
+            // Debug.Log("Other key set to 2 successfully!");
         }
 
         // private async void Start()
