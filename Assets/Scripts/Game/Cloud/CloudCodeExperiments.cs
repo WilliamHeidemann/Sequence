@@ -11,6 +11,7 @@ namespace Game.Cloud
     public class CloudCodeExperiments : MonoBehaviour
     {
         private MyModuleBindings _module;
+        private MultiplayerServiceBindings _multiplayerService;
         
         private async void Start()
         {
@@ -19,6 +20,7 @@ namespace Game.Cloud
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
             _module = new(CloudCodeService.Instance);
+            _multiplayerService = new(CloudCodeService.Instance);
             
             try
             {
@@ -42,7 +44,7 @@ namespace Game.Cloud
 
         public async Awaitable<Models.Players.GameStateData> GetGameStateData()
         {
-            GameStateData dto = await _module.GetGameStateData();
+            GameStateData dto = await _multiplayerService.GetGameStateData();
             Models.Players.GameStateData gameStateData = DtoConverter.Convert(dto);
             return gameStateData;
         }
