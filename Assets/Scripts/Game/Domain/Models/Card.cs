@@ -71,8 +71,8 @@ namespace Game.Domain.Models
 
         public Rank Rank { get; }
         public Symbol Symbol { get; }
-        public bool IsWild => Rank is Rank.Jack && Symbol is Symbol.Sun;
-        public bool IsRemover => Rank is Rank.Jack && Symbol is Symbol.Moon;
+        public bool IsWild() => Rank is Rank.Jack && Symbol is Symbol.Sun;
+        public bool IsRemover() => Rank is Rank.Jack && Symbol is Symbol.Moon;
 
         public bool Equals(Card other)
         {

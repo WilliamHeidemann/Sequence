@@ -57,7 +57,7 @@ namespace Game.Domain.Players
                 return false;
             }
 
-            if (cardInHand.IsRemover)
+            if (cardInHand.IsRemover())
             {
                 if (Board.Owner(position).IsSome(out Team owner) && owner == MyTeam)
                 {

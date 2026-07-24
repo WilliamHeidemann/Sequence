@@ -30,7 +30,7 @@ namespace Game.Domain.Models
             Clear();
             foreach (Move move in moves)
             {
-                if (move.Card.IsRemover)
+                if (move.Card.IsRemover())
                 {
                     TakenSpaces.Remove(move.Position);
                 }

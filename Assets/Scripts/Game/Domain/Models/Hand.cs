@@ -45,10 +45,10 @@ namespace Game.Domain.Models
             if (isOpenSpace)
             {
                 if (Contains(cardToCover)) return Option<Card>.Some(cardToCover);
-                return Cards.FirstOption(c => c.IsWild);
+                return Cards.FirstOption(c => c.IsWild());
             }
 
-            return Cards.FirstOption(c => c.IsRemover);
+            return Cards.FirstOption(c => c.IsRemover());
         }
     }
 }

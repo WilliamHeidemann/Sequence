@@ -35,5 +35,60 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 {
                 });
         }
+
+        public async Task<Game.Domain.Models.Position> SendPosition(Game.Domain.Models.Position position)
+        {
+            return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Position>(
+                "Cloud_Code_Module_Reference",
+                "SendPosition",
+                new Dictionary<string, object>()
+                {
+                    {"position", position},
+                });
+        }
+
+        public async Task<Game.Domain.Models.Card> SendCard(Game.Domain.Models.Card card)
+        {
+            return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Card>(
+                "Cloud_Code_Module_Reference",
+                "SendCard",
+                new Dictionary<string, object>()
+                {
+                    {"card", card},
+                });
+        }
+
+        public async Task SendMove(Game.Domain.Models.Move move)
+        {
+            await k_Service.CallModuleEndpointAsync(
+                "Cloud_Code_Module_Reference",
+                "SendMove",
+                new Dictionary<string, object>()
+                {
+                    {"move", move},
+                });
+        }
+
+        public async Task SendGameStateData(Game.Domain.Models.GameStateData gameState)
+        {
+            await k_Service.CallModuleEndpointAsync(
+                "Cloud_Code_Module_Reference",
+                "SendGameStateData",
+                new Dictionary<string, object>()
+                {
+                    {"gameState", gameState},
+                });
+        }
+
+        public async Task GetGameState(Game.Domain.Models.GameStateData gameState)
+        {
+            await k_Service.CallModuleEndpointAsync(
+                "Cloud_Code_Module_Reference",
+                "GetGameState",
+                new Dictionary<string, object>()
+                {
+                    {"gameState", gameState},
+                });
+        }
     }
 }

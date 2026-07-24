@@ -86,7 +86,7 @@ namespace Game.Presentation
                 await _discardPile.Discard(cardTransform);
             }
 
-            if (move.Card.IsRemover)
+            if (move.Card.IsRemover())
             {
                 await _boardPresenter.RemovePin(move.Position);
             }
@@ -102,7 +102,7 @@ namespace Game.Presentation
         {
             await Awaitable.WaitForSecondsAsync(1f); // simulate thinking time.
             await _opponentHandAnimator.AnimatePlay(move.Card);
-            if (move.Card.IsRemover)
+            if (move.Card.IsRemover())
             {
                 await _boardPresenter.RemovePin(move.Position);
             }

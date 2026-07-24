@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Unity.Services.CloudCode.Apis.Extensions;
 using Unity.Services.CloudCode.Core;
 
