@@ -16,11 +16,15 @@ namespace Game.Cloud
 
             ExampleServiceBindings module = new();
 
-            var cardDto = await module.SendCard(Card.AceOfMoon.ToDto());
+            var content = await module.CreateMatch();
             
-            Card card = cardDto.ToModel();
-            
-            Debug.Log($"Received card: {card}");
+            Debug.Log(content);
+
+            // var cardDto = await module.SendCard(Card.AceOfMoon.ToDto());
+            //
+            // Card card = cardDto.ToModel();
+            //
+            // Debug.Log($"Received card: {card}");
         }
     }
 }

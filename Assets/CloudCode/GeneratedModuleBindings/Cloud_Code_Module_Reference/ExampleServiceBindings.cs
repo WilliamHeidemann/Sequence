@@ -90,5 +90,15 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                     {"gameState", gameState},
                 });
         }
+
+        public async Task<string> CreateMatch()
+        {
+            return await k_Service.CallModuleEndpointAsync<string>(
+                "Cloud_Code_Module_Reference",
+                "CreateMatch",
+                new Dictionary<string, object>()
+                {
+                });
+        }
     }
 }

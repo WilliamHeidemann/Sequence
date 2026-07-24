@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Game.Domain.Models;
 using Unity.Services.CloudCode.Apis;
 using Unity.Services.CloudCode.Core;
+using Unity.Services.CloudCode.Shared;
 using Unity.Services.CloudSave.Model;
 
 namespace Cloud_Code_Module_Reference;
@@ -39,7 +41,7 @@ public class ExampleService(IGameApiClient gameApiClient)
         var valuesResponse = await gameApiClient.CloudSaveData
             .GetCustomItemsAsync(context, context.ServiceToken, context.ProjectId, CustomId);
         var values = valuesResponse.Data.Results.Select(result => result.ToJson());
-        
+
         return customIds.Concat(keys).Concat(values);
     }
 
@@ -51,7 +53,8 @@ public class ExampleService(IGameApiClient gameApiClient)
     }
 
     [CloudCodeFunction("SendCard")]
-    public async Task<Game.Domain.Models.Card> GetPositionIdentity(IExecutionContext context, Game.Domain.Models.Card card)
+    public async Task<Game.Domain.Models.Card> GetPositionIdentity(IExecutionContext context,
+        Game.Domain.Models.Card card)
     {
         await Task.Delay(1000);
         return card;
@@ -68,10 +71,30 @@ public class ExampleService(IGameApiClient gameApiClient)
     {
         await Task.Delay(1000);
     }
-    
+
     [CloudCodeFunction("GetGameState")]
     public async Task SendGameStateData(IExecutionContext context, GameStateData gameState)
     {
         await Task.Delay(1000);
+    }
+
+    [CloudCodeFunction("CreateMatch")]
+    public async Task<string> CreateMatch(IExecutionContext context)
+    {
+        try
+        {
+            ApiResponse<SetItemResponse> response = await gameApiClient.CloudSaveData.SetPrivateCustomItemAsync(
+                context,
+                context.ServiceToken,
+                context.ProjectId,
+                "match001",
+                new SetItemBody("gameStateData", Card.AceOfMoon));
+
+            return response.Data.ToJson();
+        }
+        catch (Exception e)
+        {
+            return $"En exception occured: {e.Message}";
+        }
     }
 }
