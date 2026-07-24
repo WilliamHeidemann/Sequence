@@ -1,4 +1,5 @@
-using Game.Models;
+using Game.Domain;
+using Game.Domain.Models;
 using NUnit.Framework;
 
 namespace Tests

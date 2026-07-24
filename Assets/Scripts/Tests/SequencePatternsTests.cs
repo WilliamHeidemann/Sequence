@@ -1,16 +1,16 @@
-using System.Collections;
 using System.Linq;
-using Game.Models;
+using Game.Domain;
 using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.TestTools;
 
-public class SequencePatternsTests
+namespace Tests
 {
-    [Test]
-    public void LengthOfAllPatterns_Is84()
+    public class SequencePatternsTests
     {
-        var patterns = SequencePatterns.All().ToArray();
-        Assert.That(patterns.Length, Is.EqualTo(84));
+        [Test]
+        public void LengthOfAllPatterns_Is84()
+        {
+            var patterns = SequencePatterns.All().ToArray();
+            Assert.That(patterns.Length, Is.EqualTo(84));
+        }
     }
 }
