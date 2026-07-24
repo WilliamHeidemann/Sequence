@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Game.Domain.Models;
 using Dto = Unity.Services.CloudCode.GeneratedBindings.Game.Domain.Models;
 
@@ -102,6 +104,27 @@ namespace Game.Cloud
                 Card = move.Card.ToDto(),
                 Position = move.Position.ToDto(),
                 Team = move.Team.ToDto()
+            };
+        }
+
+        private static List<Dto.Card> ToDto(this Card[] cards)
+        {
+            return cards.Select(card => card.ToDto()).ToList();
+        }
+        
+        private static List<Dto.Move> ToDto(this Move[] moves)
+        {
+            return moves.Select(move => move.ToDto()).ToList();
+        }
+        
+        public static Dto.GameStateData ToDto(this GameStateData gameStateData)
+        {
+            return new Dto.GameStateData
+            {
+                Deck = gameStateData.Deck.ToDto(),
+                Moves = gameStateData.Moves.ToDto(),
+                RedHand = gameStateData.RedHand.ToDto(),
+                YellowHand = gameStateData.YellowHand.ToDto()
             };
         }
     }
