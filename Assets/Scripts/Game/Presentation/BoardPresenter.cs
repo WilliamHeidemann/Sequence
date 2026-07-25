@@ -56,7 +56,7 @@ namespace Game.Presentation
 
                     Card card = BoardLayout.Get(position);
 
-                    slot.style.backgroundImage = new StyleBackground(_cardSprites.Get(card));
+                    slot.style.backgroundImage = new StyleBackground(_cardSprites.Get(card.Symbol));
 
                     Label label = slot.Q<Label>();
 

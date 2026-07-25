@@ -2,7 +2,6 @@ using Unity.Services.Authentication;
 using Unity.Services.CloudCode.GeneratedBindings;
 using Unity.Services.Core;
 using UnityEngine;
-using Card = Game.Domain.Models.Card;
 
 namespace Game.Cloud
 {

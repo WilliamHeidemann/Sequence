@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _uiDocument: {fileID: 105310682}
-  _cardSprites: {fileID: 11400000, guid: 08dca0da180074a54a5ffbdb9641675c, type: 2}
+  _cardSprites: {fileID: 11400000, guid: 025669167c8e14af299b7d136124e73c, type: 2}
   _cardShader: {fileID: 2100000, guid: ec38d395c469742b792b40151f599116, type: 2}
   _redPinPrefab: {fileID: 3263963994508758000, guid: 4b2899faef4764aec9cf10e6a5b8a3f3, type: 3}
   _yellowPinPrefab: {fileID: 3263963994508758000, guid: 1b0a62a616fd7451b84a09fcdc516a6b, type: 3}
@@ -647,7 +647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &599304941
 Transform:
   m_ObjectHideFlags: 0
