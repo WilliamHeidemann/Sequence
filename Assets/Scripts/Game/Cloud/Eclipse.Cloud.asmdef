@@ -1,0 +1,24 @@
+{
+    "name": "Eclipse.Cloud",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f220a277eefae4d3aa9e31c2b43bb307",
+        "GUID:9e1b717eeca2c497a8b7e2ec3a695ad7",
+        "GUID:5540e30183c82e84b954c033c388e06c",
+        "GUID:a27e5c9170d4443b09b361752dde20a8",
+        "GUID:be0d2672886cc45b2bcea5a5053a5347",
+        "GUID:fe25561d224ed4743af4c60938a59d0b",
+        "GUID:c3e847927e5747f9a371134e85820ab3",
+        "GUID:7e8c10df13884071842b92df950037f1",
+        "GUID:a6763458cfb244948a44e2de01430a48"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

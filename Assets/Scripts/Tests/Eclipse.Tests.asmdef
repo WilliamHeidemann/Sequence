@@ -1,11 +1,12 @@
 {
-    "name": "Tests",
+    "name": "Eclipse.Tests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Presentation",
-        "Domain"
+        "Eclipse.Cloud",
+        "Eclipse.Domain",
+        "Eclipse.Presentation"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

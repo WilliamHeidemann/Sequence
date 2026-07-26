@@ -1,5 +1,5 @@
 {
-    "name": "Domain",
+    "name": "Eclipse.Domain",
     "rootNamespace": "",
     "references": [
         "GUID:7e8c10df13884071842b92df950037f1"
