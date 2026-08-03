@@ -1,9 +1,10 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Eclipse%20Main%20Menu.uss?fileID=7433441132597879392&amp;guid=bf0bc098faf924cacbc3d118f52cf544&amp;type=3#Eclipse Main Menu"/>
     <ui:VisualElement class="request-row">
-        <ui:Label text="Incoming#4120" class="row-name"/>
+        <ui:Label text="Incoming#4120" name="FriendRequestName" class="row-name"/>
         <ui:VisualElement class="row-actions">
-            <ui:Button name="AcceptIncoming4120Button" text="Accept" class="accept-button"/>
-            <ui:Button name="RejectIncoming4120Button" text="Decline" class="danger-button"/>
+            <ui:Button name="Accept" text="Accept" class="accept-button"/>
+            <ui:Button name="Decline" text="Decline" class="danger-button"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

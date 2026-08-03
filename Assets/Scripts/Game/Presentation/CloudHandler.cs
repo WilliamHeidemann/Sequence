@@ -22,28 +22,18 @@ public class CloudHandler : MonoBehaviour
             FriendsService.Instance.RelationshipAdded += OnRelationShipAdded;
             FriendsService.Instance.RelationshipDeleted += OnRelationShipDeleted;
             
-            foreach (Member friend in FriendsService.Instance.Friends.Select(f => f.Member))
-            {
-                _mainMenu.ShowFriend(friend);
-            }
+            _mainMenu.SetPlayerName(AuthenticationService.Instance.PlayerName);
+            FriendsService.Instance.Friends.Select(r => r.Member).ToList()
+                .ForEach(_mainMenu.ShowFriend);
+            FriendsService.Instance.IncomingFriendRequests.Select(r => r.Member).ToList()
+                .ForEach(_mainMenu.ShowFriendRequest);
             
             _mainMenu.OnSetPlayerName += async n => await AuthenticationService.Instance.UpdatePlayerNameAsync(n);
+            _mainMenu.OnSentFriendRequest += async n => await FriendsService.Instance.AddFriendByNameAsync(n);
         }
         catch (Exception e)
         {
             Debug.LogException(e);
-        }
-    }
-
-    private void Start()
-    {
-        try
-        {
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-            throw;
         }
     }
 

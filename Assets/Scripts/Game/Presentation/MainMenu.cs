@@ -14,8 +14,8 @@ namespace Game.Presentation
         private Label _playerName;
         private TextField _changeNameInputField;
         private Button _savePlayerNameButton;
-        private VisualElement _friendsList;
-        private VisualElement _friendRequests;
+        private ScrollView _friendsList;
+        private ScrollView _friendRequests;
         private Button _sendFriendRequestButton;
         private TextField _friendRequestInputField;
         private VisualElement _challengeRequestOverlay;
@@ -29,16 +29,14 @@ namespace Game.Presentation
             _playerName = root.Q<Label>("CurrentPlayerName");
             _changeNameInputField = root.Q<TextField>("PlayerNameInput");
             _savePlayerNameButton = root.Q<Button>("SavePlayerNameButton");
-            _friendsList = root.Q<VisualElement>("FriendsList");
-            _friendRequests = root.Q<VisualElement>("RequestsPanel");
+            _friendsList = root.Q<ScrollView>("FriendsList");
+            _friendRequests = root.Q<ScrollView>("IncomingRequestsList");
             _sendFriendRequestButton = root.Q<Button>("SendFriendRequestButton");
             _friendRequestInputField = root.Q<TextField>("FriendRequestInput");
             _challengeRequestOverlay = root.Q<VisualElement>("ChallengeModalOverlay");
 
             _savePlayerNameButton.clicked += OnSavePlayerNameClicked;
             _sendFriendRequestButton.clicked += OnSendFriendRequestClicked;
-            
-            ShowFriend(null);
         }
 
         private void OnSendFriendRequestClicked()
@@ -48,12 +46,17 @@ namespace Game.Presentation
             OnSentFriendRequest?.Invoke(friendName);
         }
 
-        public void OnSavePlayerNameClicked()
+        private void OnSavePlayerNameClicked()
         {
             var newName = _changeNameInputField.text;
             _changeNameInputField.value = string.Empty;
-            _playerName.text = newName;
+            SetPlayerName(newName);
             OnSetPlayerName?.Invoke(newName);
+        }
+
+        public void SetPlayerName(string newName)
+        {
+            _playerName.text = newName;
         }
         
         public void ShowChallengePopup()
@@ -68,45 +71,21 @@ namespace Game.Presentation
 
         public void ShowFriend(Member friend)
         {
-            TemplateContainer instance = _friendTemplate.Instantiate();
-            _friendsList.Add(instance);
+            TemplateContainer template = _friendTemplate.Instantiate();
+            template.Q<Label>("FriendName").text = friend.Profile.Name;
+            _friendsList.Add(template);
         }
 
         public void ShowFriendRequest(Member potentialFriend)
         {
+            TemplateContainer template = _requestTemplate.Instantiate();
+            template.Q<Label>("FriendRequestName").text = potentialFriend.Profile.Name;
+            string potentialFriendName = potentialFriend.Profile.Name;
+            template.Q<Button>("Accept").clicked += () => OnSentFriendRequest?.Invoke(potentialFriendName);
+            _friendRequests.Add(template);
         }
 
         public void HideFriendRequest()
-        {
-            
-        }
-        
-        public void ChallengeFriend()
-        {
-            
-        }
-
-        public void AcceptChallenge()
-        {
-            
-        }
-
-        public void DeclineChallenge()
-        {
-            
-        }
-        
-        public void AcceptFriend()
-        {
-            
-        }
-
-        public void DeclineFriend()
-        {
-            
-        }
-
-        public void SendFriendRequest()
         {
             
         }

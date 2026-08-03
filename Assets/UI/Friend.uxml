@@ -1,6 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Eclipse%20Main%20Menu.uss?fileID=7433441132597879392&amp;guid=bf0bc098faf924cacbc3d118f52cf544&amp;type=3#Eclipse Main Menu"/>
     <ui:VisualElement class="friend-row">
-        <ui:Label text="Friend#1001" class="row-name"/>
-        <ui:Button name="PlayFriend1001Button" text="Play" class="secondary-button"/>
+        <ui:Label text="Friend#1001" name="FriendName" class="row-name"/>
+        <ui:Button name="Play" text="Play" class="secondary-button"/>
     </ui:VisualElement>
 </ui:UXML>
