@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement class="friend-row">
+        <ui:Label text="Friend#1001" class="row-name"/>
+        <ui:Button name="PlayFriend1001Button" text="Play" class="secondary-button"/>
+    </ui:VisualElement>
+</ui:UXML>

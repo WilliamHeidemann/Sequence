@@ -1,0 +1,49 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Friend" src="project://database/Assets/UI/Friend.uxml?fileID=9197481963319205126&amp;guid=181663193c07e42688492d478d962cf2&amp;type=3#Friend"/>
+    <ui:Template name="FriendRequest" src="project://database/Assets/UI/FriendRequest.uxml?fileID=9197481963319205126&amp;guid=c6ce7796970d443d2aa8424f95bed7d9&amp;type=3#FriendRequest"/>
+    <Style src="project://database/Assets/UI/Eclipse%20Main%20Menu.uss?fileID=7433441132597879392&amp;guid=bf0bc098faf924cacbc3d118f52cf544&amp;type=3#Eclipse Main Menu"/>
+    <ui:VisualElement name="MainMenuRoot" class="main-menu-root">
+        <ui:VisualElement name="Header" class="header">
+            <ui:Label name="LogoLabel" text="ECLIPSE" class="logo-text"/>
+            <ui:Label text="Asynchronous turn-based card duels" class="subtitle-text" style="display: none;"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="PlayerPanel" class="panel player-panel">
+            <ui:Label text="Player#1234" name="CurrentPlayerName" class="panel-title"/>
+            <ui:VisualElement class="name-row">
+                <ui:Label text="Your Name" class="player-name-label" style="display: none;"/>
+                <ui:TextField name="PlayerNameInput" placeholder-text="Change name..." class="text-input"/>
+                <ui:Button name="SavePlayerNameButton" text="Save" class="primary-button"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="Body" class="body">
+            <ui:VisualElement name="FriendsPanel" class="panel friends-panel">
+                <ui:Label text="Friends" class="panel-title"/>
+                <ui:ScrollView name="FriendsList" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" class="friends-list">
+                    <ui:Instance template="Friend" name="Friend"/>
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement name="RequestsPanel" class="panel requests-panel">
+                <ui:Label text="Friend Requests" class="panel-title"/>
+                <ui:Label text="Incoming" class="section-label"/>
+                <ui:ScrollView name="IncomingRequestsList" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" class="request-list">
+                    <ui:Instance template="FriendRequest" name="FriendRequest"/>
+                </ui:ScrollView>
+                <ui:Label text="Send Request" class="section-label"/>
+                <ui:VisualElement class="send-request-row">
+                    <ui:TextField name="FriendRequestInput" placeholder-text="Friend name or tag..." class="text-input"/>
+                    <ui:Button name="SendFriendRequestButton" text="Send" class="primary-button"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="ChallengeModalOverlay" class="challenge-modal-overlay" style="display: none;">
+            <ui:VisualElement name="ChallengeModal" class="challenge-modal">
+                <ui:Label text="Selma#1425 wants to play with you!" class="challenge-modal-title"/>
+                <ui:Label name="ChallengeChallengerNameLabel" text="Are you up for the challenge?" class="challenge-modal-message" style="display: flex;"/>
+                <ui:VisualElement class="challenge-modal-actions">
+                    <ui:Button name="AcceptChallengeButton" text="Accept" class="accept-button"/>
+                    <ui:Button name="DeclineChallengeButton" text="Decline" class="danger-button"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
