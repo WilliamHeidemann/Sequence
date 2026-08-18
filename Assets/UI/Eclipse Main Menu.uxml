@@ -37,8 +37,8 @@
         </ui:VisualElement>
         <ui:VisualElement name="ChallengeModalOverlay" class="challenge-modal-overlay" style="display: none;">
             <ui:VisualElement name="ChallengeModal" class="challenge-modal">
-                <ui:Label text="Selma#1425 wants to play with you!" class="challenge-modal-title"/>
-                <ui:Label name="ChallengeChallengerNameLabel" text="Are you up for the challenge?" class="challenge-modal-message" style="display: flex;"/>
+                <ui:Label text="Selma#1425 wants to play with you!" name="ChallengeModalHeader" class="challenge-modal-title"/>
+                <ui:Label name="ChallengeModalSubLabel" text="Are you up for the challenge?" class="challenge-modal-message" style="display: flex;"/>
                 <ui:VisualElement class="challenge-modal-actions">
                     <ui:Button name="AcceptChallengeButton" text="Accept" class="accept-button"/>
                     <ui:Button name="DeclineChallengeButton" text="Decline" class="danger-button"/>

@@ -3,6 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Game.Presentation;
 using Unity.Services.Authentication;
+using Unity.Services.CloudCode;
+using Unity.Services.CloudCode.GeneratedBindings;
+using Unity.Services.CloudCode.Subscriptions;
 using Unity.Services.Core;
 using Unity.Services.Friends;
 using Unity.Services.Friends.Models;
@@ -30,11 +33,41 @@ public class CloudHandler : MonoBehaviour
             
             _mainMenu.OnSetPlayerName += async n => await AuthenticationService.Instance.UpdatePlayerNameAsync(n);
             _mainMenu.OnSentFriendRequest += async n => await FriendsService.Instance.AddFriendByNameAsync(n);
+            _mainMenu.OnSentGameRequest += async n => await SendGameRequest(AuthenticationService.Instance.PlayerName, n);
         }
         catch (Exception e)
         {
             Debug.LogException(e);
         }
+    }
+    
+    private async Task Initialize()
+    {
+        await UnityServices.InitializeAsync();
+        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        await FriendsService.Instance.InitializeAsync();
+        await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(CreateSubscriptionEventCallbacks());
+    }
+
+    private SubscriptionEventCallbacks CreateSubscriptionEventCallbacks()
+    {
+        SubscriptionEventCallbacks callbacks = new();
+        
+        callbacks.MessageReceived += evt => _mainMenu.OpenGameRequestModal(evt.Message);
+        
+        callbacks.Error += Debug.LogError;
+        
+        return callbacks;
+    }
+
+    // Send a push message to the friend that opens their game request overlay.
+    // The friend accepting the game will start the match.
+    private async Task SendGameRequest(string challengerName, string receiverPlayerId)
+    {
+        PushMessagesServiceBindings pushMessagesServiceModule = new();
+        string response = await pushMessagesServiceModule
+            .ChallengeFriend(challengerName, "GameRequest", receiverPlayerId);
+        Debug.Log(response);
     }
 
     private void OnRelationShipDeleted(IRelationshipDeletedEvent relationshipDeletedEvent)
@@ -52,13 +85,6 @@ public class CloudHandler : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
-    }
-
-    private async Task Initialize()
-    {
-        await UnityServices.InitializeAsync();
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        await FriendsService.Instance.InitializeAsync();
     }
 
     private void OnRelationShipAdded(IRelationshipAddedEvent relationshipAddedEvent)

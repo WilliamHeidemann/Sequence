@@ -10,7 +10,7 @@ namespace Game.Presentation
         [SerializeField] private UIDocument _mainMenuDocument;
         [SerializeField] private VisualTreeAsset _friendTemplate;
         [SerializeField] private VisualTreeAsset _requestTemplate;
-        
+
         private Label _playerName;
         private TextField _changeNameInputField;
         private Button _savePlayerNameButton;
@@ -22,7 +22,8 @@ namespace Game.Presentation
 
         public event Action<string> OnSetPlayerName;
         public event Action<string> OnSentFriendRequest;
-        
+        public event Action<string> OnSentGameRequest;
+
         private void OnEnable()
         {
             VisualElement root = _mainMenuDocument.rootVisualElement;
@@ -58,7 +59,7 @@ namespace Game.Presentation
         {
             _playerName.text = newName;
         }
-        
+
         public void ShowChallengePopup()
         {
             _challengeRequestOverlay.style.display = DisplayStyle.Flex;
@@ -73,21 +74,49 @@ namespace Game.Presentation
         {
             TemplateContainer template = _friendTemplate.Instantiate();
             template.Q<Label>("FriendName").text = friend.Profile.Name;
+            var button = template.Q<Button>("Play");
+            button.clicked += () =>
+            {
+                button.text = "Play?";
+                button.style.backgroundColor = Color.grey;
+                OnSentGameRequest?.Invoke(friend.Id);
+            };
             _friendsList.Add(template);
         }
 
         public void ShowFriendRequest(Member potentialFriend)
         {
             TemplateContainer template = _requestTemplate.Instantiate();
-            template.Q<Label>("FriendRequestName").text = potentialFriend.Profile.Name;
             string potentialFriendName = potentialFriend.Profile.Name;
+            template.Q<Label>("PotentialFriendName").text = potentialFriendName;
             template.Q<Button>("Accept").clicked += () => OnSentFriendRequest?.Invoke(potentialFriendName);
             _friendRequests.Add(template);
         }
 
         public void HideFriendRequest()
         {
+        }
+
+        public void OpenGameRequestModal(string challengerName)
+        {
+            _challengeRequestOverlay.style.display = DisplayStyle.Flex;
             
+            _challengeRequestOverlay.Q<Label>("ChallengeModalHeader").text =
+                $"{challengerName} wants to play with you!";
+            
+            _challengeRequestOverlay.Q<Button>("AcceptChallengeButton").clicked +=
+                () =>
+                {
+                    Debug.Log("Challenge Accepted!");
+                    _challengeRequestOverlay.style.display = DisplayStyle.None;
+                };
+            
+            _challengeRequestOverlay.Q<Button>("DeclineChallengeButton").clicked +=
+                () =>
+                {
+                    Debug.Log("Challenge Declined!");
+                    _challengeRequestOverlay.style.display = DisplayStyle.None;
+                };
         }
     }
 }
