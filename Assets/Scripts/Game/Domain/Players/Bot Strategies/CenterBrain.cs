@@ -5,22 +5,24 @@ using UtilityToolkit.CollectionExtensions;
 
 namespace Game.Domain.Players.Bot_Strategies
 {
-    public class CenterBot : IBrain
+    public class CenterBrain : IBrain
     {
-        public Move DecideMove(GameState gameState)
+        public Move DecideMove(ClientGameState clientGameState)
         {
             // cards in hand -> all positions on the board
             // order by distance to center
             // select first one
 
-            var position = gameState.MyHand.GetCards()
+            var board = new Board(clientGameState.Moves);
+
+            var position = clientGameState.Hand
                 .Where(card => card.Rank != Rank.Jack)
                 .SelectMany(card =>
                 {
                     (Position first, Position second) = BoardLayout.Get(card);
                     return new[] { first, second };
                 })
-                .Where(gameState.Board.Fits).OrderByDescending(position =>
+                .Where(board.Fits).OrderByDescending(position =>
                 {
                     int row = (int)position.Row;
                     int column = (int)position.Column;
@@ -54,11 +56,11 @@ namespace Game.Domain.Players.Bot_Strategies
 
             if (position.IsSome(out Position playedPosition))
             {
-                return new Move()
+                return new Move
                 {
                     Card = BoardLayout.Get(playedPosition),
                     Position = playedPosition,
-                    Team = gameState.MyTeam
+                    Team = clientGameState.Team
                 };
             }
 

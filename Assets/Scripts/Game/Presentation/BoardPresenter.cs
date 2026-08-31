@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Game.Domain;
 using Game.Domain.Models;
 using LitMotion;
 using LitMotion.Extensions;

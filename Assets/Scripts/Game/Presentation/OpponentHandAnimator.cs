@@ -1,4 +1,3 @@
-using Game.Domain;
 using Game.Domain.Models;
 using UnityEngine;
 using UnityEngine.UIElements;

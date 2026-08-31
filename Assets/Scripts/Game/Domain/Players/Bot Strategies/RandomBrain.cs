@@ -5,24 +5,26 @@ using UtilityToolkit.CollectionExtensions;
 
 namespace Game.Domain.Players.Bot_Strategies
 {
-    public class RandomBot : IBrain
+    public class RandomBrain : IBrain
     {
         private readonly Random _random = new();
 
-        public Move DecideMove(GameState gameState)
+        public Move DecideMove(ClientGameState clientGameState)
         {
-            Card card = gameState.MyHand.GetCards().Where(card => card.Rank != Rank.Jack).RandomElement();
+            Board board = new(clientGameState.Moves);
+            
+            Card card = clientGameState.Hand.Where(card => card.Rank != Rank.Jack).RandomElement();
             (Position first, Position second) = BoardLayout.Get(card);
 
             if (_random.NextDouble() < 0.5f) (first, second) = (second, first);
 
-            Position position = gameState.Board.Fits(first) ? first : second;
+            Position position = board.Fits(first) ? first : second;
 
             Move move = new()
             {
                 Card = card,
                 Position = position,
-                Team = gameState.MyTeam
+                Team = clientGameState.Team
             };
 
             return move;

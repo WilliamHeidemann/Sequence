@@ -60,16 +60,6 @@ namespace Game.Presentation
             _playerName.text = newName;
         }
 
-        public void ShowChallengePopup()
-        {
-            _challengeRequestOverlay.style.display = DisplayStyle.Flex;
-        }
-
-        public void HideChallengePopup()
-        {
-            _challengeRequestOverlay.style.display = DisplayStyle.None;
-        }
-
         public void ShowFriend(Member friend)
         {
             TemplateContainer template = _friendTemplate.Instantiate();

@@ -5,7 +5,12 @@ namespace Game.Domain.Models
 {
     public class MoveHistory
     {
-        private List<Move> Moves { get; set; } = new();
+        private List<Move> Moves { get; }
+
+        public MoveHistory(Move[] moves)
+        {
+            Moves = moves.ToList();
+        }
 
         public void Add(Move move)
         {
@@ -20,11 +25,6 @@ namespace Game.Domain.Models
         public Move[] GetMoves()
         {
             return Moves.ToArray();
-        }
-
-        public void Set(Move[] moves)
-        {
-            Moves = moves.ToList();
         }
     }
 }

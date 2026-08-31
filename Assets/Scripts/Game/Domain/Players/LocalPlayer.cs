@@ -6,51 +6,48 @@ namespace Game.Domain.Players
 {
     public class LocalPlayer : IOpponent
     {
-        private readonly GameState _gameState;
         public bool IsMyTurn { get; set; }
-        public Team MyTeam => _gameState.MyTeam;
-        public Hand MyHand => _gameState.MyHand;
-        public Hand OpponentHand => _gameState.OpponentHand;
-        public Deck Deck => _gameState.Deck;
-        public Board Board => _gameState.Board;
-        public MoveHistory MoveHistory => _gameState.MoveHistory;
-        public GameStateData GetGameStateData() => _gameState.ToData();
+        public Team Team { get; set; }
+        public Hand Hand { get; set; }
+        public Board Board { get; set; }
 
-        public event Action<Move, GameStateData> OnMovePerformed;
-        
-        public LocalPlayer(Team team)
+        public event Action<Move> OnMovePerformed;
+        public event Action OnOpponentGotSequence;
+
+        public void PassGameState(ClientGameState clientGameState)
         {
-            IsMyTurn = true;
-            _gameState = new GameState(team);
-        }
+            Team = clientGameState.Team;
+            Hand = new Hand(clientGameState.Hand);
 
-        public void PassGameState(GameStateData gameStateData)
-        {
-            MoveHistory.Set(gameStateData.Moves);
-            Deck.Set(gameStateData.Deck);
-            Board.Set(gameStateData.Moves);
-            Card[] opponentHand = MyTeam == Team.Red ? gameStateData.YellowHand : gameStateData.RedHand;
-            OpponentHand.Set(opponentHand);
-
+            int sequenceCountBefore = Board.SequenceCount(Team.Opposing());
+            Board = new Board(clientGameState.Moves);
+            var sequenceCountAfter = Board.SequenceCount(Team.Opposing());
+            if (sequenceCountAfter > sequenceCountBefore)
+            {
+                OnOpponentGotSequence?.Invoke();
+            }
+            
             // if game just loaded:
             // set my hand
             // display all cards (no animation)
             
-            IsMyTurn = true;
+            IsMyTurn = clientGameState.IsMyTurn;
         }
 
-        public bool AttemptPlay(Position position)
+        public bool AttemptPlay(Position position, out Move move)
         {
-            Card tabbedCard = BoardLayout.Get(position);
-
+            move = null;
+            
             if (!IsMyTurn)
             {
                 return false;
             }
+            
+            Card tabbedCard = BoardLayout.Get(position);
 
             bool isOpenSpace = Board.Fits(position);
 
-            Option<Card> requiredCard = MyHand.FindCard(tabbedCard, isOpenSpace);
+            Option<Card> requiredCard = Hand.FindCard(tabbedCard, isOpenSpace);
 
             if (!requiredCard.IsSome(out Card cardInHand))
             {
@@ -59,7 +56,7 @@ namespace Game.Domain.Players
 
             if (cardInHand.IsRemover())
             {
-                if (Board.Owner(position).IsSome(out Team owner) && owner == MyTeam)
+                if (Board.Owner(position).IsSome(out Team owner) && owner == Team)
                 {
                     return false;
                 }
@@ -69,35 +66,29 @@ namespace Game.Domain.Players
                     throw new Exception($"Unexpected behavior: {position} could not be removed from.");
                 }
             }
-            else if (!Board.TryAddPin(position, MyTeam))
+            else if (!Board.TryAddPin(position, Team))
             {
                 throw new Exception($"Unexpected behavior: {position} could not be pinned.");
             }
-
-            if (!MyHand.TryRemove(cardInHand))
-            {
-                throw new Exception($"Unexpected behavior: {cardInHand} was not in the hand.");
-            }
-
-            Card drawnCard = Deck.Draw();
-
-            if (!MyHand.TryAdd(drawnCard))
-            {
-                throw new Exception($"Unexpected behavior: {drawnCard} could not be added.");
-            }
-
-            Move move = new()
+            
+            move = new Move
             {
                 Card = cardInHand,
                 Position = position,
-                Team = MyTeam
+                Team = Team
             };
-
-            MoveHistory.Add(move);
             
-            OnMovePerformed?.Invoke(move, _gameState.ToData());
-
+            IsMyTurn = false;
+            OnMovePerformed?.Invoke(move);
+            
             return true;
+            
+            // Method ends here. The player has locally validated the move.
+            // Now send the move to the server. The server will re-validate the move. 
+            // If the move is validated, the server will respond with a new card drawn. 
+            // If a sequence has occured, play the animation locally.
+            // The server will also record that a sequence has happened. 
+            
         }
     }
 }

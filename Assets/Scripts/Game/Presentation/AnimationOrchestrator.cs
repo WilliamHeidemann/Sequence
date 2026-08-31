@@ -1,68 +1,53 @@
+using System;
 using System.Collections.Generic;
 using Game.Domain;
 using Game.Domain.Models;
 using Game.Domain.Players;
-using Game.Domain.Players.Bot_Strategies;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Position = Game.Domain.Models.Position;
 
 namespace Game.Presentation
 {
-    public class Game : MonoBehaviour
+    public class AnimationOrchestrator : MonoBehaviour
     {
         [SerializeField] private BoardPresenter _boardPresenter;
         [SerializeField] private DrawAnimator _drawAnimator;
         [SerializeField] private CardAligner _cardAligner;
         [SerializeField] private DiscardPile _discardPile;
         [SerializeField] private OpponentHandAnimator _opponentHandAnimator;
-
-        public LocalPlayer LocalPlayer { get; set; }
-        public IOpponent Opponent { get; set; }
-
-        private void Start()
+        
+        public async Awaitable PlaySequenceCelebration()
         {
-            LocalPlayer = new LocalPlayer(Team.Red);
-            Opponent = new Bot(Team.Yellow, new CenterBot());
-            
-            _boardPresenter.OnPositionClicked += HandlePositionClicked;
-            
-            LocalPlayer.OnMovePerformed += OnLocalPlayerMovePerformed;
-            
-            Opponent.OnMovePerformed += OnOpponentMovePerformed;
-            
-            _ = PlayDrawAnimation(LocalPlayer.MyHand.GetCards());
+            Debug.Log("SEQUENCE!");
         }
 
-        private async void OnLocalPlayerMovePerformed(Move move, GameStateData gameStateData)
+        private async Awaitable OnLocalPlayerMovePerformed(Move move)
         {
-            Card drawnCard = LocalPlayer.MyHand.GetCards()[^1];
-            LocalPlayer.IsMyTurn = false;
-            await SuccessfulPlayAnimation(move, drawnCard);
+            await PlayDiscardAndPinAnimation(move);
+            await PlayDrawAnimation(new[] { drawnCard });
             Opponent.PassGameState(LocalPlayer.GetGameStateData());
         }
         
-        private async void OnOpponentMovePerformed(Move move, GameStateData gameStateData)
+        private async Awaitable OnOpponentMovePerformed(Move move, ClientGameState clientGameState)
         {
             await AnimateOpponentPlay(move);
-            LocalPlayer.PassGameState(gameStateData);
+            // LocalPlayer.PassGameState(clientGameState);
         }
 
         private void HandlePositionClicked(Position position)
         {
-            int sequenceCountBefore = LocalPlayer.Board.SequenceCount(LocalPlayer.MyTeam);
+            int sequenceCountBefore = LocalPlayer.Board.SequenceCount(LocalPlayer.Team);
             
             bool success = LocalPlayer.AttemptPlay(position);
             if (!success) _boardPresenter.Shake(position);
             else
             {
-                int sequenceCountAfter = LocalPlayer.Board.SequenceCount(LocalPlayer.MyTeam);
+                int sequenceCountAfter = LocalPlayer.Board.SequenceCount(LocalPlayer.Team);
 
-                int sequenceCountDelta = sequenceCountAfter - sequenceCountBefore;
-
-                if (sequenceCountDelta > 0)
+                if (sequenceCountAfter > sequenceCountBefore)
                 {
-                    Debug.Log("SEQUENCE!");
+                    PlaySequenceCelebration();
                 }
             }
         }
@@ -77,7 +62,7 @@ namespace Game.Presentation
             }
         }
 
-        private async Awaitable SuccessfulPlayAnimation(Move move, Card drawnCard)
+        public async Awaitable PlayDiscardAndPinAnimation(Move move)
         {
             _boardPresenter.Pop(move.Position);
 
@@ -94,8 +79,6 @@ namespace Game.Presentation
             {
                 await _boardPresenter.Pin(move.Position, move.Team);
             }
-
-            await PlayDrawAnimation(new[] { drawnCard });
         }
 
         private async Awaitable AnimateOpponentPlay(Move move)
@@ -110,6 +93,23 @@ namespace Game.Presentation
             {
                 await _boardPresenter.Pin(move.Position, move.Team);
             }
+        }
+    }
+    
+    public static class AwaitableExtensions
+    {
+        public static async void Forget(this Awaitable awaitable)
+        {
+            try { await awaitable; } 
+            catch (Exception exception) { Debug.LogException(exception); }
+        }
+
+        public static async Awaitable<TResult> Then<TSource, TResult>(
+            this Awaitable<TSource> task,
+            Func<TSource, Awaitable<TResult>> continuation)
+        {
+            TSource result = await task;
+            return await continuation(result);
         }
     }
 }

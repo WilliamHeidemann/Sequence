@@ -1,5 +1,4 @@
 using System;
-using Game.Domain;
 using Game.Domain.Models;
 using UnityEngine;
 
@@ -29,9 +28,9 @@ namespace Game.Presentation
         {
             return (card.Symbol, card.Rank) switch
             {
-                (Symbol.Moon, Rank.Queen) => _moonQueen,
-                (Symbol.Sun, Rank.King) => _sunKing,
-                (Symbol.Sun, Rank.Queen) => _sunQueen,
+                // (Symbol.Moon, Rank.Queen) => _moonQueen,
+                // (Symbol.Sun, Rank.King) => _sunKing,
+                // (Symbol.Sun, Rank.Queen) => _sunQueen,
                 (Symbol.Moon, _) => _moon,
                 (Symbol.Sun, _) => _sun,
                 _ => throw new ArgumentException($"No sprite found for card: {card.Symbol} {card.Rank}")

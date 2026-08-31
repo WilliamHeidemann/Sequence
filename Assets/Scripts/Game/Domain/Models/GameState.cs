@@ -1,48 +1,57 @@
+using System;
+using System.Linq;
+
 namespace Game.Domain.Models
 {
     public class GameState
     {
-        public Team MyTeam { get; }
-        public Hand MyHand { get; }
-        public Hand OpponentHand { get; }
+        public Hand RedHand { get; }
+        public Hand YellowHand { get; }
         public Deck Deck { get; }
         public Board Board { get; }
         public MoveHistory MoveHistory { get; }
+        public Team ToPlay { get; set; }
 
-        public GameState(Team team)
+        private GameState(Deck deck, Hand redHand, Hand yellowHand, Board board, MoveHistory moveHistory, Team toStart)
         {
-            MyTeam = team;
-            
-            Deck = new Deck();
-        
-            MyHand = new Hand();
-            while (!MyHand.IsFull)
-            {
-                MyHand.TryAdd(Deck.Draw());
-            }
-        
-            OpponentHand = new Hand();
-            while (!OpponentHand.IsFull)
-            {
-                OpponentHand.TryAdd(Deck.Draw());
-            }
-        
-            Board = new Board();
-        
-            MoveHistory = new MoveHistory();
+            Deck = deck;
+            RedHand = redHand;
+            YellowHand = yellowHand;
+            Board = board;
+            MoveHistory = moveHistory;
+            ToPlay = toStart;
         }
 
-        public GameStateData ToData()
+        public static GameState Create()
         {
-            var redHand = MyTeam == Team.Red ? MyHand.GetCards() : OpponentHand.GetCards();
-            var yellowHand = MyTeam == Team.Yellow ? MyHand.GetCards() : OpponentHand.GetCards();
+            var deck = new Deck();
 
-            return new GameStateData
+            Card[] redCards = Enumerable.Range(0, 7).Select(_ => deck.Draw()).ToArray();
+            var redHand = new Hand(redCards);
+
+            Card[] yellowCards = Enumerable.Range(0, 7).Select(_ => deck.Draw()).ToArray();
+            var yellowHand = new Hand(yellowCards);
+
+            var board = new Board(Array.Empty<Move>());
+
+            var moveHistory = new MoveHistory(Array.Empty<Move>());
+
+            Random random = new();
+            var toPlay = random.NextDouble() < 0.5 ? Team.Red : Team.Yellow;
+
+            return new GameState(deck, redHand, yellowHand, board, moveHistory, toPlay);
+        }
+
+        public ClientGameState ToClientGameState(Team team)
+        {
+            Hand hand = team == Team.Red ? RedHand : YellowHand;
+            Card[] cards = hand.GetCards();
+
+            return new ClientGameState
             {
                 Moves = MoveHistory.GetMoves(),
-                Deck = Deck.GetCards(),
-                RedHand = redHand,
-                YellowHand = yellowHand,
+                Hand = cards,
+                Team = team
             };
         }
     }

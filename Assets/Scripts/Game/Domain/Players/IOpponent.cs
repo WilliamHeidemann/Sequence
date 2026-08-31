@@ -5,7 +5,7 @@ namespace Game.Domain.Players
 {
     public interface IOpponent
     {
-        event Action<Move, GameStateData> OnMovePerformed;
-        void PassGameState(GameStateData gameStateData);
+        event Action<Move> OnMovePerformed;
+        void PassGameState(ClientGameState clientGameState);
     }
 }

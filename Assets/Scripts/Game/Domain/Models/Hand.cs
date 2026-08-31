@@ -7,7 +7,7 @@ namespace Game.Domain.Models
 {
     public class Hand
     {
-        private List<Card> Cards { get; set; } = new();
+        private List<Card> Cards { get; set; }
 
         public bool TryAdd(Card card)
         {
@@ -35,11 +35,11 @@ namespace Game.Domain.Models
             return string.Join(", ", GetCards());
         }
 
-        public void Set(Card[] opponentHand)
+        public Hand(Card[] cards)
         {
-            Cards = opponentHand.ToList();
+            Cards = cards.ToList();
         }
-
+        
         public Option<Card> FindCard(Card cardToCover, bool isOpenSpace)
         {
             if (isOpenSpace)
