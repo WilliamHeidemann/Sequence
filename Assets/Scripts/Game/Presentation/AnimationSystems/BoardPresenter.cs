@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 using Column = Game.Domain.Models.Column;
 using Position = Game.Domain.Models.Position;
 
-namespace Game.Presentation
+namespace Game.Presentation.AnimationSystems
 {
     public class BoardPresenter : MonoBehaviour
     {
@@ -60,8 +60,7 @@ namespace Game.Presentation
                     Label label = slot.Q<Label>();
 
                     label.text = card.Rank.AsSingleDigit();
-
-
+                    
                     slot.clicked += () => OnPositionClicked?.Invoke(position);
 
                     _buttons[position] = slot;

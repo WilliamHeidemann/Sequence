@@ -1,23 +1,25 @@
-using System;
 using Game.Domain.Models;
 using Game.Domain.Players.Bot_Strategies;
 
 namespace Game.Domain.Players
 {
-    public class Bot : IOpponent
+    public class Bot : IPlayer
     {
         private readonly IBrain _brain;
-        public event Action<Move> OnMovePerformed;
+        private readonly LocalGameServer _localGameServer;
 
-        public Bot(IBrain brain)
+        public Bot(LocalGameServer localGameServer, IBrain brain)
         {
             _brain = brain;
+            _localGameServer = localGameServer;
+            
+            localGameServer.OnOpponentPlayed += PassGameState;
         }
 
         public void PassGameState(ClientGameState clientGameState)
         {
             Move move = _brain.DecideMove(clientGameState);
-            OnMovePerformed?.Invoke(move);
+            _localGameServer.Request(move);
         }
     }
 }

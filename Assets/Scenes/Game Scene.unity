@@ -770,6 +770,52 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
+--- !u!1 &733830840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 733830842}
+  - component: {fileID: 733830841}
+  m_Layer: 0
+  m_Name: Local Game
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &733830841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733830840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34450edee5c842358af55cbcf44e186e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Presentation::Game.Presentation.LocalGame
+  _boardPresenter: {fileID: 105310681}
+  _animationOrchestrator: {fileID: 1626219986}
+--- !u!4 &733830842
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733830840}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &780068797
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,82 +1052,6 @@ MonoBehaviour:
   m_PivotReferenceSize: 0
   m_Pivot: 0
   m_WorldSpaceCollider: {fileID: 0}
---- !u!1 &1023429317
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1023429318}
-  - component: {fileID: 1023429319}
-  - component: {fileID: 1023429320}
-  m_Layer: 0
-  m_Name: Board
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1023429318
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1023429317}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.92, z: 0}
-  m_LocalScale: {x: 1.5892938, y: 1.5892938, z: 1.5892938}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1023429319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1023429317}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
-  m_PanelSettings: {fileID: 11400000, guid: 0a8ce1c17dd9f4390ab92f07079dddc0, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 3d7eb2d056bc845fab562ddc2de30d51, type: 3}
-  m_SortingOrder: 0
-  m_Position: 0
-  m_WorldSpaceSizeMode: 0
-  m_WorldSpaceWidth: 1920
-  m_WorldSpaceHeight: 1080
-  m_PivotReferenceSize: 0
-  m_Pivot: 0
-  m_WorldSpaceCollider: {fileID: 0}
---- !u!114 &1023429320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1023429317}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75f02a65d508d44fb940c7b004b42cd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  _uiDocument: {fileID: 1023429319}
-  _cardSprites: {fileID: 11400000, guid: 08dca0da180074a54a5ffbdb9641675c, type: 2}
-  _cardShader: {fileID: 2100000, guid: ec38d395c469742b792b40151f599116, type: 2}
-  _redPinPrefab: {fileID: 3263963994508758000, guid: 4b2899faef4764aec9cf10e6a5b8a3f3, type: 3}
-  _yellowPinPrefab: {fileID: 3263963994508758000, guid: 1b0a62a616fd7451b84a09fcdc516a6b, type: 3}
-  _pinStartTRS: {fileID: 272884480}
-  _pinEndRotationScale: {fileID: 16290605}
-  _pinGrid: {fileID: 1734935967}
 --- !u!1 &1052219826
 GameObject:
   m_ObjectHideFlags: 0
@@ -1332,7 +1302,7 @@ GameObject:
   - component: {fileID: 1626219985}
   - component: {fileID: 1626219986}
   m_Layer: 0
-  m_Name: Game
+  m_Name: Animation Orchestrator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1717,7 +1687,6 @@ SceneRoots:
   - {fileID: 1626219985}
   - {fileID: 519420032}
   - {fileID: 619394802}
-  - {fileID: 1023429318}
   - {fileID: 105310683}
   - {fileID: 1681766136}
   - {fileID: 820946022}
@@ -1731,3 +1700,4 @@ SceneRoots:
   - {fileID: 16290604}
   - {fileID: 1734935966}
   - {fileID: 2135924201}
+  - {fileID: 733830842}

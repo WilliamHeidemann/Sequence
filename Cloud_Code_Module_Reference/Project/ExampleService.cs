@@ -67,13 +67,13 @@ public class ExampleService(IGameApiClient gameApiClient)
     }
 
     [CloudCodeFunction("SendGameStateData")]
-    public async Task SendGameStateData(GameStateData gameState)
+    public async Task SendGameStateData(GameState gameState)
     {
         await Task.Delay(1000);
     }
 
     [CloudCodeFunction("GetGameState")]
-    public async Task SendGameStateData(IExecutionContext context, GameStateData gameState)
+    public async Task SendGameStateData(IExecutionContext context, ClientGameState clientGameState)
     {
         await Task.Delay(1000);
     }

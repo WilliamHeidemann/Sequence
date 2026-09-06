@@ -69,7 +69,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 });
         }
 
-        public async Task SendGameStateData(Game.Domain.Models.GameStateData gameState)
+        public async Task SendGameStateData(Game.Domain.Models.GameState gameState)
         {
             await k_Service.CallModuleEndpointAsync(
                 "Cloud_Code_Module_Reference",
@@ -80,14 +80,14 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 });
         }
 
-        public async Task GetGameState(Game.Domain.Models.GameStateData gameState)
+        public async Task GetGameState(Game.Domain.Models.ClientGameState clientGameState)
         {
             await k_Service.CallModuleEndpointAsync(
                 "Cloud_Code_Module_Reference",
                 "GetGameState",
                 new Dictionary<string, object>()
                 {
-                    {"gameState", gameState},
+                    {"clientGameState", clientGameState},
                 });
         }
 

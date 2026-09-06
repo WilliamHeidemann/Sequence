@@ -7,7 +7,7 @@ using UnityEngine;
 using UtilityToolkit.CollectionExtensions;
 using UtilityToolkit.Editor;
 
-namespace Game.Presentation
+namespace Game.Presentation.AnimationSystems
 {
     public class CardAligner : MonoBehaviour
     {

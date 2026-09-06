@@ -1,0 +1,98 @@
+using System.Collections.Generic;
+using Game.Domain;
+using Game.Domain.Models;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Game.Presentation.AnimationSystems
+{
+    public class AnimationOrchestrator : MonoBehaviour
+    {
+        [SerializeField] private BoardPresenter _boardPresenter;
+        [SerializeField] private DrawAnimator _drawAnimator;
+        [SerializeField] private CardAligner _cardAligner;
+        [SerializeField] private DiscardPile _discardPile;
+        [SerializeField] private OpponentHandAnimator _opponentHandAnimator;
+
+        private readonly AnimationQueue _animationQueue = new();
+
+        public void BindAnimations(PlayCoordinator playCoordinator)
+        {
+            playCoordinator.OnDrawCard += PlayDrawAnimation;
+            playCoordinator.OnOpponentPlayed += AnimateOpponentPlay;
+            playCoordinator.OnValidMoveRequest += PlayDiscardAndPinAnimation;
+            playCoordinator.OnInvalidMoveRequest += position => _boardPresenter.Shake(position);
+        }
+
+        public async Awaitable PlaySequenceCelebration()
+        {
+            Debug.Log("SEQUENCE!");
+        }
+
+        public void PlayDrawAnimation(Card card)
+        {
+            _animationQueue.Enqueue(Draw, card);
+            return;
+
+            async Awaitable Draw(Card c)
+            {
+                UIDocument cardUIDocument = _drawAnimator.InstantiateCardFaceDown();
+                await _drawAnimator.AnimateDrawing(c, cardUIDocument);
+                _cardAligner.AddCard(c, cardUIDocument.transform);
+            }
+        }
+
+        public void PlayDrawAnimation(IEnumerable<Card> cards)
+        {
+            foreach (Card card in cards)
+            {
+                PlayDrawAnimation(card);
+            }
+        }
+
+        public void PlayDiscardAndPinAnimation(Move move)
+        {
+            _animationQueue.Enqueue(Play);
+            return;
+
+            async Awaitable Play()
+            {
+                _boardPresenter.Pop(move.Position);
+
+                if (_cardAligner.RemoveCard(move.Card, out Transform cardTransform))
+                {
+                    await _discardPile.Discard(cardTransform);
+                }
+
+                if (move.Card.IsRemover())
+                {
+                    await _boardPresenter.RemovePin(move.Position);
+                }
+                else
+                {
+                    await _boardPresenter.Pin(move.Position, move.Team);
+                }
+            }
+        }
+
+        private void AnimateOpponentPlay(Move move)
+        {
+            _animationQueue.Enqueue(Play);
+            return;
+            
+            async Awaitable Play()
+            {
+                await Awaitable.WaitForSecondsAsync(1f); // simulate thinking time.
+                await _opponentHandAnimator.AnimatePlay(move.Card);
+                if (move.Card.IsRemover())
+                {
+                    await _boardPresenter.RemovePin(move.Position);
+                }
+                else
+                {
+                    await _boardPresenter.Pin(move.Position, move.Team);
+                }
+            }
+        }
+    }
+}

@@ -46,12 +46,14 @@ namespace Game.Domain.Models
         {
             Hand hand = team == Team.Red ? RedHand : YellowHand;
             Card[] cards = hand.GetCards();
-
+            bool isMyTurn = team == ToPlay;
+            
             return new ClientGameState
             {
                 Moves = MoveHistory.GetMoves(),
                 Hand = cards,
-                Team = team
+                Team = team,
+                IsMyTurn = isMyTurn
             };
         }
     }
