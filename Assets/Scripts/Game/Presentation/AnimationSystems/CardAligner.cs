@@ -5,7 +5,6 @@ using LitMotion;
 using LitMotion.Extensions;
 using UnityEngine;
 using UtilityToolkit.CollectionExtensions;
-using UtilityToolkit.Editor;
 
 namespace Game.Presentation.AnimationSystems
 {
@@ -29,29 +28,27 @@ namespace Game.Presentation.AnimationSystems
         public void AddCard(Card card, Transform cardTransform)
         {
             _cards.Add(cardTransform);
-            if (_lookup.TryGetValue(card, out List<Transform> cards))
-            {
-                cards.Add(cardTransform);
-            }
-            else
-            {
-                _lookup.Add(card, cards = new List<Transform>());
-                cards.Add(cardTransform);
-            }
             AlignCards(_cards);
+
+            _lookup.TryAdd(card, new List<Transform>());
+            _lookup[card].Add(cardTransform);
         }
 
         public bool RemoveCard(Card card, out Transform cardTransform)
         {
-            if (_lookup.TryGetValue(card, out List<Transform> cardList))
+            if (_lookup.TryGetValue(card, out List<Transform> cardList) && cardList.Count > 0)
             {
                 cardTransform = cardList.RandomElement();
+
+                cardList.Remove(cardTransform);
+
                 _cards.Remove(cardTransform);
-                _lookup.Remove(card);
+
                 AlignCards(_cards);
+
                 return true;
             }
-            
+
             cardTransform = null;
             return false;
         }
@@ -93,12 +90,6 @@ namespace Game.Presentation.AnimationSystems
                     .WithEase(Ease.InOutCubic)
                     .BindToLocalScale(cards[i]);
             }
-        }
-
-        [Button]
-        private void AlignEditMode()
-        {
-            AlignCards(_previewCards.ToList());
         }
     }
 }

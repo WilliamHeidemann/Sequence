@@ -13,18 +13,16 @@ namespace Game.Domain.Models
                 return false;
             }
 
-            if (cardInHand.IsRemover())
+            if (!cardInHand.IsRemover())
             {
-                bool playerOwnsPosition = board.Owner(move.Position)
-                    .SelectOrDefault(owner => owner == move.Team);
-
-                if (playerOwnsPosition)
-                {
-                    return false;
-                }
+                return true;
             }
+            
+            bool playerOwnsPosition = board.Owner(move.Position)
+                .SelectOrDefault(owner => owner == move.Team);
 
-            return true;
+            return !playerOwnsPosition;
+
         }
         
         public static bool IsValid(Move move, Board board, Hand hand, Team toPlay)

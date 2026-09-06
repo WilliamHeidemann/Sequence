@@ -19,7 +19,8 @@ namespace Game.Domain.Models
                 return false;
             }
 
-            gameState.Board.TryAddPin(move.Position, move.Team);
+            if (move.Card.IsRemover()) gameState.Board.Remove(move.Position);
+            else gameState.Board.TryAdd(move.Position, move.Team);
 
             hand.TryRemove(move.Card);
 

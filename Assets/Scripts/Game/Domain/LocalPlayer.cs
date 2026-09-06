@@ -4,12 +4,7 @@ using UtilityToolkit.Monads;
 
 namespace Game.Domain.Players
 {
-    public interface IPlayer
-    {
-        void PassGameState(ClientGameState clientGameState);
-    }
-    
-    public class LocalPlayer : IPlayer
+    public class LocalPlayer
     {
         public bool IsMyTurn { get; set; }
         public Team Team { get; set; }
@@ -33,9 +28,9 @@ namespace Game.Domain.Players
         {
             Card tabbedCard = BoardLayout.Get(position);
 
-            bool isOpenSpace = Board.Fits(position);
+            bool fits = Board.Fits(position);
 
-            Option<Card> requiredCard = Hand.FindCard(tabbedCard, isOpenSpace);
+            Option<Card> requiredCard = Hand.FindCard(tabbedCard, fits);
 
             if (!requiredCard.IsSome(out Card cardInHand))
             {
@@ -47,11 +42,6 @@ namespace Game.Domain.Players
                 if (Board.Owner(position).IsSome(out Team owner) && owner == Team)
                 {
                     return Option<Move>.None;
-                }
-
-                if (!Board.Remove(position))
-                {
-                    throw new Exception($"Unexpected behavior: {position} could not be removed from.");
                 }
             }
 

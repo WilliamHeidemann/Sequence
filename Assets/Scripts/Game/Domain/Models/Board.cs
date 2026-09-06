@@ -8,7 +8,7 @@ namespace Game.Domain.Models
     {
         private readonly Dictionary<Position, Team> _takenSpaces = new();
 
-        public bool TryAddPin(Position position, Team team) => _takenSpaces.TryAdd(position, team);
+        public bool TryAdd(Position position, Team team) => _takenSpaces.TryAdd(position, team);
 
         public bool Fits(Position position) => !_takenSpaces.ContainsKey(position);
 
@@ -24,7 +24,7 @@ namespace Game.Domain.Models
         
         public Board(Move[] moves)
         {
-            foreach (var move in moves)
+            foreach (Move move in moves)
             {
                 if (move.Card.IsRemover())
                 {

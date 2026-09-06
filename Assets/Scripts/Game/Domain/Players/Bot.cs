@@ -3,7 +3,7 @@ using Game.Domain.Players.Bot_Strategies;
 
 namespace Game.Domain.Players
 {
-    public class Bot : IPlayer
+    public class Bot
     {
         private readonly IBrain _brain;
         private readonly LocalGameServer _localGameServer;
