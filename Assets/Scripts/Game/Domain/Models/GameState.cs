@@ -10,36 +10,41 @@ namespace Game.Domain.Models
         public Deck Deck { get; }
         public Board Board { get; }
         public MoveHistory MoveHistory { get; }
+        public Score Score { get; }
         public Team ToPlay { get; set; }
 
-        private GameState(Deck deck, Hand redHand, Hand yellowHand, Board board, MoveHistory moveHistory, Team toStart)
+        private GameState(Deck deck, Hand redHand, Hand yellowHand, Board board, MoveHistory moveHistory, 
+            Score score, Team toStart)
         {
             Deck = deck;
             RedHand = redHand;
             YellowHand = yellowHand;
             Board = board;
             MoveHistory = moveHistory;
+            Score = score;
             ToPlay = toStart;
         }
 
         public static GameState Create()
         {
-            var deck = new Deck();
+            Deck deck = new();
 
             Card[] redCards = Enumerable.Range(0, 7).Select(_ => deck.Draw()).ToArray();
-            var redHand = new Hand(redCards);
+            Hand redHand = new(redCards);
 
             Card[] yellowCards = Enumerable.Range(0, 7).Select(_ => deck.Draw()).ToArray();
-            var yellowHand = new Hand(yellowCards);
+            Hand yellowHand = new(yellowCards);
 
-            var board = new Board(Array.Empty<Move>());
+            Board board = new(Array.Empty<Move>());
 
-            var moveHistory = new MoveHistory(Array.Empty<Move>());
+            MoveHistory moveHistory = new(Array.Empty<Move>());
 
+            Score score = new();
+            
             Random random = new();
-            var toPlay = random.NextDouble() < 0.5 ? Team.Red : Team.Yellow;
+            Team toPlay = random.NextDouble() < 0.5 ? Team.Red : Team.Yellow;
 
-            return new GameState(deck, redHand, yellowHand, board, moveHistory, toPlay);
+            return new GameState(deck, redHand, yellowHand, board, moveHistory, score, toPlay);
         }
 
         public ClientGameState ToClientGameState(Team team)

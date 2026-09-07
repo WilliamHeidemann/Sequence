@@ -8,6 +8,7 @@ namespace Game.Domain.Models
         public Move[] Moves { get; set; } = Array.Empty<Move>();
         public Card[] Hand { get; set; } = Array.Empty<Card>();
         public Team Team { get; set; }
+        public Score Score { get; set; }
         public bool IsMyTurn { get; set; }
     }
 }
