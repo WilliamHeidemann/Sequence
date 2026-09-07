@@ -42,16 +42,11 @@ namespace Game.Domain
 
         private void Receive(ClientGameState clientGameState)
         {
+            _localPlayer.PassGameState(clientGameState);
+            
             clientGameState.Moves.LastOption().Try(lastMove =>
             {
-                if (lastMove.Team == _localPlayer.Team)
-                {
-                    _localPlayer.PassGameState(clientGameState);
-                }
-                else
-                {
-                    OnOpponentPlayed?.Invoke(lastMove);
-                }
+                OnOpponentPlayed?.Invoke(lastMove);
             });
         }
     }
