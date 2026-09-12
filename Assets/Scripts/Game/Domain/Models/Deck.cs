@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UtilityToolkit.CollectionExtensions;
 
 namespace Game.Domain.Models
@@ -23,7 +24,9 @@ namespace Game.Domain.Models
         { 
             Cards.Clear();
 
-            foreach (Card card in Card.FullDeck.Shuffle())
+            Card[] doubleDeck = Card.FullDeck.Concat(Card.FullDeck).ToArray();
+
+            foreach (Card card in doubleDeck.Shuffle())
             {
                 Cards.Push(card);
             }

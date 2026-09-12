@@ -110,14 +110,14 @@ namespace Game.Cloud
             return moves.Select(ToModel).ToArray();
         }
         
-        public static GameStateData ToModel(this Dto.GameStateData gameStateData)
+        public static ClientGameState ToModel(this Dto.ClientGameState clientGameState)
         {
-            return new GameStateData
+            return new ClientGameState
             {
-                Deck = gameStateData.Deck.ToModel(),
-                Moves = gameStateData.Moves.ToModel(),
-                RedHand = gameStateData.RedHand.ToModel(),
-                YellowHand = gameStateData.YellowHand.ToModel()
+                Moves = clientGameState.Moves.ToModel(),
+                Hand = clientGameState.Hand.ToModel(),
+                IsMyTurn = clientGameState.IsMyTurn,
+                Team = clientGameState.Team.ToModel()
             };
         }
     }

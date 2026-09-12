@@ -3,7 +3,7 @@ using LitMotion.Extensions;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Game.Presentation
+namespace Game.Presentation.AnimationSystems
 {
     public class DiscardPile : MonoBehaviour
     {

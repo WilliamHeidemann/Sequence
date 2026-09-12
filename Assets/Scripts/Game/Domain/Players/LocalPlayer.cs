@@ -1,103 +1,62 @@
-using System;
 using Game.Domain.Models;
 using UtilityToolkit.Monads;
 
 namespace Game.Domain.Players
 {
-    public class LocalPlayer : IOpponent
+    public class LocalPlayer
     {
-        private readonly GameState _gameState;
         public bool IsMyTurn { get; set; }
-        public Team MyTeam => _gameState.MyTeam;
-        public Hand MyHand => _gameState.MyHand;
-        public Hand OpponentHand => _gameState.OpponentHand;
-        public Deck Deck => _gameState.Deck;
-        public Board Board => _gameState.Board;
-        public MoveHistory MoveHistory => _gameState.MoveHistory;
-        public GameStateData GetGameStateData() => _gameState.ToData();
-
-        public event Action<Move, GameStateData> OnMovePerformed;
+        public Team Team { get; set; }
+        public Hand Hand { get; set; }
+        public Board Board { get; set; }
         
-        public LocalPlayer(Team team)
+        public LocalPlayer(ClientGameState clientGameState)
         {
-            IsMyTurn = true;
-            _gameState = new GameState(team);
+            PassGameState(clientGameState);
         }
 
-        public void PassGameState(GameStateData gameStateData)
+        public void PassGameState(ClientGameState clientGameState)
         {
-            MoveHistory.Set(gameStateData.Moves);
-            Deck.Set(gameStateData.Deck);
-            Board.Set(gameStateData.Moves);
-            Card[] opponentHand = MyTeam == Team.Red ? gameStateData.YellowHand : gameStateData.RedHand;
-            OpponentHand.Set(opponentHand);
-
-            // if game just loaded:
-            // set my hand
-            // display all cards (no animation)
-            
-            IsMyTurn = true;
+            IsMyTurn = clientGameState.IsMyTurn;
+            Team = clientGameState.Team;
+            Hand = new Hand(clientGameState.Hand);
+            Board = new Board(clientGameState.Moves);
         }
-
-        public bool AttemptPlay(Position position)
+        
+        public Option<Move> GetValidMove(Position position)
         {
             Card tabbedCard = BoardLayout.Get(position);
 
-            if (!IsMyTurn)
-            {
-                return false;
-            }
+            bool fits = Board.Fits(position);
 
-            bool isOpenSpace = Board.Fits(position);
-
-            Option<Card> requiredCard = MyHand.FindCard(tabbedCard, isOpenSpace);
+            Option<Card> requiredCard = Hand.FindCard(tabbedCard, fits);
 
             if (!requiredCard.IsSome(out Card cardInHand))
             {
-                return false;
+                return Option<Move>.None;
             }
 
             if (cardInHand.IsRemover())
             {
-                if (Board.Owner(position).IsSome(out Team owner) && owner == MyTeam)
+                if (Board.Owner(position).IsSome(out Team owner) && owner == Team)
                 {
-                    return false;
+                    return Option<Move>.None;
                 }
-                
-                if (!Board.Remove(position))
-                {
-                    throw new Exception($"Unexpected behavior: {position} could not be removed from.");
-                }
-            }
-            else if (!Board.TryAddPin(position, MyTeam))
-            {
-                throw new Exception($"Unexpected behavior: {position} could not be pinned.");
-            }
-
-            if (!MyHand.TryRemove(cardInHand))
-            {
-                throw new Exception($"Unexpected behavior: {cardInHand} was not in the hand.");
-            }
-
-            Card drawnCard = Deck.Draw();
-
-            if (!MyHand.TryAdd(drawnCard))
-            {
-                throw new Exception($"Unexpected behavior: {drawnCard} could not be added.");
             }
 
             Move move = new()
             {
                 Card = cardInHand,
                 Position = position,
-                Team = MyTeam
+                Team = Team
             };
 
-            MoveHistory.Add(move);
-            
-            OnMovePerformed?.Invoke(move, _gameState.ToData());
+            return IsValid(move) ? Option<Move>.Some(move) : Option<Move>.None;
+        }
 
-            return true;
+        private bool IsValid(Move move)
+        {
+            return MoveValidator.IsValid(move, Board, Hand);
         }
     }
 }

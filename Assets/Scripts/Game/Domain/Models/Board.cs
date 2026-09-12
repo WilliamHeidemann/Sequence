@@ -6,11 +6,11 @@ namespace Game.Domain.Models
 {
     public class Board
     {
-        private Dictionary<Position, Team> TakenSpaces { get; } = new();
+        private readonly Dictionary<Position, Team> _takenSpaces = new();
 
-        public bool TryAddPin(Position position, Team team) => TakenSpaces.TryAdd(position, team);
+        public bool TryAdd(Position position, Team team) => _takenSpaces.TryAdd(position, team);
 
-        public bool Fits(Position position) => !TakenSpaces.ContainsKey(position);
+        public bool Fits(Position position) => !_takenSpaces.ContainsKey(position);
 
         public bool HasSequence(Team team) =>
             SequencePatterns.All().Any(pattern => IsSequence(pattern, team));
@@ -20,21 +20,17 @@ namespace Game.Domain.Models
 
         private bool IsSequence(Position[] positions, Team team) =>
             positions.All(position =>
-                TakenSpaces.TryGetValue(position, out Team occupyingTeam) && occupyingTeam == team);
-
-
-        public void Clear() => TakenSpaces.Clear();
-
-        public void Set(Move[] moves)
+                _takenSpaces.TryGetValue(position, out Team occupyingTeam) && occupyingTeam == team);
+        
+        public Board(Move[] moves)
         {
-            Clear();
             foreach (Move move in moves)
             {
                 if (move.Card.IsRemover())
                 {
-                    TakenSpaces.Remove(move.Position);
+                    _takenSpaces.Remove(move.Position);
                 }
-                else if (!TakenSpaces.TryAdd(move.Position, move.Team))
+                else if (!_takenSpaces.TryAdd(move.Position, move.Team))
                 {
                     throw new DomainException($"Duplicate move at {BoardLayout.Get(move.Position)}");
                 }
@@ -43,12 +39,12 @@ namespace Game.Domain.Models
 
         public bool Remove(Position position)
         {
-            return TakenSpaces.Remove(position);
+            return _takenSpaces.Remove(position);
         }
 
         public Option<Team> Owner(Position position)
         {
-            return TakenSpaces.TryGetValue(position, out Team team) 
+            return _takenSpaces.TryGetValue(position, out Team team) 
                 ? Option<Team>.Some(team) 
                 : Option<Team>.None;
         }
@@ -58,5 +54,11 @@ namespace Game.Domain.Models
     {
         Red,
         Yellow
+    }
+
+    public static class TeamExtensions
+    {
+        public static Team Opposing(this Team team) => 
+            team == Team.Red ? Team.Yellow : Team.Red;
     }
 }

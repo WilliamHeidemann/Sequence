@@ -1,66 +1,26 @@
-using System;
 using Game.Domain.Models;
 using Game.Domain.Players.Bot_Strategies;
+using Game.Domain.Server;
 
 namespace Game.Domain.Players
 {
-    public class Bot : IOpponent
+    public class Bot
     {
-        private readonly GameState _gameState;
         private readonly IBrain _brain;
+        private readonly LocalGameServer _localGameServer;
 
-        public Bot(Team team, IBrain brain)
+        public Bot(LocalGameServer localGameServer, IBrain brain)
         {
-            _gameState = new GameState(team);
             _brain = brain;
+            _localGameServer = localGameServer;
+            
+            localGameServer.OnOpponentPlayed += PassGameState;
         }
 
-        public event Action<Move, GameStateData> OnMovePerformed;
-
-        public void PassGameState(GameStateData gameStateData)
+        public void PassGameState(ClientGameState clientGameState)
         {
-            SetGameState(gameStateData);
-            Move move = _brain.DecideMove(_gameState);
-            Play(move);
-        }
-
-
-        private void SetGameState(GameStateData gameStateData)
-        {
-            _gameState.MoveHistory.Set(gameStateData.Moves);
-            _gameState.Deck.Set(gameStateData.Deck);
-
-            if (_gameState.MyTeam == Team.Red)
-            {
-                _gameState.MyHand.Set(gameStateData.RedHand);
-                _gameState.OpponentHand.Set(gameStateData.YellowHand);
-            }
-            else
-            {
-                _gameState.MyHand.Set(gameStateData.YellowHand);
-                _gameState.OpponentHand.Set(gameStateData.RedHand);
-            }
-
-            _gameState.Board.Set(gameStateData.Moves);
-        }
-
-        private void Play(Move move)
-        {
-            _gameState.Board.TryAddPin(move.Position, _gameState.MyTeam);
-
-            _gameState.MyHand.TryRemove(move.Card);
-
-            _gameState.MoveHistory.Add(move);
-
-            while (!_gameState.MyHand.IsFull)
-            {
-                if (!_gameState.MyHand.TryAdd(_gameState.Deck.Draw()))
-                {
-                    break;
-                }
-            }
-
-            OnMovePerformed?.Invoke(move, _gameState.ToData());
+            Move move = _brain.DecideMove(clientGameState);
+            _localGameServer.Request(move);
         }
     }
 }

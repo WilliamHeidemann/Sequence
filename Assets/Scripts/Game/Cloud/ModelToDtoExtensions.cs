@@ -116,15 +116,15 @@ namespace Game.Cloud
         {
             return moves.Select(move => move.ToDto()).ToList();
         }
-        
-        public static Dto.GameStateData ToDto(this GameStateData gameStateData)
+
+        public static Dto.ClientGameState ToDto(this ClientGameState clientGameState)
         {
-            return new Dto.GameStateData
+            return new Dto.ClientGameState
             {
-                Deck = gameStateData.Deck.ToDto(),
-                Moves = gameStateData.Moves.ToDto(),
-                RedHand = gameStateData.RedHand.ToDto(),
-                YellowHand = gameStateData.YellowHand.ToDto()
+                Team = clientGameState.Team.ToDto(),
+                Hand = clientGameState.Hand.ToDto(),
+                Moves = clientGameState.Moves.ToDto(),
+                IsMyTurn = clientGameState.IsMyTurn
             };
         }
     }

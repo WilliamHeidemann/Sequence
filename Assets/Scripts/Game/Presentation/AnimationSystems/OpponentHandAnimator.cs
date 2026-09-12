@@ -1,10 +1,9 @@
-using Game.Domain;
 using Game.Domain.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
-namespace Game.Presentation
+namespace Game.Presentation.AnimationSystems
 {
     public class OpponentHandAnimator : MonoBehaviour
     {
