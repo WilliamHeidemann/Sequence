@@ -1,11 +1,15 @@
 using System;
 using System.Threading.Tasks;
+using Game.Cloud;
 using Game.Domain;
 using Game.Domain.Models;
 using Game.Domain.Players;
 using Game.Domain.Players.Bot_Strategies;
 using Game.Domain.Server;
 using Game.Presentation.AnimationSystems;
+using Unity.Services.Authentication;
+using Unity.Services.CloudCode.GeneratedBindings;
+using Unity.Services.Core;
 using UnityEngine;
 
 namespace Game.Presentation
@@ -19,14 +23,16 @@ namespace Game.Presentation
         private Bot _bot;
         private PlayCoordinator _playCoordinator;
 
-        private void Start()
+        private async void Start()
         {
-            GameState gameState = GameState.Create();
+            await UnityServices.InitializeAsync();
+
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
             
-            LocalGameServer playerGameServer = new(gameState);
-            LocalGameServer botGameServer = new(gameState);
-            playerGameServer.OtherPlayerServer = botGameServer;
-            botGameServer.OtherPlayerServer = playerGameServer;
+            GameState gameState = GameState.Create();
+
+            // IGameServer playerGameServer = CreateLocalGameServer(gameState);
+            IGameServer playerGameServer = CreateCloudGameServer(gameState);
             
             _localPlayer = new LocalPlayer(gameState.ToClientGameState(gameState.ToPlay));
             
@@ -35,7 +41,25 @@ namespace Game.Presentation
             _animationOrchestrator.PlayDrawAnimation(_localPlayer.Hand.GetCards());
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
             
+        }
+
+        private LocalGameServer CreateLocalGameServer(GameState gameState)
+        {
+            LocalGameServer playerGameServer = new(gameState);
+            LocalGameServer botGameServer = new(gameState);
+            playerGameServer.OtherPlayerServer = botGameServer;
+            botGameServer.OtherPlayerServer = playerGameServer;
             _bot = new Bot(botGameServer, new CenterBrain());
+            
+            return playerGameServer;
+        }
+
+        private CloudGameServer CreateCloudGameServer(GameState gameState)
+        {
+            GameLogicServiceBindings gameLogicService = new();
+            CloudGameServer playerGameServer = new CloudGameServer(gameLogicService);
+            
+            return playerGameServer;
         }
 
         private async void HandlePositionClicked(Position position)

@@ -8,7 +8,7 @@ namespace Game.Domain.Server
     public class LocalGameServer : IGameServer
     {
         private readonly GameState _gameState;
-        public LocalGameServer OtherPlayerServer { get; set; }
+        public IGameServer OtherPlayerServer { get; set; }
         public event Action<Card> OnCardReceived;
         public event Action<ClientGameState> OnOpponentPlayed;
 
@@ -35,7 +35,7 @@ namespace Game.Domain.Server
             return Task.CompletedTask;
         }
 
-        private void Receive(ClientGameState gameState)
+        public void Receive(ClientGameState gameState)
         {
             OnOpponentPlayed?.Invoke(gameState);
         }
