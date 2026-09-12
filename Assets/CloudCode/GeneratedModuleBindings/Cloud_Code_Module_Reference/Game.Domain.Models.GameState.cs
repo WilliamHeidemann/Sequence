@@ -11,6 +11,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings.Game.Domain.Models
         public Deck Deck;
         public Board Board;
         public MoveHistory MoveHistory;
+        public Score Score;
         public Team ToPlay;
 
         [Preserve]

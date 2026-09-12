@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Game.Domain.Models;
 
 namespace Game.Domain.Server
@@ -16,7 +17,7 @@ namespace Game.Domain.Server
             _gameState = gameState;
         }
 
-        public void Request(Move move)
+        public Task Request(Move move)
         {
             if (StateUpdater.Update(_gameState, move))
             {
@@ -30,6 +31,8 @@ namespace Game.Domain.Server
 
                 OtherPlayerServer.Receive(_gameState.ToClientGameState(move.Team.Opposing()));
             }
+            
+            return Task.CompletedTask;
         }
 
         private void Receive(ClientGameState gameState)

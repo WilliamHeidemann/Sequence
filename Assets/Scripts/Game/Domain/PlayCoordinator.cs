@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Game.Domain.Models;
 using Game.Domain.Players;
 using Game.Domain.Server;
@@ -25,14 +26,14 @@ namespace Game.Domain
             gameServer.OnOpponentPlayed += Receive;
         }
 
-        public void PositionClicked(Position position)
+        public async Task PositionClicked(Position position)
         {
             var attempt = _localPlayer.GetValidMove(position);
 
             if (attempt.IsSome(out Move move))
             {
                 OnValidMoveRequest?.Invoke(move);
-                _gameServer.Request(move);
+                await _gameServer.Request(move);
             }
             else
             {

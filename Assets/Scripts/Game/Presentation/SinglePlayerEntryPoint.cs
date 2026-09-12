@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Game.Domain;
 using Game.Domain.Models;
 using Game.Domain.Players;
@@ -31,9 +33,21 @@ namespace Game.Presentation
             _playCoordinator = new PlayCoordinator(playerGameServer, _localPlayer);
             _animationOrchestrator.BindAnimations(_playCoordinator);
             _animationOrchestrator.PlayDrawAnimation(_localPlayer.Hand.GetCards());
-            _boardPresenter.OnPositionClicked += _playCoordinator.PositionClicked;
+            _boardPresenter.OnPositionClicked += HandlePositionClicked;
             
             _bot = new Bot(botGameServer, new CenterBrain());
+        }
+
+        private async void HandlePositionClicked(Position position)
+        {
+            try
+            {
+                await _playCoordinator.PositionClicked(position);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
     }
 }
