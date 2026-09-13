@@ -7,7 +7,7 @@ namespace Game.Domain.Server
 {
     public class LocalGameServer : IGameServer
     {
-        private readonly GameState _gameState;
+        private GameState _gameState;
         public IGameServer OtherPlayerServer { get; set; }
         public event Action<Card> OnCardReceived;
         public event Action<ClientGameState> OnOpponentPlayed;
@@ -19,20 +19,31 @@ namespace Game.Domain.Server
 
         public Task Request(Move move)
         {
-            if (StateUpdater.Update(_gameState, move))
-            {
-                Hand hand = move.Team switch
-                {
-                    Team.Red => _gameState.RedHand,
-                    Team.Yellow => _gameState.YellowHand,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-                OnCardReceived?.Invoke(hand.GetCards().Last());
-
-                OtherPlayerServer.Receive(_gameState.ToClientGameState(move.Team.Opposing()));
-            }
+            MoveValidator.MoveResult moveResult = MoveValidator.PlayMove(_gameState, move);
             
+            _gameState = moveResult switch
+            {
+                MoveValidator.MoveResult.Success(var updatedState) => OnMoveSuccess(updatedState, move),
+                MoveValidator.MoveResult.Invalid => _gameState,
+                _ => throw new ArgumentOutOfRangeException(nameof(moveResult))
+            };
+
+            OtherPlayerServer.Receive(_gameState.ToClientGameState(move.Team.Opposing()));
+
             return Task.CompletedTask;
+        }
+
+        private GameState OnMoveSuccess(GameState updatedState, Move move)
+        {
+            Card[] hand = move.Team switch
+            {
+                Team.Red => _gameState.RedHand,
+                Team.Yellow => _gameState.YellowHand,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            OnCardReceived?.Invoke(hand.Last());
+            return updatedState;
         }
 
         public void Receive(ClientGameState gameState)

@@ -12,6 +12,11 @@ namespace Game.Domain.Models
         {
             Reshuffle();
         }
+
+        public Deck(Card[] cards)
+        {
+            Cards = cards.ToStack();
+        }
         
         public Card Draw()
         {
@@ -35,11 +40,6 @@ namespace Game.Domain.Models
         public Card[] GetCards()
         {
             return Cards.ToArray();
-        }
-
-        public void Set(Card[] deck)
-        {
-            Cards = deck.ToStack();
         }
     }
 }

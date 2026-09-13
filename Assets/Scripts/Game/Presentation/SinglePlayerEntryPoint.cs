@@ -29,7 +29,7 @@ namespace Game.Presentation
 
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             
-            GameState gameState = GameState.Create();
+            GameState gameState = GameState.CreateInitial();
 
             // IGameServer playerGameServer = CreateLocalGameServer(gameState);
             IGameServer playerGameServer = CreateCloudGameServer(gameState);

@@ -9,7 +9,7 @@ namespace Game.Domain.Players
         public Team Team { get; set; }
         public Hand Hand { get; set; }
         public Board Board { get; set; }
-        
+
         public LocalPlayer(ClientGameState clientGameState)
         {
             PassGameState(clientGameState);
@@ -22,7 +22,7 @@ namespace Game.Domain.Players
             Hand = new Hand(clientGameState.Hand);
             Board = new Board(clientGameState.Moves);
         }
-        
+
         public Option<Move> GetValidMove(Position position)
         {
             Card tabbedCard = BoardLayout.Get(position);
@@ -38,7 +38,9 @@ namespace Game.Domain.Players
 
             if (cardInHand.IsRemover())
             {
-                if (Board.Owner(position).IsSome(out Team owner) && owner == Team)
+                bool ownerIsPlayer = Board.Owner(position).IsSome(out Team owner) && owner == Team;
+                
+                if (ownerIsPlayer)
                 {
                     return Option<Move>.None;
                 }
@@ -56,7 +58,8 @@ namespace Game.Domain.Players
 
         private bool IsValid(Move move)
         {
-            return MoveValidator.IsValid(move, Board, Hand);
+            Team toPlay = IsMyTurn ? Team : Team.Opposing();
+            return MoveValidator.IsValid(move, Board, Hand, toPlay);
         }
     }
 }
