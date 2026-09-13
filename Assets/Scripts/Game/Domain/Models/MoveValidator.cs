@@ -65,7 +65,7 @@ namespace Game.Domain.Models
             Hand hand = new(cardsInHand);
             Board board = new(gameState.Moves);
 
-            if (!MoveValidator.IsValid(move, board, hand, gameState.ToPlay))
+            if (!IsValid(move, board, hand, gameState.ToPlay))
             {
                 return new MoveResult.Invalid();
             }

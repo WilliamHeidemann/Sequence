@@ -56,12 +56,8 @@ namespace Game.Domain.Players.Bot_Strategies
 
             if (position.IsSome(out Position playedPosition))
             {
-                return new Move
-                {
-                    Card = BoardLayout.Get(playedPosition),
-                    Position = playedPosition,
-                    Team = clientGameState.Team
-                };
+                Card card = BoardLayout.Get(playedPosition);
+                return new Move(playedPosition, card, clientGameState.Team);
             }
 
             throw new Exception("No room for any card");

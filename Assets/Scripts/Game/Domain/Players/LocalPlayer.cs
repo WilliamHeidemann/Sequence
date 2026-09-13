@@ -46,12 +46,7 @@ namespace Game.Domain.Players
                 }
             }
 
-            Move move = new()
-            {
-                Card = cardInHand,
-                Position = position,
-                Team = Team
-            };
+            Move move = new(position, cardInHand, Team);
 
             return IsValid(move) ? Option<Move>.Some(move) : Option<Move>.None;
         }

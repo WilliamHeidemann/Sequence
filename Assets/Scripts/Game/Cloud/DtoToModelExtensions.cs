@@ -92,12 +92,10 @@ namespace Game.Cloud
 
         public static Move ToModel(this Dto.Move move)
         {
-            return new Move
-            {
-                Card = move.Card.ToModel(),
-                Position = move.Position.ToModel(),
-                Team = move.Team.ToModel()
-            };
+            Card card = move.Card.ToModel();
+            Position position = move.Position.ToModel();
+            Team team = move.Team.ToModel();
+            return new Move(position, card, team);
         }
 
         private static Card[] ToModel(this List<Dto.Card> cards)

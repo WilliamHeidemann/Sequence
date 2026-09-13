@@ -19,16 +19,12 @@ namespace Game.Domain.Server
 
         public Task Request(Move move)
         {
-            MoveValidator.MoveResult moveResult = MoveValidator.PlayMove(_gameState, move);
-            
-            _gameState = moveResult switch
+            _gameState = MoveValidator.PlayMove(_gameState, move) switch
             {
                 MoveValidator.MoveResult.Success(var updatedState) => OnMoveSuccess(updatedState, move),
                 MoveValidator.MoveResult.Invalid => _gameState,
-                _ => throw new ArgumentOutOfRangeException(nameof(moveResult))
+                _ => throw new ArgumentOutOfRangeException()
             };
-
-            OtherPlayerServer.Receive(_gameState.ToClientGameState(move.Team.Opposing()));
 
             return Task.CompletedTask;
         }
@@ -37,12 +33,15 @@ namespace Game.Domain.Server
         {
             Card[] hand = move.Team switch
             {
-                Team.Red => _gameState.RedHand,
-                Team.Yellow => _gameState.YellowHand,
+                Team.Red => updatedState.RedHand,
+                Team.Yellow => updatedState.YellowHand,
                 _ => throw new ArgumentOutOfRangeException()
             };
 
             OnCardReceived?.Invoke(hand.Last());
+
+            OtherPlayerServer.Receive(updatedState.ToClientGameState(move.Team.Opposing()));
+
             return updatedState;
         }
 

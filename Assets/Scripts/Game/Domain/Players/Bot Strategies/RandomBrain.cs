@@ -12,7 +12,7 @@ namespace Game.Domain.Players.Bot_Strategies
         public Move DecideMove(ClientGameState clientGameState)
         {
             Board board = new(clientGameState.Moves);
-            
+
             Card card = clientGameState.Hand.Where(card => card.Rank != Rank.Jack).RandomElement();
             (Position first, Position second) = BoardLayout.Get(card);
 
@@ -20,12 +20,7 @@ namespace Game.Domain.Players.Bot_Strategies
 
             Position position = board.Fits(first) ? first : second;
 
-            Move move = new()
-            {
-                Card = card,
-                Position = position,
-                Team = clientGameState.Team
-            };
+            Move move = new(position, card, clientGameState.Team);
 
             return move;
         }

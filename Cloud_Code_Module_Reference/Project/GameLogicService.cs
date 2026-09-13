@@ -9,8 +9,12 @@ public class GameLogicService
     [CloudCodeFunction]
     public CardResultDto Request(Move move)
     {
-        GameState gameState = GameState.Create();
-        Card card = gameState.Deck.Draw();
+        GameState gameState = GameState.CreateInitial();
+        
+        Deck deck = new(gameState.Deck);
+        
+        Card card = deck.Draw();
+        
         return new CardResultDto
         {
             Card = card,
