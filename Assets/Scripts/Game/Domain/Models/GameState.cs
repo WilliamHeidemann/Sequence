@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace Game.Domain.Models
 {
+    [Serializable]
     public class GameState
     {
         public GameState(Card[] redHand, Card[] yellowHand, Card[] deck, Move[] moves, Score score, Team toPlay)

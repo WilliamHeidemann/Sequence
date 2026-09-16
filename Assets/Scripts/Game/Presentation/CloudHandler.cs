@@ -53,6 +53,9 @@ public class CloudHandler : MonoBehaviour
     {
         SubscriptionEventCallbacks callbacks = new();
         
+        // The subscribed callback should handle all push message types.
+        // 1) GameRequest(playerId)
+        // 2) OpponentPlayedMessage(matchId)
         callbacks.MessageReceived += evt => _mainMenu.OpenGameRequestModal(evt.Message);
         
         callbacks.Error += Debug.LogError;

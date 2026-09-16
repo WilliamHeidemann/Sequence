@@ -1,10 +1,11 @@
 using Game.Domain.Models;
 using Game.Domain.Models.Dto;
+using Unity.Services.CloudCode.Apis;
 using Unity.Services.CloudCode.Core;
 
 namespace Cloud_Code_Module_Reference;
 
-public class GameLogicService
+public class GameLogicService(IGameApiClient gameApiClient)
 {
     [CloudCodeFunction]
     public CardResultDto Request(Move move)

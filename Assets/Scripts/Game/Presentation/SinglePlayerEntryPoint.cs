@@ -41,6 +41,16 @@ namespace Game.Presentation
             _animationOrchestrator.PlayDrawAnimation(_localPlayer.Hand.GetCards());
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
             
+            // ExampleServiceBindings exampleService = new();
+            // string result1 = await exampleService.CreateMatch();
+            // Debug.Log($"Match created: {result1}");
+            //
+            // string result2 = await exampleService.StoreGameState();
+            // Debug.Log($"Game State stored: {result2}");
+            //
+            // var cardDto = await exampleService.DrawCard();
+            // Card card = cardDto.ToModel();
+            // Debug.Log($"Card drawn: {card}");
         }
 
         private LocalGameServer CreateLocalGameServer(GameState gameState)

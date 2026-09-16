@@ -100,5 +100,25 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 {
                 });
         }
+
+        public async Task<string> StoreGameState()
+        {
+            return await k_Service.CallModuleEndpointAsync<string>(
+                "Cloud_Code_Module_Reference",
+                "StoreGameState",
+                new Dictionary<string, object>()
+                {
+                });
+        }
+
+        public async Task<Game.Domain.Models.Card> DrawCard()
+        {
+            return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Card>(
+                "Cloud_Code_Module_Reference",
+                "DrawCard",
+                new Dictionary<string, object>()
+                {
+                });
+        }
     }
 }
