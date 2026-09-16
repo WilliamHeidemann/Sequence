@@ -21,7 +21,7 @@ namespace Game.Cloud
         
         public async Task Request(Move move)
         {
-            var cardResult = await _gameLogicService.Request(move.ToDto());
+            var cardResult = await _gameLogicService.Request(move.ToDto(), "match002");
             
             if (cardResult.HasCard)
             {

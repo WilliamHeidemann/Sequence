@@ -51,6 +51,9 @@ namespace Game.Presentation
             // var cardDto = await exampleService.DrawCard();
             // Card card = cardDto.ToModel();
             // Debug.Log($"Card drawn: {card}");
+            
+            GameLogicServiceBindings gameLogicServiceBindings = new();
+            
         }
 
         private LocalGameServer CreateLocalGameServer(GameState gameState)

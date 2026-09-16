@@ -16,7 +16,7 @@ public class ExampleService(IGameApiClient gameApiClient)
 {
     private const string CustomId = "ExampleItemId";
 
-    [CloudCodeFunction("SetExampleData")]
+    [CloudCodeFunction]
     public async Task SetExampleData(IExecutionContext context)
     {
         SetItemBody setItemBody = new("OtherKey", 2);
@@ -29,7 +29,7 @@ public class ExampleService(IGameApiClient gameApiClient)
             setItemBody);
     }
 
-    [CloudCodeFunction("GetExampleData")]
+    [CloudCodeFunction]
     public async Task<IEnumerable<string>> GetExampleData(IExecutionContext context)
     {
         var customIdsResponse =
@@ -47,41 +47,8 @@ public class ExampleService(IGameApiClient gameApiClient)
         return customIds.Concat(keys).Concat(values);
     }
 
-    [CloudCodeFunction("SendPosition")]
-    public async Task<Position> GetPositionIdentity(IExecutionContext context, Position position)
-    {
-        await Task.Delay(1000);
-        return position;
-    }
-
-    [CloudCodeFunction("SendCard")]
-    public async Task<Game.Domain.Models.Card> GetPositionIdentity(IExecutionContext context,
-        Game.Domain.Models.Card card)
-    {
-        await Task.Delay(1000);
-        return card;
-    }
-
-    [CloudCodeFunction("SendMove")]
-    public async Task SendMove(Move move)
-    {
-        await Task.Delay(1000);
-    }
-
-    [CloudCodeFunction("SendGameStateData")]
-    public async Task SendGameStateData(GameState gameState)
-    {
-        await Task.Delay(1000);
-    }
-
-    [CloudCodeFunction("GetGameState")]
-    public async Task SendGameStateData(IExecutionContext context, ClientGameState clientGameState)
-    {
-        await Task.Delay(1000);
-    }
-
-    [CloudCodeFunction("CreateMatch")]
-    public async Task<string> CreateMatch(IExecutionContext context)
+    [CloudCodeFunction]
+    public async Task<string> CreateMatch1(IExecutionContext context)
     {
         try
         {
