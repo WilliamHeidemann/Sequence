@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using Game.Domain.Models;
 using Game.Domain.Server;
 using Unity.Services.CloudCode.GeneratedBindings;
-using UnityEngine;
-using UtilityToolkit.Monads;
 
 namespace Game.Cloud
 {
@@ -18,11 +16,11 @@ namespace Game.Cloud
         {
             _gameLogicService = gameLogicService;
         }
-        
+
         public async Task Request(Move move)
         {
             var cardResult = await _gameLogicService.Request(move.ToDto(), "match002");
-            
+
             if (cardResult.HasCard)
             {
                 OnCardReceived?.Invoke(cardResult.Card.ToModel());
