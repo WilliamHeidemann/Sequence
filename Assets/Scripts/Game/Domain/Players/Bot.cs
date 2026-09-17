@@ -7,20 +7,20 @@ namespace Game.Domain.Players
     public class Bot
     {
         private readonly IBrain _brain;
-        private readonly LocalGameServer _localGameServer;
+        private readonly IGameServer _gameServer;
 
-        public Bot(LocalGameServer localGameServer, IBrain brain)
+        public Bot(IGameServer gameServer, IBrain brain)
         {
             _brain = brain;
-            _localGameServer = localGameServer;
+            _gameServer = gameServer;
             
-            localGameServer.OnOpponentPlayed += PassGameState;
+            gameServer.OnOpponentPlayed += Play;
         }
 
-        public void PassGameState(ClientGameState clientGameState)
+        private void Play(ClientGameState clientGameState)
         {
             Move move = _brain.DecideMove(clientGameState);
-            _localGameServer.Request(move);
+            _gameServer.Request(move);
         }
     }
 }

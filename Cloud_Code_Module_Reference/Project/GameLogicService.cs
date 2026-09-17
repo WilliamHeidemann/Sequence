@@ -45,10 +45,10 @@ public class GameLogicService(IGameApiClient gameApiClient)
         };
 
     [CloudCodeFunction]
-    public async Task<ClientGameState> GetClientGameState(IExecutionContext context, string matchId)
+    public async Task<ClientGameState> GetClientGameState(IExecutionContext context, string matchId, Team team)
     {
         GameState gameState = await GetGameState(context, matchId);
-        return gameState.ToClientGameState(Team.Red);
+        return gameState.ToClientGameState(team);
     }
     
     private async Task<GameState> GetGameState(IExecutionContext context, string matchId)

@@ -29,10 +29,14 @@ namespace Game.Presentation
 
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             
-            GameState gameState = GameState.CreateInitial();
+            // GameState gameState = GameState.CreateInitial();
+            
+            GameLogicServiceBindings gameLogicServiceBindings = new();
+            var matchId = await gameLogicServiceBindings.CreateMatch();
 
-            IGameServer playerGameServer = CreateLocalGameServer(gameState);
+            // IGameServer playerGameServer = CreateLocalGameServer(gameState);
             // IGameServer playerGameServer = CreateCloudGameServer(gameState);
+            IGameServer playerGameServer = CreateCloudBotGameServer(matchId);
             
             _localPlayer = new LocalPlayer(gameState.ToClientGameState(gameState.ToPlay));
             
@@ -51,12 +55,27 @@ namespace Game.Presentation
             // var cardDto = await exampleService.DrawCard();
             // Card card = cardDto.ToModel();
             // Debug.Log($"Card drawn: {card}");
-            
+        }
+
+        private CloudGameServer CreateCloudBotGameServer(string matchId)
+        {
             GameLogicServiceBindings gameLogicServiceBindings = new();
-            await gameLogicServiceBindings.CreateMatch();
+            CloudGameServer playerGameServer = new(gameLogicServiceBindings);
+            CloudGameServer botGameServer = new(gameLogicServiceBindings);
+            // The following is only possible when both clients are on the same machine. 
+            // This is to use remote gameplay without push messages implemented. 
+            playerGameServer.OnCardReceived += async _ => await PassGameState(botGameServer, matchId, Team.Red, gameLogicServiceBindings);
+            botGameServer.OnCardReceived += async _ => await PassGameState(playerGameServer, matchId, Team.Yellow, gameLogicServiceBindings);
+
+            _bot = new Bot(botGameServer, new CenterBrain());
             
-            ExampleServiceBindings bindings = new();
-            await bindings.CreateCard();
+            return playerGameServer;
+        }
+
+        private static async Task PassGameState(CloudGameServer otherServer, string matchId, Team team, GameLogicServiceBindings gameLogicServiceBindings)
+        {
+            var clientGameState = await gameLogicServiceBindings.GetClientGameState(matchId, team.ToDto());
+            otherServer.Receive(clientGameState.ToModel());
         }
 
         private LocalGameServer CreateLocalGameServer(GameState gameState)

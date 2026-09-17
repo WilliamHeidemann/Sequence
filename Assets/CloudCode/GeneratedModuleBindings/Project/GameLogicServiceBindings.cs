@@ -38,7 +38,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 });
         }
 
-        public async Task<Game.Domain.Models.ClientGameState> GetClientGameState(string matchId)
+        public async Task<Game.Domain.Models.ClientGameState> GetClientGameState(string matchId, Game.Domain.Models.Team team)
         {
             return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.ClientGameState>(
                 "Project",
@@ -46,6 +46,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 new Dictionary<string, object>()
                 {
                     {"matchId", matchId},
+                    {"team", team},
                 });
         }
     }
