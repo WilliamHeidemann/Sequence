@@ -8,7 +8,6 @@ using Unity.Services.CloudCode.Apis;
 using Unity.Services.CloudCode.Core;
 using Unity.Services.CloudCode.Shared;
 using Unity.Services.CloudSave.Model;
-using JsonException = System.Text.Json.JsonException;
 
 namespace Cloud_Code_Module_Reference;
 
@@ -48,7 +47,7 @@ public class ExampleService(IGameApiClient gameApiClient)
     }
 
     [CloudCodeFunction]
-    public async Task<string> CreateMatch1(IExecutionContext context)
+    public async Task<string> CreateCard(IExecutionContext context)
     {
         try
         {
@@ -106,5 +105,11 @@ public class ExampleService(IGameApiClient gameApiClient)
         Deck deck = new(gameState.Deck);
 
         return deck.Draw();
+    }
+
+    [CloudCodeFunction]
+    public int Get0()
+    {
+        return 0;
     }
 }

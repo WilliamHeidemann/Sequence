@@ -31,8 +31,8 @@ namespace Game.Presentation
             
             GameState gameState = GameState.CreateInitial();
 
-            // IGameServer playerGameServer = CreateLocalGameServer(gameState);
-            IGameServer playerGameServer = CreateCloudGameServer(gameState);
+            IGameServer playerGameServer = CreateLocalGameServer(gameState);
+            // IGameServer playerGameServer = CreateCloudGameServer(gameState);
             
             _localPlayer = new LocalPlayer(gameState.ToClientGameState(gameState.ToPlay));
             
@@ -52,8 +52,9 @@ namespace Game.Presentation
             // Card card = cardDto.ToModel();
             // Debug.Log($"Card drawn: {card}");
             
-            GameLogicServiceBindings gameLogicServiceBindings = new();
-            
+            // GameLogicServiceBindings gameLogicServiceBindings = new();
+            ExampleServiceBindings bindings = new();
+            await bindings.Get0();
         }
 
         private LocalGameServer CreateLocalGameServer(GameState gameState)
@@ -67,13 +68,13 @@ namespace Game.Presentation
             return playerGameServer;
         }
 
-        private CloudGameServer CreateCloudGameServer(GameState gameState)
-        {
-            GameLogicServiceBindings gameLogicService = new();
-            CloudGameServer playerGameServer = new CloudGameServer(gameLogicService);
-            
-            return playerGameServer;
-        }
+        // private CloudGameServer CreateCloudGameServer(GameState gameState)
+        // {
+            // GameLogicServiceBindings gameLogicService = new();
+            // CloudGameServer playerGameServer = new CloudGameServer(gameLogicService);
+            //
+            // return playerGameServer;
+        // }
 
         private async void HandlePositionClicked(Position position)
         {

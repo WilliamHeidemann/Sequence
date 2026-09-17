@@ -36,11 +36,11 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 });
         }
 
-        public async Task<string> CreateMatch1()
+        public async Task<string> CreateCard()
         {
             return await k_Service.CallModuleEndpointAsync<string>(
                 "Cloud_Code_Module_Reference",
-                "CreateMatch1",
+                "CreateCard",
                 new Dictionary<string, object>()
                 {
                 });
@@ -61,6 +61,16 @@ namespace Unity.Services.CloudCode.GeneratedBindings
             return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Card>(
                 "Cloud_Code_Module_Reference",
                 "DrawCard",
+                new Dictionary<string, object>()
+                {
+                });
+        }
+
+        public async Task<int> Get0()
+        {
+            return await k_Service.CallModuleEndpointAsync<int>(
+                "Cloud_Code_Module_Reference",
+                "Get0",
                 new Dictionary<string, object>()
                 {
                 });
