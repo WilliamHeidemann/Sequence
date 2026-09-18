@@ -22,6 +22,7 @@ namespace Game.Presentation
 
         private Bot _bot;
         private PlayCoordinator _playCoordinator;
+        private string _matchId;
 
         private async void Start()
         {
@@ -41,6 +42,8 @@ namespace Game.Presentation
             _animationOrchestrator.BindAnimations(_playCoordinator);
             _animationOrchestrator.PlayDrawAnimation(match.ClientGameState.Hand);
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
+            
+            _matchId = match.MatchId;
         }
 
         private CloudGameServer CreateCloudBotGameServer(string matchId)
@@ -97,6 +100,13 @@ namespace Game.Presentation
             {
                 Debug.LogError(e);
             }
+        }
+
+        private async Task OnDestroy()
+        {
+            GameLogicServiceBindings gameLogicServiceBindings = new();
+            bool success = await gameLogicServiceBindings.DeleteMatch(_matchId);
+            Debug.Log(success);
         }
     }
 }

@@ -49,5 +49,16 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                     {"team", team},
                 });
         }
+
+        public async Task<bool> DeleteMatch(string matchId)
+        {
+            return await k_Service.CallModuleEndpointAsync<bool>(
+                "Project",
+                "DeleteMatch",
+                new Dictionary<string, object>()
+                {
+                    {"matchId", matchId},
+                });
+        }
     }
 }

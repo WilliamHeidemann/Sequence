@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Game.Domain.Models;
 using Game.Domain.Models.Dto;
@@ -72,5 +73,14 @@ public class GameLogicService(IGameApiClient gameApiClient)
                               ?? throw new JsonException("Could not deserialize game state");
 
         return gameState;
+    }
+
+    [CloudCodeFunction]
+    public async Task<bool> DeleteMatch(IExecutionContext context, string matchId)
+    {
+        var result = await gameApiClient.CloudSaveData.DeletePrivateCustomItemsAsync(context,
+            context.ServiceToken, context.ProjectId, matchId);
+
+        return result.StatusCode == HttpStatusCode.OK;
     }
 }
