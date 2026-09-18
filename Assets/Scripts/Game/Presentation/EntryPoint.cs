@@ -12,6 +12,7 @@ using Unity.Services.Authentication;
 using Unity.Services.CloudCode.GeneratedBindings;
 using Unity.Services.Core;
 using UnityEngine;
+using UtilityToolkit.Monads;
 
 namespace Game.Presentation
 {
@@ -20,44 +21,77 @@ namespace Game.Presentation
         [SerializeField] private BoardPresenter _boardPresenter;
         [SerializeField] private AnimationOrchestrator _animationOrchestrator;
         [SerializeField] private AudioPlayer _audioPlayer;
+        [SerializeField] private Mode _mode;
+
+        public enum Mode
+        {
+            Local,
+            Online
+        }
 
         private Bot _bot;
         private PlayCoordinator _playCoordinator;
-        private string _matchId;
+        private Option<string> _matchId;
 
         private async void Start()
         {
             await UnityServices.InitializeAsync();
 
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            
+
+            ClientGameState clientGameState = _mode switch
+            {
+                Mode.Local => CreateLocalClientGameState(),
+                Mode.Online => await CreateCloudClientGameState(),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            // IGameServer playerGameServer = CreateCloudGameServer(gameState);
+            IGameServer playerGameServer = _mode switch
+            {
+                Mode.Local => CreateLocalGameServer(),
+                Mode.Online => CreateCloudBotGameServer(clientGameState),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            _playCoordinator = new PlayCoordinator(playerGameServer, clientGameState);
+            _animationOrchestrator.BindAnimations(_playCoordinator);
+            _animationOrchestrator.PlayDrawAnimation(clientGameState.Hand);
+            _boardPresenter.OnPositionClicked += HandlePositionClicked;
+        }
+
+        private ClientGameState CreateLocalClientGameState()
+        {
+            GameState gameState = GameState.CreateInitial();
+            return gameState.ToClientGameState(gameState.ToPlay);
+        }
+
+        private async Task<ClientGameState> CreateCloudClientGameState()
+        {
             GameLogicServiceBindings gameLogicServiceBindings = new();
             var matchDto = await gameLogicServiceBindings.CreateMatch();
             Match match = matchDto.ToModel();
-
-            // IGameServer playerGameServer = CreateLocalGameServer(gameState);
-            // IGameServer playerGameServer = CreateCloudGameServer(gameState);
-            IGameServer playerGameServer = CreateCloudBotGameServer(match);
-
-            _playCoordinator = new PlayCoordinator(playerGameServer, match.ClientGameState);
-            _animationOrchestrator.BindAnimations(_playCoordinator);
-            _animationOrchestrator.PlayDrawAnimation(match.ClientGameState.Hand);
-            _boardPresenter.OnPositionClicked += HandlePositionClicked;
-            
-            _matchId = match.Id;
+            _matchId = Option<string>.Some(match.Id);
+            return match.ClientGameState;
         }
 
-        private CloudGameServer CreateCloudBotGameServer(Match match)
+        private CloudGameServer CreateCloudBotGameServer(ClientGameState clientGameState)
         {
+            if (!_matchId.IsSome(out string matchId))
+            {
+                throw new Exception("MatchId does not exist");
+            }
+            
             GameLogicServiceBindings gameLogicServiceBindings = new();
-            CloudGameServer playerGameServer = new(gameLogicServiceBindings, match.Id);
-            CloudGameServer botGameServer = new(gameLogicServiceBindings, match.Id);
+            CloudGameServer playerGameServer = new(gameLogicServiceBindings, matchId);
+            CloudGameServer botGameServer = new(gameLogicServiceBindings, matchId);
             // The following is only possible when both clients are on the same machine. 
             // This is to use remote gameplay without push messages implemented. 
             playerGameServer.OnCardReceived += async _ =>
-                await PassGameState(botGameServer, match.Id, match.ClientGameState.Team.Opposing(), gameLogicServiceBindings);
+                await PassGameState(botGameServer, matchId, clientGameState.Team.Opposing(),
+                    gameLogicServiceBindings);
             botGameServer.OnCardReceived += async _ =>
-                await PassGameState(playerGameServer, match.Id, match.ClientGameState.Team, gameLogicServiceBindings);
+                await PassGameState(playerGameServer, matchId, clientGameState.Team, gameLogicServiceBindings);
 
             _bot = new Bot(botGameServer, new CenterBrain());
 
@@ -105,9 +139,12 @@ namespace Game.Presentation
 
         private async Task OnDestroy()
         {
-            GameLogicServiceBindings gameLogicServiceBindings = new();
-            bool success = await gameLogicServiceBindings.DeleteMatch(_matchId);
-            Debug.Log(success);
+            if (_matchId.IsSome(out string matchId))
+            {
+                GameLogicServiceBindings gameLogicServiceBindings = new();
+                bool success = await gameLogicServiceBindings.DeleteMatch(matchId);
+                Debug.Log(success);    
+            }
         }
     }
 }
