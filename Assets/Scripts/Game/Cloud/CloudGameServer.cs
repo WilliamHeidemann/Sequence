@@ -9,17 +9,19 @@ namespace Game.Cloud
     public class CloudGameServer : IGameServer
     {
         private readonly GameLogicServiceBindings _gameLogicService;
+        private readonly string _matchId;
         public event Action<Card> OnCardReceived;
         public event Action<ClientGameState> OnOpponentPlayed;
 
-        public CloudGameServer(GameLogicServiceBindings gameLogicService)
+        public CloudGameServer(GameLogicServiceBindings gameLogicService, string matchId)
         {
             _gameLogicService = gameLogicService;
+            _matchId = matchId;
         }
 
         public async Task Request(Move move)
         {
-            var cardResult = await _gameLogicService.Request(move.ToDto(), "match002");
+            var cardResult = await _gameLogicService.Request(move.ToDto(), _matchId);
 
             if (cardResult.HasCard)
             {

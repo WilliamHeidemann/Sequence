@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Game.Domain.Models;
+using Game.Domain.Models.Dto;
 using Dto = Unity.Services.CloudCode.GeneratedBindings.Game.Domain.Models;
 
 namespace Game.Cloud
@@ -38,7 +39,7 @@ namespace Game.Cloud
                 _ => throw new ArgumentOutOfRangeException(nameof(symbol), symbol, null)
             };
         }
-        
+
         public static Card ToModel(this Dto.Card card)
         {
             return new Card(card.Symbol.ToModel(), card.Rank.ToModel());
@@ -57,7 +58,7 @@ namespace Game.Cloud
                 _ => throw new ArgumentOutOfRangeException(nameof(row), row, null)
             };
         }
-        
+
         public static Column ToModel(this Dto.Column column)
         {
             return column switch
@@ -107,7 +108,7 @@ namespace Game.Cloud
         {
             return moves.Select(ToModel).ToArray();
         }
-        
+
         public static ClientGameState ToModel(this Dto.ClientGameState clientGameState)
         {
             return new ClientGameState
@@ -116,6 +117,15 @@ namespace Game.Cloud
                 Hand = clientGameState.Hand.ToModel(),
                 IsMyTurn = clientGameState.IsMyTurn,
                 Team = clientGameState.Team.ToModel()
+            };
+        }
+
+        public static Match ToModel(this Dto.Dto.Match match)
+        {
+            return new Match
+            {
+                MatchId = match.MatchId,
+                ClientGameState = match.ClientGameState.ToModel()
             };
         }
     }

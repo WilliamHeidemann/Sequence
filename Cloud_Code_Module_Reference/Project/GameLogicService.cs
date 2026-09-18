@@ -13,12 +13,12 @@ namespace Cloud_Code_Module_Reference;
 public class GameLogicService(IGameApiClient gameApiClient)
 {
     [CloudCodeFunction]
-    public async Task<string> CreateMatch(IExecutionContext context)
+    public async Task<Match> CreateMatch(IExecutionContext context)
     {
         string matchId = Guid.NewGuid().ToString();
 
         GameState gameState = GameState.CreateInitial();
-        
+
         ApiResponse<SetItemResponse> response = await gameApiClient.CloudSaveData.SetPrivateCustomItemAsync(
             context,
             context.ServiceToken,
@@ -26,19 +26,25 @@ public class GameLogicService(IGameApiClient gameApiClient)
             matchId,
             new SetItemBody("gameState", gameState));
 
-        return matchId;
+        ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
+
+        return new Match
+        {
+            MatchId = matchId,
+            ClientGameState = clientGameState
+        };
     }
-    
+
     [CloudCodeFunction]
-    public async Task<CardResultDto> Request(IExecutionContext context, Move move, string matchId) =>
+    public async Task<CardResult> Request(IExecutionContext context, Move move, string matchId) =>
         MoveValidator.PlayMove(await GetGameState(context, matchId), move) switch
         {
-            MoveValidator.MoveResult.Success(var updatedGameState) => new CardResultDto
+            MoveValidator.MoveResult.Success(var updatedGameState) => new CardResult
             {
                 Card = new Deck(updatedGameState.Deck).Draw(),
                 HasCard = true,
             },
-            MoveValidator.MoveResult.Invalid => new CardResultDto
+            MoveValidator.MoveResult.Invalid => new CardResult
             {
                 HasCard = false,
             }
@@ -50,7 +56,7 @@ public class GameLogicService(IGameApiClient gameApiClient)
         GameState gameState = await GetGameState(context, matchId);
         return gameState.ToClientGameState(team);
     }
-    
+
     private async Task<GameState> GetGameState(IExecutionContext context, string matchId)
     {
         ApiResponse<GetItemsResponse> response = await gameApiClient.CloudSaveData.GetPrivateCustomItemsAsync(

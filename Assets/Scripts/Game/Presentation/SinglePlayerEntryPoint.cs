@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Game.Cloud;
 using Game.Domain;
 using Game.Domain.Models;
+using Game.Domain.Models.Dto;
 using Game.Domain.Players;
 using Game.Domain.Players.Bot_Strategies;
 using Game.Domain.Server;
@@ -18,8 +19,7 @@ namespace Game.Presentation
     {
         [SerializeField] private BoardPresenter _boardPresenter;
         [SerializeField] private AnimationOrchestrator _animationOrchestrator;
-        
-        private LocalPlayer _localPlayer;
+
         private Bot _bot;
         private PlayCoordinator _playCoordinator;
 
@@ -29,71 +29,61 @@ namespace Game.Presentation
 
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             
-            // GameState gameState = GameState.CreateInitial();
-            
             GameLogicServiceBindings gameLogicServiceBindings = new();
-            var matchId = await gameLogicServiceBindings.CreateMatch();
+            var matchDto = await gameLogicServiceBindings.CreateMatch();
+            Match match = matchDto.ToModel();
 
             // IGameServer playerGameServer = CreateLocalGameServer(gameState);
             // IGameServer playerGameServer = CreateCloudGameServer(gameState);
-            IGameServer playerGameServer = CreateCloudBotGameServer(matchId);
-            
-            _localPlayer = new LocalPlayer(gameState.ToClientGameState(gameState.ToPlay));
-            
-            _playCoordinator = new PlayCoordinator(playerGameServer, _localPlayer);
+            IGameServer playerGameServer = CreateCloudBotGameServer(match.MatchId);
+
+            _playCoordinator = new PlayCoordinator(playerGameServer, match.ClientGameState);
             _animationOrchestrator.BindAnimations(_playCoordinator);
-            _animationOrchestrator.PlayDrawAnimation(_localPlayer.Hand.GetCards());
+            _animationOrchestrator.PlayDrawAnimation(match.ClientGameState.Hand);
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
-            
-            // ExampleServiceBindings exampleService = new();
-            // string result1 = await exampleService.CreateMatch();
-            // Debug.Log($"Match created: {result1}");
-            //
-            // string result2 = await exampleService.StoreGameState();
-            // Debug.Log($"Game State stored: {result2}");
-            //
-            // var cardDto = await exampleService.DrawCard();
-            // Card card = cardDto.ToModel();
-            // Debug.Log($"Card drawn: {card}");
         }
 
         private CloudGameServer CreateCloudBotGameServer(string matchId)
         {
             GameLogicServiceBindings gameLogicServiceBindings = new();
-            CloudGameServer playerGameServer = new(gameLogicServiceBindings);
-            CloudGameServer botGameServer = new(gameLogicServiceBindings);
+            CloudGameServer playerGameServer = new(gameLogicServiceBindings, matchId);
+            CloudGameServer botGameServer = new(gameLogicServiceBindings, matchId);
             // The following is only possible when both clients are on the same machine. 
             // This is to use remote gameplay without push messages implemented. 
-            playerGameServer.OnCardReceived += async _ => await PassGameState(botGameServer, matchId, Team.Red, gameLogicServiceBindings);
-            botGameServer.OnCardReceived += async _ => await PassGameState(playerGameServer, matchId, Team.Yellow, gameLogicServiceBindings);
+            playerGameServer.OnCardReceived += async _ =>
+                await PassGameState(botGameServer, matchId, Team.Red, gameLogicServiceBindings);
+            botGameServer.OnCardReceived += async _ =>
+                await PassGameState(playerGameServer, matchId, Team.Yellow, gameLogicServiceBindings);
 
             _bot = new Bot(botGameServer, new CenterBrain());
-            
+
             return playerGameServer;
         }
 
-        private static async Task PassGameState(CloudGameServer otherServer, string matchId, Team team, GameLogicServiceBindings gameLogicServiceBindings)
+        private static async Task PassGameState(CloudGameServer otherServer, string matchId, Team team,
+            GameLogicServiceBindings gameLogicServiceBindings)
         {
             var clientGameState = await gameLogicServiceBindings.GetClientGameState(matchId, team.ToDto());
             otherServer.Receive(clientGameState.ToModel());
         }
 
-        private LocalGameServer CreateLocalGameServer(GameState gameState)
+        private LocalGameServer CreateLocalGameServer()
         {
+            GameState gameState = GameState.CreateInitial();
             LocalGameServer playerGameServer = new(gameState);
             LocalGameServer botGameServer = new(gameState);
             playerGameServer.OtherPlayerServer = botGameServer;
             botGameServer.OtherPlayerServer = playerGameServer;
             _bot = new Bot(botGameServer, new CenterBrain());
-            
+
             return playerGameServer;
         }
 
-        private CloudGameServer CreateCloudGameServer(GameState gameState)
+        private CloudGameServer CreateCloudGameServer(string matchId)
         {
             GameLogicServiceBindings gameLogicService = new();
-            CloudGameServer playerGameServer = new CloudGameServer(gameLogicService);
-            
+            CloudGameServer playerGameServer = new(gameLogicService, matchId);
+
             return playerGameServer;
         }
 

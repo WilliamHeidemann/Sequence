@@ -1,9 +1,44 @@
 using System;
+using UtilityToolkit.Monads;
 
 namespace Game.Domain.Models
 {
     public static class MoveValidator
     {
+        public static Option<Move> GetValidMove(ClientGameState clientGameState, Position position)
+        {
+            Board board = new(clientGameState.Moves);
+
+            Hand hand = new(clientGameState.Hand);
+            
+            Card tabbedCard = BoardLayout.Get(position);
+
+            bool fits = board.Fits(position);
+
+            Option<Card> requiredCard = hand.FindCard(tabbedCard, fits);
+
+            if (!requiredCard.IsSome(out Card cardInHand))
+            {
+                return Option<Move>.None;
+            }
+
+            if (cardInHand.IsRemover())
+            {
+                bool ownerIsPlayer = board.Owner(position).IsSome(out Team owner) && owner == clientGameState.Team;
+                
+                if (ownerIsPlayer)
+                {
+                    return Option<Move>.None;
+                }
+            }
+
+            Move move = new(position, cardInHand, clientGameState.Team);
+
+            Team toPlay = clientGameState.IsMyTurn ? clientGameState.Team : clientGameState.Team.Opposing();
+            
+            return IsValid(move, board, hand, toPlay) ? Option<Move>.Some(move) : Option<Move>.None;
+        }
+        
         public static bool IsValid(Move move, Board board, Hand hand, Team toPlay)
         {
             if (move.Team != toPlay)

@@ -4,13 +4,13 @@ using System;
 
 namespace Unity.Services.CloudCode.GeneratedBindings.Game.Domain.Models.Dto
 {
-    public partial class CardResultDto
+    public partial class Match
     {
-        public bool HasCard;
-        public Card Card;
+        public string MatchId;
+        public ClientGameState ClientGameState;
 
         [Preserve]
-        public CardResultDto ()
+        public Match ()
         {
         }
     }

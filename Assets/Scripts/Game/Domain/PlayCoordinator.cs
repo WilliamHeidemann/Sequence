@@ -1,26 +1,26 @@
 using System;
 using System.Threading.Tasks;
 using Game.Domain.Models;
-using Game.Domain.Players;
 using Game.Domain.Server;
 using UtilityToolkit.CollectionExtensions;
+using UtilityToolkit.Monads;
 
 namespace Game.Domain
 {
     public class PlayCoordinator
     {
-        private readonly LocalPlayer _localPlayer;
         private readonly IGameServer _gameServer;
+        private ClientGameState _clientGameState;
 
         public event Action<Position> OnInvalidMoveRequest;
         public event Action<Move> OnValidMoveRequest;
         public event Action<Card> OnDrawCard;
         public event Action<Move> OnOpponentPlayed;
 
-        public PlayCoordinator(IGameServer gameServer, LocalPlayer localPlayer)
+        public PlayCoordinator(IGameServer gameServer, ClientGameState startingState)
         {
             _gameServer = gameServer;
-            _localPlayer = localPlayer;
+            _clientGameState = startingState;
             
             gameServer.OnCardReceived += card => OnDrawCard?.Invoke(card);
             gameServer.OnOpponentPlayed += Receive;
@@ -28,7 +28,7 @@ namespace Game.Domain
 
         public async Task PositionClicked(Position position)
         {
-            var attempt = _localPlayer.GetValidMove(position);
+            Option<Move> attempt = MoveValidator.GetValidMove(_clientGameState, position);
 
             if (attempt.IsSome(out Move move))
             {
@@ -43,7 +43,7 @@ namespace Game.Domain
 
         private void Receive(ClientGameState clientGameState)
         {
-            _localPlayer.PassGameState(clientGameState);
+            _clientGameState = clientGameState;
             
             clientGameState.Moves.LastOption().Try(lastMove =>
             {

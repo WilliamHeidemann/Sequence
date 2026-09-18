@@ -1,6 +1,9 @@
+using System;
+
 namespace Game.Domain.Models.Dto
 {
-    public class CardResultDto
+    [Serializable]
+    public class CardResult
     {
         public bool HasCard { get; set; }
         public Card Card { get; set; }
