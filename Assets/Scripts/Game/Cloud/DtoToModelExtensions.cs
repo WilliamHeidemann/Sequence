@@ -124,7 +124,7 @@ namespace Game.Cloud
         {
             return new Match
             {
-                MatchId = match.MatchId,
+                Id = match.Id,
                 ClientGameState = match.ClientGameState.ToModel()
             };
         }

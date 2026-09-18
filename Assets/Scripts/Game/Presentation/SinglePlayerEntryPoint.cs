@@ -36,27 +36,27 @@ namespace Game.Presentation
 
             // IGameServer playerGameServer = CreateLocalGameServer(gameState);
             // IGameServer playerGameServer = CreateCloudGameServer(gameState);
-            IGameServer playerGameServer = CreateCloudBotGameServer(match.MatchId);
+            IGameServer playerGameServer = CreateCloudBotGameServer(match);
 
             _playCoordinator = new PlayCoordinator(playerGameServer, match.ClientGameState);
             _animationOrchestrator.BindAnimations(_playCoordinator);
             _animationOrchestrator.PlayDrawAnimation(match.ClientGameState.Hand);
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
             
-            _matchId = match.MatchId;
+            _matchId = match.Id;
         }
 
-        private CloudGameServer CreateCloudBotGameServer(string matchId)
+        private CloudGameServer CreateCloudBotGameServer(Match match)
         {
             GameLogicServiceBindings gameLogicServiceBindings = new();
-            CloudGameServer playerGameServer = new(gameLogicServiceBindings, matchId);
-            CloudGameServer botGameServer = new(gameLogicServiceBindings, matchId);
+            CloudGameServer playerGameServer = new(gameLogicServiceBindings, match.Id);
+            CloudGameServer botGameServer = new(gameLogicServiceBindings, match.Id);
             // The following is only possible when both clients are on the same machine. 
             // This is to use remote gameplay without push messages implemented. 
             playerGameServer.OnCardReceived += async _ =>
-                await PassGameState(botGameServer, matchId, Team.Red, gameLogicServiceBindings);
+                await PassGameState(botGameServer, match.Id, match.ClientGameState.Team.Opposing(), gameLogicServiceBindings);
             botGameServer.OnCardReceived += async _ =>
-                await PassGameState(playerGameServer, matchId, Team.Yellow, gameLogicServiceBindings);
+                await PassGameState(playerGameServer, match.Id, match.ClientGameState.Team, gameLogicServiceBindings);
 
             _bot = new Bot(botGameServer, new CenterBrain());
 

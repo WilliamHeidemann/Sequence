@@ -31,7 +31,7 @@ public class GameLogicService(IGameApiClient gameApiClient)
 
         return new Match
         {
-            MatchId = matchId,
+            Id = matchId,
             ClientGameState = clientGameState
         };
     }

@@ -6,7 +6,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings.Game.Domain.Models.Dto
 {
     public partial class Match
     {
-        public string MatchId;
+        public string Id;
         public ClientGameState ClientGameState;
 
         [Preserve]
