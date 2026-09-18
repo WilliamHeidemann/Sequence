@@ -22,7 +22,6 @@ namespace Game.Presentation.AnimationSystems
         {
             Func<Awaitable> applied = animation.Apply(input);
             Enqueue(applied);
-
         }
         
         public void Enqueue<T1, T2>(Func<T1, T2, Awaitable> animation, T1 input1, T2 input2)

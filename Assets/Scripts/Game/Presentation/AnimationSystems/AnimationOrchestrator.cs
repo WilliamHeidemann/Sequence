@@ -3,6 +3,7 @@ using Game.Domain;
 using Game.Domain.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Position = Game.Domain.Models.Position;
 
 namespace Game.Presentation.AnimationSystems
 {
@@ -13,6 +14,7 @@ namespace Game.Presentation.AnimationSystems
         [SerializeField] private CardAligner _cardAligner;
         [SerializeField] private DiscardPile _discardPile;
         [SerializeField] private OpponentHandAnimator _opponentHandAnimator;
+        [SerializeField] private AudioPlayer _audioPlayer;
 
         private readonly AnimationQueue _animationQueue = new();
 
@@ -21,7 +23,13 @@ namespace Game.Presentation.AnimationSystems
             playCoordinator.OnDrawCard += PlayDrawAnimation;
             playCoordinator.OnOpponentPlayed += AnimateOpponentPlay;
             playCoordinator.OnValidMoveRequest += PlayDiscardAndPinAnimation;
-            playCoordinator.OnInvalidMoveRequest += position => _boardPresenter.Shake(position);
+            playCoordinator.OnInvalidMoveRequest += PlayInvalidMove;
+        }
+
+        public void PlayInvalidMove(Position position)
+        {
+            _boardPresenter.Shake(position);
+            // _audioPlayer.Play();
         }
 
         public async Awaitable PlaySequenceCelebration()
