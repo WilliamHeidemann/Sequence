@@ -113,8 +113,9 @@ namespace Game.Presentation
 
         private LocalGameServer CreateLocalGameServer(GameState gameState)
         {
-            LocalGameServer playerGameServer = new(gameState);
-            LocalGameServer botGameServer = new(gameState);
+            LocalGameState localGameState = new(gameState);
+            LocalGameServer playerGameServer = new(localGameState);
+            LocalGameServer botGameServer = new(localGameState);
             playerGameServer.OtherPlayerServer = botGameServer;
             botGameServer.OtherPlayerServer = playerGameServer;
             _bot = new Bot(botGameServer, new CenterBrain());
