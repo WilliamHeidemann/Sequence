@@ -41,6 +41,14 @@ namespace Game.Domain
             }
         }
 
+        public void RaiseDrawHandEvent()
+        {
+            foreach (Card card in _clientGameState.Hand)
+            {
+                OnDrawCard?.Invoke(card);
+            }
+        }
+        
         private void Receive(ClientGameState clientGameState)
         {
             _clientGameState = clientGameState;

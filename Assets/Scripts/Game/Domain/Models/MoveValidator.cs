@@ -7,6 +7,11 @@ namespace Game.Domain.Models
     {
         public static Option<Move> GetValidMove(ClientGameState clientGameState, Position position)
         {
+            if (!clientGameState.IsMyTurn)
+            {
+                return Option<Move>.None;
+            }
+            
             Board board = new(clientGameState.Moves);
 
             Hand hand = new(clientGameState.Hand);

@@ -20,7 +20,6 @@ namespace Game.Presentation
     {
         [SerializeField] private BoardPresenter _boardPresenter;
         [SerializeField] private AnimationOrchestrator _animationOrchestrator;
-        [SerializeField] private AudioPlayer _audioPlayer;
         [SerializeField] private Mode _mode;
 
         public enum Mode
@@ -39,31 +38,38 @@ namespace Game.Presentation
 
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-            ClientGameState clientGameState = _mode switch
-            {
-                Mode.Local => CreateLocalClientGameState(),
-                Mode.Online => await CreateCloudClientGameState(),
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
             // IGameServer playerGameServer = CreateCloudGameServer(gameState);
-            IGameServer playerGameServer = _mode switch
+
+            _playCoordinator = _mode switch
             {
-                Mode.Local => CreateLocalGameServer(),
-                Mode.Online => CreateCloudBotGameServer(clientGameState),
+                Mode.Local => CreateLocalPlayCoordinator(),
+                Mode.Online => await CreateCloudPlayCoordinator(),
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            _playCoordinator = new PlayCoordinator(playerGameServer, clientGameState);
             _animationOrchestrator.BindAnimations(_playCoordinator);
-            _animationOrchestrator.PlayDrawAnimation(clientGameState.Hand);
+            _playCoordinator.RaiseDrawHandEvent();
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
         }
 
-        private ClientGameState CreateLocalClientGameState()
+        private PlayCoordinator CreateLocalPlayCoordinator()
         {
             GameState gameState = GameState.CreateInitial();
-            return gameState.ToClientGameState(gameState.ToPlay);
+            
+            ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
+            
+            LocalGameServer playerGameServer = CreateLocalGameServer(gameState);
+
+            return new PlayCoordinator(playerGameServer, clientGameState);
+        }
+
+        private async Task<PlayCoordinator> CreateCloudPlayCoordinator()
+        {
+            ClientGameState clientGameState = await CreateCloudClientGameState();
+
+            CloudGameServer playerGameServer = CreateCloudBotGameServer(clientGameState);
+
+            return new PlayCoordinator(playerGameServer, clientGameState);
         }
 
         private async Task<ClientGameState> CreateCloudClientGameState()
@@ -105,9 +111,8 @@ namespace Game.Presentation
             otherServer.Receive(clientGameState.ToModel());
         }
 
-        private LocalGameServer CreateLocalGameServer()
+        private LocalGameServer CreateLocalGameServer(GameState gameState)
         {
-            GameState gameState = GameState.CreateInitial();
             LocalGameServer playerGameServer = new(gameState);
             LocalGameServer botGameServer = new(gameState);
             playerGameServer.OtherPlayerServer = botGameServer;
