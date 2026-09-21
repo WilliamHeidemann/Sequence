@@ -4,13 +4,14 @@ using System;
 
 namespace Unity.Services.CloudCode.GeneratedBindings.Game.Domain.Models.Dto
 {
-    public partial class CardResult
+    public partial class MoveRequestResult
     {
         public bool HasCard;
+        public bool IsOutOfSync;
         public Card Card;
 
         [Preserve]
-        public CardResult ()
+        public MoveRequestResult ()
         {
         }
     }

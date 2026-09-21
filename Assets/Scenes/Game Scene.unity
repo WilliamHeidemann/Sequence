@@ -825,8 +825,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Eclipse.Presentation::Game.Presentation.LocalGame
   _boardPresenter: {fileID: 105310681}
   _animationOrchestrator: {fileID: 1626219986}
-  _audioPlayer: {fileID: 854427144}
-  _mode: 0
+  _mode: 1
 --- !u!4 &733830842
 Transform:
   m_ObjectHideFlags: 0

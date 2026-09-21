@@ -39,7 +39,6 @@ public class GameLogicService(IGameApiClient gameApiClient)
         };
     }
 
-    [CloudCodeFunction]
     private async Task<ApiResponse<SetItemResponse>> SetMatch(IExecutionContext context, string matchId,
         GameState gameState)
     {
@@ -56,12 +55,12 @@ public class GameLogicService(IGameApiClient gameApiClient)
     [CloudCodeFunction]
     public async Task<MoveRequestResult> Request(IExecutionContext context, Move move, string matchId)
     {
-        GameState current = await GetGameState(context, matchId);
+        GameState currentGameState = await GetGameState(context, matchId);
 
-        MoveRequestResult moveRequestResult = MoveValidator.PlayMove(current, move) switch
+        MoveRequestResult moveRequestResult = MoveValidator.PlayMove(currentGameState, move) switch
         {
-            MoveValidator.MoveResult.Success(var next, var drawnCard) => await SuccessMoveRequestResult(context,
-                matchId, next, drawnCard),
+            MoveValidator.MoveResult.Success(var nextGameState, var drawnCard) => await SuccessMoveRequestResult(context,
+                matchId, nextGameState, drawnCard),
             MoveValidator.MoveResult.Invalid => new MoveRequestResult { HasCard = false, },
             MoveValidator.MoveResult.OutOfSync => new MoveRequestResult { HasCard = false, IsOutOfSync = true },
             _ => throw new ArgumentOutOfRangeException()

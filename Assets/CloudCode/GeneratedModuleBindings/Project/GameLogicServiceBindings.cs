@@ -26,9 +26,9 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 });
         }
 
-        public async Task<Game.Domain.Models.Dto.CardResult> Request(Game.Domain.Models.Move move, string matchId)
+        public async Task<Game.Domain.Models.Dto.MoveRequestResult> Request(Game.Domain.Models.Move move, string matchId)
         {
-            return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Dto.CardResult>(
+            return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Dto.MoveRequestResult>(
                 "Project",
                 "Request",
                 new Dictionary<string, object>()
