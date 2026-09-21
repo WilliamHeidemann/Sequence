@@ -76,19 +76,26 @@ namespace Game.Domain.Models
             public class Success : MoveResult
             {
                 public GameState UpdatedState { get; }
+                public Card DrawnCard { get; }
 
-                public Success(GameState updatedState)
+                public Success(GameState updatedState, Card drawnCard)
                 {
                     UpdatedState = updatedState;
+                    DrawnCard = drawnCard;
                 }
 
-                public void Deconstruct(out GameState updatedState)
+                public void Deconstruct(out GameState updatedState, out Card drawnCard)
                 {
                     updatedState = UpdatedState;
+                    drawnCard = DrawnCard;
                 }
             }
 
             public class Invalid : MoveResult
+            {
+            }
+
+            public class OutOfSync : MoveResult
             {
             }
         }
@@ -135,7 +142,7 @@ namespace Game.Domain.Models
                 deck.GetCards(), moveHistory.GetMoves(), 
                 gameState.Score, move.Team.Opposing());
             
-            return new MoveResult.Success(updatedGameState);
+            return new MoveResult.Success(updatedGameState, draw);
         }
     }
 }

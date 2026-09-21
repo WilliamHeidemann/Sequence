@@ -11,6 +11,14 @@ using Unity.Services.CloudSave.Model;
 
 namespace Cloud_Code_Module_Reference;
 
+public interface IGameServiceClient
+{
+    public Task<Match> CreateMatch(IExecutionContext context);
+    public Task<MoveRequestResult> Request(IExecutionContext context, Move move, string matchId);
+    public Task<ClientGameState> GetClientGameState(IExecutionContext context, string matchId, Team team);
+    public Task<bool> DeleteMatch(IExecutionContext context, string matchId);
+}
+
 public class GameLogicService(IGameApiClient gameApiClient)
 {
     [CloudCodeFunction]
@@ -19,13 +27,8 @@ public class GameLogicService(IGameApiClient gameApiClient)
         string matchId = Guid.NewGuid().ToString();
 
         GameState gameState = GameState.CreateInitial();
-
-        ApiResponse<SetItemResponse> response = await gameApiClient.CloudSaveData.SetPrivateCustomItemAsync(
-            context,
-            context.ServiceToken,
-            context.ProjectId,
-            matchId,
-            new SetItemBody("gameState", gameState));
+        
+        ApiResponse<SetItemResponse> response = await SetMatch(context, matchId, gameState);
 
         ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
 
@@ -37,19 +40,50 @@ public class GameLogicService(IGameApiClient gameApiClient)
     }
 
     [CloudCodeFunction]
-    public async Task<CardResult> Request(IExecutionContext context, Move move, string matchId) =>
-        MoveValidator.PlayMove(await GetGameState(context, matchId), move) switch
+    private async Task<ApiResponse<SetItemResponse>> SetMatch(IExecutionContext context, string matchId,
+        GameState gameState)
+    {
+        SetItemBody setItemBody = new("gameState", gameState);
+
+        return await gameApiClient.CloudSaveData.SetPrivateCustomItemAsync(
+            context,
+            context.ServiceToken,
+            context.ProjectId,
+            matchId,
+            setItemBody);
+    }
+
+    [CloudCodeFunction]
+    public async Task<MoveRequestResult> Request(IExecutionContext context, Move move, string matchId)
+    {
+        GameState current = await GetGameState(context, matchId);
+
+        MoveRequestResult moveRequestResult = MoveValidator.PlayMove(current, move) switch
         {
-            MoveValidator.MoveResult.Success(var updatedGameState) => new CardResult
-            {
-                Card = new Deck(updatedGameState.Deck).Draw(),
-                HasCard = true,
-            },
-            MoveValidator.MoveResult.Invalid => new CardResult
-            {
-                HasCard = false,
-            }
+            MoveValidator.MoveResult.Success(var next, var drawnCard) => await SuccessMoveRequestResult(context,
+                matchId, next, drawnCard),
+            MoveValidator.MoveResult.Invalid => new MoveRequestResult { HasCard = false, },
+            MoveValidator.MoveResult.OutOfSync => new MoveRequestResult { HasCard = false, IsOutOfSync = true },
+            _ => throw new ArgumentOutOfRangeException()
         };
+
+        return moveRequestResult;
+    }
+
+    private async Task<MoveRequestResult> SuccessMoveRequestResult(IExecutionContext context, string matchId,
+        GameState next, Card drawnCard)
+    {
+        ApiResponse<SetItemResponse> response = await SetMatch(context, matchId, next);
+
+        if (response.StatusCode != HttpStatusCode.OK)
+        {
+            // maybe start returning an enum instead? Or an algebraic data type so the card can be return?
+            return new MoveRequestResult { HasCard = false, IsOutOfSync = true };
+        }
+
+        return new MoveRequestResult { Card = drawnCard, HasCard = true };
+    }
+
 
     [CloudCodeFunction]
     public async Task<ClientGameState> GetClientGameState(IExecutionContext context, string matchId, Team team)

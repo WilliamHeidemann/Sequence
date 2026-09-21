@@ -33,7 +33,7 @@ namespace Game.Domain.Server
 
             _gameState.Value = result switch
             {
-                MoveValidator.MoveResult.Success(var updatedState) => updatedState,
+                MoveValidator.MoveResult.Success(var updatedState, var drawnCard) => updatedState,
                 MoveValidator.MoveResult.Invalid => _gameState.Value,
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -45,16 +45,9 @@ namespace Game.Domain.Server
 
         private void HandleEvents(MoveValidator.MoveResult result, Move move)
         {
-            if (result is MoveValidator.MoveResult.Success(var updatedState))
+            if (result is MoveValidator.MoveResult.Success(var updatedState, var drawnCard))
             {
-                Card[] hand = move.Team switch
-                {
-                    Team.Red => updatedState.RedHand,
-                    Team.Yellow => updatedState.YellowHand,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-
-                OnCardReceived?.Invoke(hand.Last());
+                OnCardReceived?.Invoke(drawnCard);
 
                 OtherPlayerServer.Receive(updatedState.ToClientGameState(move.Team.Opposing()));
             }
