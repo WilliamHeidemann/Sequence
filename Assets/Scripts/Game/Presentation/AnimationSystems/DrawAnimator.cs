@@ -43,7 +43,7 @@ namespace Game.Presentation.AnimationSystems
                 .WithEase(Ease.InCubic)
                 .WithOnComplete(() =>
                 {
-                    Sprite sprite = _cardSprites.Get(card);
+                    Sprite sprite = _cardSprites.GetHandSprite(card);
                     VisualElement root = cardGameObject.rootVisualElement;
                     root.Q<VisualElement>("Card").style.backgroundImage = new StyleBackground(sprite);
                     root.Q<Label>().text = card.Rank.AsSingleDigit();

@@ -19,7 +19,7 @@ namespace Game.Presentation.AnimationSystems
 
             VisualElement root = document.rootVisualElement;
 
-            root.Q<VisualElement>("Card").style.backgroundImage = new StyleBackground(_cardSprites.Get(card));
+            root.Q<VisualElement>("Card").style.backgroundImage = new StyleBackground(_cardSprites.GetHandSprite(card));
 
             root.Q<Label>().text = card.Rank.AsSingleDigit();
 
