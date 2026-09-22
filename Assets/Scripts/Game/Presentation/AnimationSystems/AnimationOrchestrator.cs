@@ -45,7 +45,7 @@ namespace Game.Presentation.AnimationSystems
             async Awaitable Draw(Card c)
             {
                 UIDocument cardUIDocument = _drawAnimator.InstantiateCardFaceDown();
-                _audioPlayer.Play(Sound.DrawCard);
+                _audioPlayer.Play(Sound.DrawCard, .15f);
                 await _drawAnimator.AnimateDrawing(c, cardUIDocument);
                 _audioPlayer.Play(Sound.ToHand);
                 _cardAligner.AddCard(c, cardUIDocument.transform);

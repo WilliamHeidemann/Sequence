@@ -14,5 +14,11 @@ namespace Game.Presentation
             _audioSource.pitch = Random.Range(0.9f, 1.1f);
             _audioSource.PlayOneShot(audioClip);
         }
+
+        public async Awaitable Play(Sound sound, float delay)
+        {
+            await Awaitable.WaitForSecondsAsync(delay);
+            Play(sound);
+        }
     }
 }
