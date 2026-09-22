@@ -1639,7 +1639,7 @@ MonoBehaviour:
   _cardAligner: {fileID: 802132157}
   _discardPile: {fileID: 820946023}
   _opponentHandAnimator: {fileID: 2135924202}
-  _audioPlayer: {fileID: 0}
+  _audioPlayer: {fileID: 854427144}
 --- !u!1 &1681766135
 GameObject:
   m_ObjectHideFlags: 0

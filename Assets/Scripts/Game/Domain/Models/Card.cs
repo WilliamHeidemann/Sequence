@@ -134,7 +134,7 @@ namespace Game.Domain.Models
                 Rank.Eight => "8",
                 Rank.Nine => "9",
                 Rank.Ten => "10",
-                Rank.Jack => "J",
+                Rank.Jack => string.Empty,
                 Rank.Queen => "Q",
                 Rank.King => "K",
                 _ => throw new ArgumentOutOfRangeException()
