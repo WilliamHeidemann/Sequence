@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Game.Domain.Models.Dto;
 using Unity.Services.CloudCode.Core;
 using Unity.Services.CloudCodePush.Model;
 
@@ -8,25 +9,34 @@ namespace Cloud_Code_Module_Reference;
 public class PushMessagesService(IPushClient pushClient)
 {
     [CloudCodeFunction("ChallengeFriend")]
-    public async Task<string> ChallengeFriend(IExecutionContext context,
+    public async Task<bool> ChallengeFriend(IExecutionContext context,
         string challengerName, string challengedPlayerId)
     {
-        const string messageType = "GameRequest";
+        try
+        {
+            const PushMessageType messageType = PushMessageType.GameRequest;
         
-        SendMessageReply response =
-            await pushClient.SendPlayerMessageAsync(context, challengerName, messageType, challengedPlayerId);
+            SendMessageReply response =
+                await pushClient.SendPlayerMessageAsync(context, challengerName, messageType.ToString(), challengedPlayerId);
 
-        return "Message sent";
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
     }
 
     public async Task<bool> NotifyOpponentOfMove(IExecutionContext context, string matchId, string opponentPlayerId)
     {
         try
         {
-            const string messageType = "MoveNotification";
+            const PushMessageType messageType = PushMessageType.NewMove;
             
             SendMessageReply response =
-                await pushClient.SendPlayerMessageAsync(context, message, messageType, opponentPlayerId);
+                await pushClient.SendPlayerMessageAsync(context, matchId, messageType.ToString(), opponentPlayerId);
+            
             return true;
         }
         catch (Exception e)

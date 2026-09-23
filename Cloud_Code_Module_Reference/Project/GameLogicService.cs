@@ -21,15 +21,21 @@ public interface IGameServiceClient
 
 public class GameLogicService(IGameApiClient gameApiClient)
 {
+    private record Teams(string Red, string Yellow);
+    
     [CloudCodeFunction]
-    public async Task<Match> CreateMatch(IExecutionContext context)
+    public async Task<Match> CreateMatch(IExecutionContext context, string opponentId)
     {
         string matchId = Guid.NewGuid().ToString();
 
-        GameState gameState = GameState.CreateInitial();
+        if (context.PlayerId == null) throw new NullReferenceException("context.PlayerId is null");
         
-        ApiResponse<SetItemResponse> response = await SetMatch(context, matchId, gameState);
-
+        Teams teams = AssignTeams(context.PlayerId, opponentId);
+        ApiResponse<SetItemResponse> setTeamsResponse = await SetTeams(context, matchId, teams);
+        
+        GameState gameState = GameState.CreateInitial();
+        ApiResponse<SetItemResponse> setMatchResponse = await SetMatch(context, matchId, gameState);
+        
         ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
 
         return new Match
@@ -39,17 +45,36 @@ public class GameLogicService(IGameApiClient gameApiClient)
         };
     }
 
-    private async Task<ApiResponse<SetItemResponse>> SetMatch(IExecutionContext context, string matchId,
-        GameState gameState)
+    private Teams AssignTeams(string player1, string player2)
     {
-        SetItemBody setItemBody = new("gameState", gameState);
+        return Random.Shared.NextDouble() < 0.5 
+            ? new Teams(player1, player2) 
+            : new Teams(player2, player1);
+    }
+
+    private async Task<ApiResponse<SetItemResponse>> SetTeams(IExecutionContext context, string matchId, Teams teams)
+    {
+        SetItemBody setGameData = new("teams", teams);
 
         return await gameApiClient.CloudSaveData.SetPrivateCustomItemAsync(
             context,
             context.ServiceToken,
             context.ProjectId,
             matchId,
-            setItemBody);
+            setGameData);
+    }
+
+    private async Task<ApiResponse<SetItemResponse>> SetMatch(IExecutionContext context, string matchId,
+        GameState gameState)
+    {
+        SetItemBody setGameData = new("gameState", gameState);
+
+        return await gameApiClient.CloudSaveData.SetPrivateCustomItemAsync(
+            context,
+            context.ServiceToken,
+            context.ProjectId,
+            matchId,
+            setGameData);
     }
 
     [CloudCodeFunction]
@@ -85,9 +110,10 @@ public class GameLogicService(IGameApiClient gameApiClient)
 
 
     [CloudCodeFunction]
-    public async Task<ClientGameState> GetClientGameState(IExecutionContext context, string matchId, Team team)
+    public async Task<ClientGameState> GetClientGameState(IExecutionContext context, string matchId)
     {
         GameState gameState = await GetGameState(context, matchId);
+        Team team = await GetMyTeam(context, matchId);
         return gameState.ToClientGameState(team);
     }
 

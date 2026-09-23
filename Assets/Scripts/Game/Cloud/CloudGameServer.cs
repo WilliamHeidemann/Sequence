@@ -29,6 +29,16 @@ namespace Game.Cloud
             }
         }
 
+        public async Task CheckIfOpponentPlayed(string matchId, Team team)
+        {
+            var dto = await _gameLogicService.GetClientGameState(matchId, team.ToDto());
+            var clientGameState = dto.ToModel();
+            if (clientGameState.IsMyTurn)
+            {
+                Receive(clientGameState);
+            }
+        }
+
         public void Receive(ClientGameState gameState)
         {
             OnOpponentPlayed?.Invoke(gameState);

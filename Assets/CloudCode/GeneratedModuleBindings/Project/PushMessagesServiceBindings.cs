@@ -16,16 +16,15 @@ namespace Unity.Services.CloudCode.GeneratedBindings
             k_Service = service;
         }
 
-        public async Task<string> ChallengeFriend(string message, string messageType, string playerId)
+        public async Task<bool> ChallengeFriend(string challengerName, string challengedPlayerId)
         {
-            return await k_Service.CallModuleEndpointAsync<string>(
+            return await k_Service.CallModuleEndpointAsync<bool>(
                 "Project",
                 "ChallengeFriend",
                 new Dictionary<string, object>()
                 {
-                    {"message", message},
-                    {"messageType", messageType},
-                    {"playerId", playerId},
+                    {"challengerName", challengerName},
+                    {"challengedPlayerId", challengedPlayerId},
                 });
         }
     }

@@ -53,6 +53,14 @@ namespace Game.Presentation
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
         }
 
+        public async Task OnNewMovePushMessageReceived(string matchId)
+        {
+            if (_playCoordinator != null)
+            {
+                _playCoordinator.
+            }
+        }
+
         private PlayCoordinator CreateLocalPlayCoordinator()
         {
             GameState gameState = GameState.CreateInitial();

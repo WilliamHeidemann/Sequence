@@ -48,6 +48,11 @@ namespace Game.Domain
                 OnDrawCard?.Invoke(card);
             }
         }
+
+        public async Task CheckIfOpponentPlayed(string matchId)
+        {
+            await _gameServer.CheckIfOpponentPlayed(matchId);
+        }
         
         private void Receive(ClientGameState clientGameState)
         {

@@ -10,5 +10,6 @@ namespace Game.Domain.Server
         public void Receive(ClientGameState clientGameState);
         event Action<Card> OnCardReceived;
         event Action<ClientGameState> OnOpponentPlayed;
+        public Task CheckIfOpponentPlayed(string matchId, Team team);
     }
 }

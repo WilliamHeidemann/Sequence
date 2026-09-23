@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Game.Domain.Models.Dto;
 using Unity.Services.Authentication;
 using Unity.Services.CloudCode;
 using Unity.Services.CloudCode.GeneratedBindings;
@@ -57,11 +58,33 @@ namespace Game.Presentation
             // The subscribed callback should handle all push message types.
             // 1) GameRequest(playerId)
             // 2) OpponentPlayedMessage(matchId)
-            callbacks.MessageReceived += evt => _mainMenu.OpenGameRequestModal(evt.Message);
+            callbacks.MessageReceived += HandlePushMessageReceivedEvent;
         
             callbacks.Error += Debug.LogError;
         
             return callbacks;
+        }
+
+        private void HandlePushMessageReceivedEvent(Unity.Services.CloudCode.Subscriptions.IMessageReceivedEvent messageReceivedEvent)
+        {
+            if (Enum.TryParse(messageReceivedEvent.MessageType, true, out PushMessageType messageType))
+            {
+                switch (messageType)
+                {
+                    case PushMessageType.GameRequest:
+                        string challengerName = messageReceivedEvent.Message;
+                        _mainMenu.OpenGameRequestModal(challengerName);
+                        break;
+                    case PushMessageType.NewMove:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            else
+            {
+                Debug.LogError($"{messageReceivedEvent.MessageType} is not a valid push message type");
+            }
         }
 
         // Send a push message to the friend that opens their game request overlay.
@@ -69,9 +92,11 @@ namespace Game.Presentation
         private async Task SendGameRequest(string challengerName, string receiverPlayerId)
         {
             PushMessagesServiceBindings pushMessagesServiceModule = new();
-            string response = await pushMessagesServiceModule
-                .ChallengeFriend(challengerName, "GameRequest", receiverPlayerId);
-            Debug.Log(response);
+            bool success = await pushMessagesServiceModule
+                .ChallengeFriend(challengerName, receiverPlayerId);
+            
+            string log = success ? "Challenge Friend Success" : "Challenge Friend Failed";
+            Debug.Log(log);
         }
 
         private void OnRelationShipDeleted(IRelationshipDeletedEvent relationshipDeletedEvent)
