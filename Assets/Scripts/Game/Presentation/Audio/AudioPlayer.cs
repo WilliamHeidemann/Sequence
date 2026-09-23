@@ -1,7 +1,6 @@
-﻿using Game.Domain;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Game.Presentation
+namespace Game.Presentation.Audio
 {
     public class AudioPlayer : MonoBehaviour
     {

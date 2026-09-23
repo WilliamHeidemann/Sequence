@@ -2,7 +2,7 @@
 using UnityEngine;
 using UtilityToolkit.CollectionExtensions;
 
-namespace Game.Presentation
+namespace Game.Presentation.Audio
 {
     [CreateAssetMenu(fileName = "Audio Container", menuName = "Audio/Audio Container")]
     public class AudioContainer : ScriptableObject

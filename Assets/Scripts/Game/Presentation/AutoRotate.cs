@@ -1,36 +1,38 @@
-using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class AutoRotate : MonoBehaviour
+namespace Game.Presentation
 {
-    [SerializeField] private float _speed;
-    [SerializeField] private PanelRenderer _panelRenderer;
-
-    private VisualElement _background;
-    private VisualElement _circle;
-    private float _currentAngle = 0f;
-
-    private void OnEnable()
+    public class AutoRotate : MonoBehaviour
     {
-        _panelRenderer.RegisterUIReloadCallback(Setup);
-    }
+        [SerializeField] private float _speed;
+        [SerializeField] private PanelRenderer _panelRenderer;
 
-    private void Setup(PanelRenderer panelRenderer, VisualElement rootElement, int version)
-    {
-        _background = rootElement.Q<VisualElement>("background");
-        _circle = rootElement.Q<VisualElement>("circle");
+        private VisualElement _background;
+        private VisualElement _circle;
+        private float _currentAngle = 0f;
 
-        if (_background == null) Debug.LogError("AutoRotate requires background element");
-        if (_circle == null) Debug.LogError("AutoRotate requires circle element");
-    }
+        private void OnEnable()
+        {
+            _panelRenderer.RegisterUIReloadCallback(Setup);
+        }
 
-    void Update()
-    {
-        _currentAngle += _speed * Time.deltaTime;
-        _currentAngle %= 360f;
+        private void Setup(PanelRenderer panelRenderer, VisualElement rootElement, int version)
+        {
+            _background = rootElement.Q<VisualElement>("background");
+            _circle = rootElement.Q<VisualElement>("circle");
 
-        _background.style.rotate = new StyleRotate(new Rotate(new Angle(_currentAngle, AngleUnit.Degree)));
-        _circle.style.rotate = new StyleRotate(new Rotate(new Angle((360f - _currentAngle) / 2f, AngleUnit.Degree)));
+            if (_background == null) Debug.LogError("AutoRotate requires background element");
+            if (_circle == null) Debug.LogError("AutoRotate requires circle element");
+        }
+
+        void Update()
+        {
+            _currentAngle += _speed * Time.deltaTime;
+            _currentAngle %= 360f;
+
+            _background.style.rotate = new StyleRotate(new Rotate(new Angle(_currentAngle, AngleUnit.Degree)));
+            _circle.style.rotate = new StyleRotate(new Rotate(new Angle((360f - _currentAngle) / 2f, AngleUnit.Degree)));
+        }
     }
 }
