@@ -1,0 +1,46 @@
+VBCSCompilerPreWarmer: pre-warm launched (dotnet PID 2964)
+VBCSCompiler prewarm took 5.04 ms
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-William" at "2026-09-23T08:05:20.0780899Z"
+Built from '6000.6/respin/6000.6.0f1-fa21a270ab12' branch; Version is '6000.6.0f1 (f7f8ed4d1e24) revision 16251117'; Using compiler version '194234433'; Build Type 'Release'
+OS: 'Windows 11  (10.0.26200) Core' Language: 'en' Physical Memory: 31831 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+Process architecture: x64
+Date: 2026-09-23T08:05:20Z
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 23496, path: "C:/Program Files/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.18.3+d7ffd15
+  Session Id:              c8eb8d26c6f042229612a6a0672d5919
+  Correlation Id:          80e1540e76e51c1ec94dcaaab550cf61
+  External correlation Id: 8056930514439211809
+  Machine Id:              pQaQMhQPER6ImoeOkhjoV6IGIb4=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-William" (connect: 0.00s, validation: 0.00s, handshake: 0.02s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-William-notifications" at "2026-09-23T08:05:20.1029263Z"
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] License group:
+  Id: 5772612521371-UnityPersXXXX
+  Product: Unity Personal
+  Type: Assigned
+  Expiration: Unlimited
+[Licensing::Client] Successfully updated license, isAsync: True, time: 0.00
+[Licensing::Module] Licensing Background thread has ended after 0.03s
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.6.0f1\Editor\Unity.exe
+-batchmode
+-projectPath
+C:\UnityProjects\Eclipse
+-runTests
+-testPlatform
+EditMode
+-testResults
+C:\UnityProjects\Eclipse\test-results.xml
+-logFile
+C:\UnityProjects\Eclipse\test-log.txt
+-quit
+Successfully changed project path to: C:\UnityProjects\Eclipse
+C:/UnityProjects/Eclipse
+[ExitDontLaunchBugReporter] Exiting without the bug reporter. Application will exit with return code 1
