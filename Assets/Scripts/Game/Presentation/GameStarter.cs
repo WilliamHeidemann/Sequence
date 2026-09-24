@@ -57,7 +57,7 @@ namespace Game.Presentation
         {
             if (_playCoordinator != null)
             {
-                _playCoordinator.
+                await _playCoordinator.CheckIfOpponentPlayed(matchId);
             }
         }
 
@@ -72,19 +72,19 @@ namespace Game.Presentation
             return new PlayCoordinator(playerGameServer, clientGameState);
         }
 
-        private async Task<PlayCoordinator> CreateCloudPlayCoordinator()
+        private async Task<PlayCoordinator> CreateCloudPlayCoordinator(string opponentId)
         {
-            ClientGameState clientGameState = await CreateCloudClientGameState();
+            ClientGameState clientGameState = await CreateCloudClientGameState(opponentId);
 
             CloudGameServer playerGameServer = CreateCloudBotGameServer(clientGameState);
 
             return new PlayCoordinator(playerGameServer, clientGameState);
         }
 
-        private async Task<ClientGameState> CreateCloudClientGameState()
+        private async Task<ClientGameState> CreateCloudClientGameState(string opponentId)
         {
             GameLogicServiceBindings gameLogicServiceBindings = new();
-            var matchDto = await gameLogicServiceBindings.CreateMatch();
+            var matchDto = await gameLogicServiceBindings.CreateMatch(opponentId);
             Match match = matchDto.ToModel();
             _matchId = Option<string>.Some(match.Id);
             return match.ClientGameState;
@@ -102,21 +102,18 @@ namespace Game.Presentation
             CloudGameServer botGameServer = new(gameLogicServiceBindings, matchId);
             // The following is only possible when both clients are on the same machine. 
             // This is to use remote gameplay without push messages implemented. 
-            playerGameServer.OnCardReceived += async _ =>
-                await PassGameState(botGameServer, matchId, clientGameState.Team.Opposing(),
-                    gameLogicServiceBindings);
-            botGameServer.OnCardReceived += async _ =>
-                await PassGameState(playerGameServer, matchId, clientGameState.Team, gameLogicServiceBindings);
+            playerGameServer.OnCardReceived += async _ => await PassGameState(botGameServer, matchId, gameLogicServiceBindings);
+            botGameServer.OnCardReceived += async _ => await PassGameState(playerGameServer, matchId, gameLogicServiceBindings);
 
             new Bot(botGameServer, new CenterBrain());
 
             return playerGameServer;
         }
 
-        private static async Task PassGameState(CloudGameServer otherServer, string matchId, Team team,
+        private static async Task PassGameState(CloudGameServer otherServer, string matchId,
             GameLogicServiceBindings gameLogicServiceBindings)
         {
-            var clientGameState = await gameLogicServiceBindings.GetClientGameState(matchId, team.ToDto());
+            var clientGameState = await gameLogicServiceBindings.GetClientGameState(matchId);
             otherServer.Receive(clientGameState.ToModel());
         }
 

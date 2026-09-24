@@ -117,6 +117,11 @@ public class GameLogicService(IGameApiClient gameApiClient)
         return gameState.ToClientGameState(team);
     }
 
+    private async Task<Team> GetMyTeam(IExecutionContext context, string matchId)
+    {
+        throw new NotImplementedException();
+    }
+
     private async Task<GameState> GetGameState(IExecutionContext context, string matchId)
     {
         ApiResponse<GetItemsResponse> response = await gameApiClient.CloudSaveData.GetPrivateCustomItemsAsync(

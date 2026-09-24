@@ -53,7 +53,7 @@ namespace Game.Domain.Server
             }
         }
 
-        public Task CheckIfOpponentPlayed(string matchId, Team team)
+        public Task CheckIfOpponentPlayed(string matchId)
         {
             throw new NotImplementedException();
         }

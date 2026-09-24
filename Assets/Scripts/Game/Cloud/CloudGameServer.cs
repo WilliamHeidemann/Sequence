@@ -29,14 +29,14 @@ namespace Game.Cloud
             }
         }
 
-        public async Task CheckIfOpponentPlayed(string matchId, Team team)
+        public async Task CheckIfOpponentPlayed(string matchId)
         {
-            var dto = await _gameLogicService.GetClientGameState(matchId, team.ToDto());
-            var clientGameState = dto.ToModel();
-            if (clientGameState.IsMyTurn)
-            {
-                Receive(clientGameState);
-            }
+            // var dto = await _gameLogicService.GetClientGameState(matchId);
+            // var clientGameState = dto.ToModel();
+            // if (clientGameState.IsMyTurn)
+            // {
+            //     Receive(clientGameState);
+            // }
         }
 
         public void Receive(ClientGameState gameState)

@@ -16,13 +16,14 @@ namespace Unity.Services.CloudCode.GeneratedBindings
             k_Service = service;
         }
 
-        public async Task<Game.Domain.Models.Dto.Match> CreateMatch()
+        public async Task<Game.Domain.Models.Dto.Match> CreateMatch(string opponentId)
         {
             return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Dto.Match>(
                 "Project",
                 "CreateMatch",
                 new Dictionary<string, object>()
                 {
+                    {"opponentId", opponentId},
                 });
         }
 
@@ -38,7 +39,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 });
         }
 
-        public async Task<Game.Domain.Models.ClientGameState> GetClientGameState(string matchId, Game.Domain.Models.Team team)
+        public async Task<Game.Domain.Models.ClientGameState> GetClientGameState(string matchId)
         {
             return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.ClientGameState>(
                 "Project",
@@ -46,7 +47,6 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 new Dictionary<string, object>()
                 {
                     {"matchId", matchId},
-                    {"team", team},
                 });
         }
 
