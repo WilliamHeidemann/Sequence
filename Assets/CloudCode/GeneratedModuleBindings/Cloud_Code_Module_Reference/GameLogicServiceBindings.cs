@@ -19,7 +19,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<Game.Domain.Models.Dto.Match> CreateMatch(string opponentId)
         {
             return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Dto.Match>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "CreateMatch",
                 new Dictionary<string, object>()
                 {
@@ -30,7 +30,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<Game.Domain.Models.Dto.MoveRequestResult> Request(Game.Domain.Models.Move move, string matchId)
         {
             return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Dto.MoveRequestResult>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "Request",
                 new Dictionary<string, object>()
                 {
@@ -42,7 +42,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<Game.Domain.Models.ClientGameState> GetClientGameState(string matchId)
         {
             return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.ClientGameState>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "GetClientGameState",
                 new Dictionary<string, object>()
                 {
@@ -53,7 +53,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<bool> DeleteMatch(string matchId)
         {
             return await k_Service.CallModuleEndpointAsync<bool>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "DeleteMatch",
                 new Dictionary<string, object>()
                 {

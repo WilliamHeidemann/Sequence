@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Game.Cloud;
 using Game.Domain.Models.Dto;
 using Unity.Services.Authentication;
 using Unity.Services.CloudCode;
@@ -21,14 +22,12 @@ namespace Game.Presentation
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             await FriendsService.Instance.InitializeAsync();
-            await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(CreateSubscriptionEventCallbacks(mainMenu, gameStarter));
-            await BindMainMenu(mainMenu, gameStarter);
+            await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(CreateSubscriptionEventCallbacks(mainMenu, gameStarter)); 
+            BindMainMenu(mainMenu, gameStarter);
         }
 
-        private static async Task BindMainMenu(MainMenu mainMenu, GameStarter gameStarter)
+        private static void BindMainMenu(MainMenu mainMenu, GameStarter gameStarter)
         {
-            await Initialize(mainMenu, gameStarter);
-
             FriendsService.Instance.RelationshipAdded += (e) => OnRelationShipAdded(e, mainMenu);
             FriendsService.Instance.RelationshipDeleted += (e) => OnRelationShipDeleted(e, mainMenu);
 
@@ -42,7 +41,7 @@ namespace Game.Presentation
             mainMenu.OnSentFriendRequest += async n => await FriendsService.Instance.AddFriendByNameAsync(n);
             mainMenu.OnSentGameRequest +=
                 async n => await SendGameRequest(AuthenticationService.Instance.PlayerName, n);
-            mainMenu.OnChallengeAccepted += async challengerName => await StartMatch(challengerName, gameStarter);
+            mainMenu.OnChallengeAccepted += async challengerName => await StartMatch(challengerName, gameStarter, mainMenu);
         }
         
         private static SubscriptionEventCallbacks CreateSubscriptionEventCallbacks(MainMenu mainMenu,  GameStarter gameStarter)
@@ -60,11 +59,12 @@ namespace Game.Presentation
             return callbacks;
         }
 
-        private static async Task StartMatch(string opponentName, GameStarter gameStarter)
+        private static async Task StartMatch(string opponentName, GameStarter gameStarter, MainMenu mainMenu)
         {
             string matchId = await gameStarter.StartOnlineGame(opponentName);
             PushMessagesServiceBindings pushMessagesServiceModule = new();
-            // TODO
+            await pushMessagesServiceModule.AcceptChallenge(matchId);
+            mainMenu.gameObject.SetActive(false);
         }
 
         private static async Task HandlePushMessageReceivedEvent(
@@ -77,6 +77,13 @@ namespace Game.Presentation
                     case PushMessageType.ChallengeRequest:
                         string challengerName = messageReceivedEvent.Message;
                         mainMenu.OpenGameRequestModal(challengerName);
+                        break;
+                    case PushMessageType.ChallengeAccepted:
+                        string matchID = messageReceivedEvent.Message;
+                        GameLogicServiceBindings gameLogicServiceModule = new();
+                        var clientGameState = await gameLogicServiceModule.GetClientGameState(matchID);
+                        gameStarter.StartGame(matchID, clientGameState.ToModel());
+                        mainMenu.gameObject.SetActive(false);
                         break;
                     case PushMessageType.NewMove:
                         string matchId = messageReceivedEvent.Message;

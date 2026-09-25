@@ -19,7 +19,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task SetExampleData()
         {
             await k_Service.CallModuleEndpointAsync(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "SetExampleData",
                 new Dictionary<string, object>()
                 {
@@ -29,7 +29,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<List<string>> GetExampleData()
         {
             return await k_Service.CallModuleEndpointAsync<List<string>>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "GetExampleData",
                 new Dictionary<string, object>()
                 {
@@ -39,7 +39,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<string> CreateCard()
         {
             return await k_Service.CallModuleEndpointAsync<string>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "CreateCard",
                 new Dictionary<string, object>()
                 {
@@ -49,7 +49,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<string> StoreGameState()
         {
             return await k_Service.CallModuleEndpointAsync<string>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "StoreGameState",
                 new Dictionary<string, object>()
                 {
@@ -59,7 +59,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<Game.Domain.Models.Card> DrawCard()
         {
             return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Card>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "DrawCard",
                 new Dictionary<string, object>()
                 {
@@ -69,7 +69,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<int> Get0()
         {
             return await k_Service.CallModuleEndpointAsync<int>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "Get0",
                 new Dictionary<string, object>()
                 {

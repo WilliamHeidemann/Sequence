@@ -37,13 +37,21 @@ namespace Game.Presentation
             _animationOrchestrator.BindAnimations(_playCoordinator);
             _playCoordinator.RaiseDrawHandEvent();
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
-            
+
             if (_matchId.IsSome(out string matchId))
             {
                 return matchId;
             }
 
             throw new Exception("Match Id has not been set.");
+        }
+
+        public void StartGame(string matchId, ClientGameState clientGameState)
+        {
+            _playCoordinator = CreatePlayCoordinator(matchId, clientGameState);
+            _animationOrchestrator.BindAnimations(_playCoordinator);
+            _playCoordinator.RaiseDrawHandEvent();
+            _boardPresenter.OnPositionClicked += HandlePositionClicked;
         }
 
         public async Task OnNewMovePushMessageReceived(string matchId)
@@ -72,6 +80,12 @@ namespace Game.Presentation
             CloudGameServer playerGameServer = CreateCloudBotGameServer();
 
             return new PlayCoordinator(playerGameServer, clientGameState);
+        }
+
+        private PlayCoordinator CreatePlayCoordinator(string matchId, ClientGameState startingState)
+        {
+            CloudGameServer playerGameServer = CreateCloudGameServer(matchId);
+            return new PlayCoordinator(playerGameServer, startingState);
         }
 
         private async Task<ClientGameState> CreateCloudClientGameState(string opponentId)
@@ -127,9 +141,7 @@ namespace Game.Presentation
         private CloudGameServer CreateCloudGameServer(string matchId)
         {
             GameLogicServiceBindings gameLogicService = new();
-            CloudGameServer playerGameServer = new(gameLogicService, matchId);
-
-            return playerGameServer;
+            return new CloudGameServer(gameLogicService, matchId);
         }
 
         private async void HandlePositionClicked(Position position)

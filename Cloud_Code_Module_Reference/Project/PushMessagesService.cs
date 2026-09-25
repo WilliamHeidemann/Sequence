@@ -8,7 +8,7 @@ namespace Cloud_Code_Module_Reference;
 
 public class PushMessagesService(IPushClient pushClient)
 {
-    [CloudCodeFunction("ChallengeFriend")]
+    [CloudCodeFunction]
     public async Task<bool> ChallengeFriend(IExecutionContext context,
         string challengerName, string challengedPlayerId)
     {
@@ -29,6 +29,7 @@ public class PushMessagesService(IPushClient pushClient)
         }
     }
 
+    [CloudCodeFunction]
     public async Task<bool> AcceptChallenge(IExecutionContext context, string matchId)
     {
         try
@@ -47,6 +48,7 @@ public class PushMessagesService(IPushClient pushClient)
         }
     }
 
+    [CloudCodeFunction]
     public async Task<bool> NotifyOpponentOfMove(IExecutionContext context, string matchId, string opponentPlayerId)
     {
         try

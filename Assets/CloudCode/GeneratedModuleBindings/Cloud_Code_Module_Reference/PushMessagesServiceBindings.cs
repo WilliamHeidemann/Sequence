@@ -19,12 +19,35 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<bool> ChallengeFriend(string challengerName, string challengedPlayerId)
         {
             return await k_Service.CallModuleEndpointAsync<bool>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "ChallengeFriend",
                 new Dictionary<string, object>()
                 {
                     {"challengerName", challengerName},
                     {"challengedPlayerId", challengedPlayerId},
+                });
+        }
+
+        public async Task<bool> AcceptChallenge(string matchId)
+        {
+            return await k_Service.CallModuleEndpointAsync<bool>(
+                "Cloud_Code_Module_Reference",
+                "AcceptChallenge",
+                new Dictionary<string, object>()
+                {
+                    {"matchId", matchId},
+                });
+        }
+
+        public async Task<bool> NotifyOpponentOfMove(string matchId, string opponentPlayerId)
+        {
+            return await k_Service.CallModuleEndpointAsync<bool>(
+                "Cloud_Code_Module_Reference",
+                "NotifyOpponentOfMove",
+                new Dictionary<string, object>()
+                {
+                    {"matchId", matchId},
+                    {"opponentPlayerId", opponentPlayerId},
                 });
         }
     }

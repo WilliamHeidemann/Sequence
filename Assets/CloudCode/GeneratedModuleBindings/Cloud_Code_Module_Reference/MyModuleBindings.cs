@@ -19,7 +19,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<string> SayHello(string name)
         {
             return await k_Service.CallModuleEndpointAsync<string>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "SayHello",
                 new Dictionary<string, object>()
                 {
@@ -30,7 +30,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
         public async Task<string> GetServerTime()
         {
             return await k_Service.CallModuleEndpointAsync<string>(
-                "Project",
+                "Cloud_Code_Module_Reference",
                 "GetServerTime",
                 new Dictionary<string, object>()
                 {
