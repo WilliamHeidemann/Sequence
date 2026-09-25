@@ -402,7 +402,7 @@
       "url": "https://packages.unity.com"
     },
     "com.williamheidemann.utilitytoolkit": {
-      "version": "git@github.com:WilliamHeidemann/UtilityToolkit.git",
+      "version": "https://github.com/WilliamHeidemann/UtilityToolkit.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
