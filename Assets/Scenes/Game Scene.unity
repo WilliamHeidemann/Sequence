@@ -1573,7 +1573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   _startIn: 1
   _mode: 0
-  _mainMenu: {fileID: 1362680816}
+  _mainMenu: {fileID: 1362680818}
   _gameStarter: {fileID: 733830841}
 --- !u!1 &1564673131
 GameObject:

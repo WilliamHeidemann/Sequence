@@ -14,10 +14,29 @@ public class PushMessagesService(IPushClient pushClient)
     {
         try
         {
-            const PushMessageType messageType = PushMessageType.GameRequest;
-        
+            const PushMessageType messageType = PushMessageType.ChallengeRequest;
+
             SendMessageReply response =
-                await pushClient.SendPlayerMessageAsync(context, challengerName, messageType.ToString(), challengedPlayerId);
+                await pushClient.SendPlayerMessageAsync(context, challengerName, messageType.ToString(),
+                    challengedPlayerId);
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+    }
+
+    public async Task<bool> AcceptChallenge(IExecutionContext context, string matchId)
+    {
+        try
+        {
+            const PushMessageType messageType = PushMessageType.ChallengeAccepted;
+
+            SendMessageReply response =
+                await pushClient.SendPlayerMessageAsync(context, matchId, messageType.ToString(), matchId);
 
             return true;
         }
@@ -33,10 +52,10 @@ public class PushMessagesService(IPushClient pushClient)
         try
         {
             const PushMessageType messageType = PushMessageType.NewMove;
-            
+
             SendMessageReply response =
                 await pushClient.SendPlayerMessageAsync(context, matchId, messageType.ToString(), opponentPlayerId);
-            
+
             return true;
         }
         catch (Exception e)

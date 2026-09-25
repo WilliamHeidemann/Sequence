@@ -23,6 +23,7 @@ namespace Game.Presentation
         public event Action<string> OnSetPlayerName;
         public event Action<string> OnSentFriendRequest;
         public event Action<string> OnSentGameRequest;
+        public event Action<string> OnChallengeAccepted;
 
         private void OnEnable()
         {
@@ -98,6 +99,7 @@ namespace Game.Presentation
                 () =>
                 {
                     Debug.Log("Challenge Accepted!");
+                    OnChallengeAccepted?.Invoke(challengerName);
                     _challengeRequestOverlay.style.display = DisplayStyle.None;
                 };
             

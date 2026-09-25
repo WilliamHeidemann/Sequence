@@ -14,68 +14,73 @@ using UnityEngine;
 
 namespace Game.Presentation
 {
-    public class CloudHandler : MonoBehaviour
+    public static class CloudHandler
     {
-        [SerializeField] private MainMenu _mainMenu;
-
-        private async void Awake()
-        {
-            try
-            {
-                await Initialize();
-            
-                FriendsService.Instance.RelationshipAdded += OnRelationShipAdded;
-                FriendsService.Instance.RelationshipDeleted += OnRelationShipDeleted;
-            
-                _mainMenu.SetPlayerName(AuthenticationService.Instance.PlayerName);
-                FriendsService.Instance.Friends.Select(r => r.Member).ToList()
-                    .ForEach(_mainMenu.ShowFriend);
-                FriendsService.Instance.IncomingFriendRequests.Select(r => r.Member).ToList()
-                    .ForEach(_mainMenu.ShowFriendRequest);
-            
-                _mainMenu.OnSetPlayerName += async n => await AuthenticationService.Instance.UpdatePlayerNameAsync(n);
-                _mainMenu.OnSentFriendRequest += async n => await FriendsService.Instance.AddFriendByNameAsync(n);
-                _mainMenu.OnSentGameRequest += async n => await SendGameRequest(AuthenticationService.Instance.PlayerName, n);
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
-    
-        private async Task Initialize()
+        public static async Task Initialize(MainMenu mainMenu, GameStarter gameStarter)
         {
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             await FriendsService.Instance.InitializeAsync();
-            await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(CreateSubscriptionEventCallbacks());
+            await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(CreateSubscriptionEventCallbacks(mainMenu, gameStarter));
+            await BindMainMenu(mainMenu, gameStarter);
         }
 
-        private SubscriptionEventCallbacks CreateSubscriptionEventCallbacks()
+        private static async Task BindMainMenu(MainMenu mainMenu, GameStarter gameStarter)
+        {
+            await Initialize(mainMenu, gameStarter);
+
+            FriendsService.Instance.RelationshipAdded += (e) => OnRelationShipAdded(e, mainMenu);
+            FriendsService.Instance.RelationshipDeleted += (e) => OnRelationShipDeleted(e, mainMenu);
+
+            mainMenu.SetPlayerName(AuthenticationService.Instance.PlayerName);
+            FriendsService.Instance.Friends.Select(r => r.Member).ToList()
+                .ForEach(mainMenu.ShowFriend);
+            FriendsService.Instance.IncomingFriendRequests.Select(r => r.Member).ToList()
+                .ForEach(mainMenu.ShowFriendRequest);
+
+            mainMenu.OnSetPlayerName += async n => await AuthenticationService.Instance.UpdatePlayerNameAsync(n);
+            mainMenu.OnSentFriendRequest += async n => await FriendsService.Instance.AddFriendByNameAsync(n);
+            mainMenu.OnSentGameRequest +=
+                async n => await SendGameRequest(AuthenticationService.Instance.PlayerName, n);
+            mainMenu.OnChallengeAccepted += async challengerName => await StartMatch(challengerName, gameStarter);
+        }
+        
+        private static SubscriptionEventCallbacks CreateSubscriptionEventCallbacks(MainMenu mainMenu,  GameStarter gameStarter)
         {
             SubscriptionEventCallbacks callbacks = new();
-        
+
             // The subscribed callback should handle all push message types.
             // 1) GameRequest(playerId)
             // 2) OpponentPlayedMessage(matchId)
-            callbacks.MessageReceived += HandlePushMessageReceivedEvent;
-        
+            callbacks.MessageReceived += async messageReceivedEvent =>
+                await HandlePushMessageReceivedEvent(messageReceivedEvent, mainMenu, gameStarter);
+
             callbacks.Error += Debug.LogError;
-        
+
             return callbacks;
         }
 
-        private void HandlePushMessageReceivedEvent(Unity.Services.CloudCode.Subscriptions.IMessageReceivedEvent messageReceivedEvent)
+        private static async Task StartMatch(string opponentName, GameStarter gameStarter)
+        {
+            string matchId = await gameStarter.StartOnlineGame(opponentName);
+            PushMessagesServiceBindings pushMessagesServiceModule = new();
+            // TODO
+        }
+
+        private static async Task HandlePushMessageReceivedEvent(
+            Unity.Services.CloudCode.Subscriptions.IMessageReceivedEvent messageReceivedEvent, MainMenu mainMenu, GameStarter gameStarter)
         {
             if (Enum.TryParse(messageReceivedEvent.MessageType, true, out PushMessageType messageType))
             {
                 switch (messageType)
                 {
-                    case PushMessageType.GameRequest:
+                    case PushMessageType.ChallengeRequest:
                         string challengerName = messageReceivedEvent.Message;
-                        _mainMenu.OpenGameRequestModal(challengerName);
+                        mainMenu.OpenGameRequestModal(challengerName);
                         break;
                     case PushMessageType.NewMove:
+                        string matchId = messageReceivedEvent.Message;
+                        await gameStarter.OnNewMovePushMessageReceived(matchId);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -89,17 +94,17 @@ namespace Game.Presentation
 
         // Send a push message to the friend that opens their game request overlay.
         // The friend accepting the game will start the match.
-        private async Task SendGameRequest(string challengerName, string receiverPlayerId)
+        private static async Task SendGameRequest(string challengerName, string receiverPlayerId)
         {
             PushMessagesServiceBindings pushMessagesServiceModule = new();
             bool success = await pushMessagesServiceModule
                 .ChallengeFriend(challengerName, receiverPlayerId);
-            
+
             string log = success ? "Challenge Friend Success" : "Challenge Friend Failed";
             Debug.Log(log);
         }
 
-        private void OnRelationShipDeleted(IRelationshipDeletedEvent relationshipDeletedEvent)
+        private static void OnRelationShipDeleted(IRelationshipDeletedEvent relationshipDeletedEvent, MainMenu mainMenu)
         {
             switch (relationshipDeletedEvent.Relationship.Type)
             {
@@ -107,7 +112,7 @@ namespace Game.Presentation
                     throw new NotImplementedException();
                     break;
                 case RelationshipType.FriendRequest:
-                    _mainMenu.HideFriendRequest();
+                    mainMenu.HideFriendRequest();
                     break;
                 case RelationshipType.Block:
                     throw new NotImplementedException();
@@ -116,15 +121,15 @@ namespace Game.Presentation
             }
         }
 
-        private void OnRelationShipAdded(IRelationshipAddedEvent relationshipAddedEvent)
+        private static void OnRelationShipAdded(IRelationshipAddedEvent relationshipAddedEvent, MainMenu mainMenu)
         {
             switch (relationshipAddedEvent.Relationship.Type)
             {
                 case RelationshipType.Friend:
-                    _mainMenu.ShowFriend(relationshipAddedEvent.Relationship.Member);
+                    mainMenu.ShowFriend(relationshipAddedEvent.Relationship.Member);
                     break;
                 case RelationshipType.FriendRequest:
-                    _mainMenu.ShowFriendRequest(relationshipAddedEvent.Relationship.Member);
+                    mainMenu.ShowFriendRequest(relationshipAddedEvent.Relationship.Member);
                     break;
                 case RelationshipType.Block:
                     throw new NotImplementedException();

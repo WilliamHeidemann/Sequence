@@ -1,31 +1,32 @@
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Game.Presentation
 {
-    public enum StartIn
-    {
-        MainMenu,
-        Game
-    }
-
-    public enum Mode
-    {
-        Local,
-        Online
-    }
-
     public class EntryPoint : MonoBehaviour
     {
         [SerializeField] private StartIn _startIn;
         [SerializeField] private Mode _mode;
-        [SerializeField] private GameObject _mainMenu;
+        [SerializeField] private MainMenu _mainMenu;
         [SerializeField] private GameStarter _gameStarter;
 
-        private void Awake()
+        private async Task Awake()
         {
-            _mainMenu.SetActive(_startIn == StartIn.MainMenu);
-            if (_startIn == StartIn.Game) _gameStarter.StartGame(_mode);
+            try
+            {
+                if (_mode == Mode.Online) await CloudHandler.Initialize(_mainMenu, _gameStarter);
+                _mainMenu.gameObject.SetActive(_startIn == StartIn.MainMenu);
+                if (_startIn == StartIn.Game && _mode == Mode.Local)
+                {
+                    _gameStarter.StartLocalGame();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                throw;
+            }
         }
     }
 }

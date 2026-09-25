@@ -2,7 +2,8 @@
 {
     public enum PushMessageType
     {
-        GameRequest,
+        ChallengeRequest,
+        ChallengeAccepted,
         NewMove
     }
 }

@@ -8,9 +8,7 @@ using Game.Domain.Players;
 using Game.Domain.Players.Bot_Strategies;
 using Game.Domain.Server;
 using Game.Presentation.AnimationSystems;
-using Unity.Services.Authentication;
 using Unity.Services.CloudCode.GeneratedBindings;
-using Unity.Services.Core;
 using UnityEngine;
 using UtilityToolkit.Monads;
 
@@ -24,33 +22,28 @@ namespace Game.Presentation
         private PlayCoordinator _playCoordinator;
         private Option<string> _matchId;
 
-        public async Task StartGame(Mode mode)
+        public void StartLocalGame()
         {
-            if (mode == Mode.Online)
-            {
-                if (UnityServices.State == ServicesInitializationState.Uninitialized)
-                {
-                    await UnityServices.InitializeAsync();
-                }
- 
-                if (!AuthenticationService.Instance.IsSignedIn)
-                {
-                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                }
-            }
-            
-            // IGameServer playerGameServer = CreateCloudGameServer(gameState);
-
-            _playCoordinator = mode switch
-            {
-                Mode.Local => CreateLocalPlayCoordinator(),
-                Mode.Online => await CreateCloudPlayCoordinator(),
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
+            _playCoordinator = CreateLocalPlayCoordinator();
             _animationOrchestrator.BindAnimations(_playCoordinator);
             _playCoordinator.RaiseDrawHandEvent();
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
+        }
+
+        /// <returns>Match ID</returns>
+        public async Task<string> StartOnlineGame(string opponentId)
+        {
+            _playCoordinator = await CreateCloudPlayCoordinator(opponentId);
+            _animationOrchestrator.BindAnimations(_playCoordinator);
+            _playCoordinator.RaiseDrawHandEvent();
+            _boardPresenter.OnPositionClicked += HandlePositionClicked;
+            
+            if (_matchId.IsSome(out string matchId))
+            {
+                return matchId;
+            }
+
+            throw new Exception("Match Id has not been set.");
         }
 
         public async Task OnNewMovePushMessageReceived(string matchId)
@@ -64,9 +57,9 @@ namespace Game.Presentation
         private PlayCoordinator CreateLocalPlayCoordinator()
         {
             GameState gameState = GameState.CreateInitial();
-            
+
             ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
-            
+
             LocalGameServer playerGameServer = CreateLocalGameServer(gameState);
 
             return new PlayCoordinator(playerGameServer, clientGameState);
@@ -76,7 +69,7 @@ namespace Game.Presentation
         {
             ClientGameState clientGameState = await CreateCloudClientGameState(opponentId);
 
-            CloudGameServer playerGameServer = CreateCloudBotGameServer(clientGameState);
+            CloudGameServer playerGameServer = CreateCloudBotGameServer();
 
             return new PlayCoordinator(playerGameServer, clientGameState);
         }
@@ -90,20 +83,22 @@ namespace Game.Presentation
             return match.ClientGameState;
         }
 
-        private CloudGameServer CreateCloudBotGameServer(ClientGameState clientGameState)
+        private CloudGameServer CreateCloudBotGameServer()
         {
             if (!_matchId.IsSome(out string matchId))
             {
                 throw new Exception("MatchId does not exist");
             }
-            
+
             GameLogicServiceBindings gameLogicServiceBindings = new();
             CloudGameServer playerGameServer = new(gameLogicServiceBindings, matchId);
             CloudGameServer botGameServer = new(gameLogicServiceBindings, matchId);
             // The following is only possible when both clients are on the same machine. 
             // This is to use remote gameplay without push messages implemented. 
-            playerGameServer.OnCardReceived += async _ => await PassGameState(botGameServer, matchId, gameLogicServiceBindings);
-            botGameServer.OnCardReceived += async _ => await PassGameState(playerGameServer, matchId, gameLogicServiceBindings);
+            playerGameServer.OnCardReceived +=
+                async _ => await PassGameState(botGameServer, matchId, gameLogicServiceBindings);
+            botGameServer.OnCardReceived += async _ =>
+                await PassGameState(playerGameServer, matchId, gameLogicServiceBindings);
 
             new Bot(botGameServer, new CenterBrain());
 
@@ -155,7 +150,7 @@ namespace Game.Presentation
             {
                 GameLogicServiceBindings gameLogicServiceBindings = new();
                 bool success = await gameLogicServiceBindings.DeleteMatch(matchId);
-                Debug.Log(success);    
+                Debug.Log(success);
             }
         }
     }
