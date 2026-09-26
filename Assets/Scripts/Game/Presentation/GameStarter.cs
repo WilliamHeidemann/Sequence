@@ -34,6 +34,7 @@ namespace Game.Presentation
         public async Task<string> StartOnlineGame(string opponentId)
         {
             _playCoordinator = await CreateCloudPlayCoordinator(opponentId);
+            _playCoordinator.OnValidMoveRequest += async move => NotifyOpponent(opponentId);
             _animationOrchestrator.BindAnimations(_playCoordinator);
             _playCoordinator.RaiseDrawHandEvent();
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
@@ -52,6 +53,26 @@ namespace Game.Presentation
             _animationOrchestrator.BindAnimations(_playCoordinator);
             _playCoordinator.RaiseDrawHandEvent();
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
+        }
+
+        private async Task NotifyOpponent(string opponentId)
+        {
+            if (!_matchId.IsSome(out string matchId))
+            {
+                Debug.LogError("MatchId does not exist. Opponent was not notified.");
+                return;
+            }
+            
+            PushMessagesServiceBindings pushMessagesServiceBindings = new();
+            bool success = await pushMessagesServiceBindings.NotifyOpponentOfMove(matchId, opponentId);
+            if (success)
+            {
+                Debug.Log($"Opponent {opponentId} was successfully notified of move.");
+            }
+            else
+            {
+                Debug.LogError($"Opponent {opponentId} was not notified of move.");
+            }
         }
 
         public async Task OnNewMovePushMessageReceived(string matchId)

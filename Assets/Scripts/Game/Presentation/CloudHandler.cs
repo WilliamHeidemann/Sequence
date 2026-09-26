@@ -63,7 +63,9 @@ namespace Game.Presentation
         {
             string matchId = await gameStarter.StartOnlineGame(opponentName);
             PushMessagesServiceBindings pushMessagesServiceModule = new();
-            await pushMessagesServiceModule.AcceptChallenge(matchId);
+            var success = await pushMessagesServiceModule.AcceptChallenge(matchId);
+            if (success) Debug.Log("Push message sent: Match accepted.");
+            else Debug.LogError("Failed to send push message: Match accepted.");
             mainMenu.gameObject.SetActive(false);
         }
 
