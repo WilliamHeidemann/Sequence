@@ -22,37 +22,57 @@ namespace Game.Presentation
         private PlayCoordinator _playCoordinator;
         private Option<string> _matchId;
 
+        private void BindToPresentation(PlayCoordinator playCoordinator)
+        {
+            _animationOrchestrator.BindAnimations(playCoordinator);
+            playCoordinator.RaiseDrawHandEvent();
+            _boardPresenter.OnPositionClicked += HandlePositionClicked;
+        }
+        
         public void StartLocalGame()
         {
             _playCoordinator = CreateLocalPlayCoordinator();
-            _animationOrchestrator.BindAnimations(_playCoordinator);
-            _playCoordinator.RaiseDrawHandEvent();
-            _boardPresenter.OnPositionClicked += HandlePositionClicked;
-        }
-
-        /// <returns>Match ID</returns>
-        public async Task<string> StartOnlineGame(string opponentId)
-        {
-            _playCoordinator = await CreateCloudPlayCoordinator(opponentId);
-            _playCoordinator.OnValidMoveRequest += async move => await NotifyOpponent(opponentId);
-            _animationOrchestrator.BindAnimations(_playCoordinator);
-            _playCoordinator.RaiseDrawHandEvent();
-            _boardPresenter.OnPositionClicked += HandlePositionClicked;
-
-            if (_matchId.IsSome(out string matchId))
+            BindToPresentation(_playCoordinator);
+            return;
+            
+            static PlayCoordinator CreateLocalPlayCoordinator()
             {
-                return matchId;
-            }
+                GameState gameState = GameState.CreateInitial();
 
-            throw new Exception("Match Id has not been set.");
+                ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
+
+                LocalGameServer playerGameServer = CreateLocalGameServer(gameState);
+
+                return new PlayCoordinator(playerGameServer, clientGameState);
+            
+                static LocalGameServer CreateLocalGameServer(GameState gameState)
+                {
+                    LocalGameState localGameState = new(gameState);
+                    LocalGameServer playerGameServer = new(localGameState);
+                    LocalGameServer botGameServer = new(localGameState);
+                    playerGameServer.OtherPlayerServer = botGameServer;
+                    botGameServer.OtherPlayerServer = playerGameServer;
+                    new Bot(botGameServer, new CenterBrain());
+
+                    return playerGameServer;
+                }
+            }
+        }
+        
+        public async Task<Match> CreateMatch(string opponentId)
+        {
+            GameLogicServiceBindings gameLogicServiceBindings = new();
+            var matchDto = await gameLogicServiceBindings.CreateMatch(opponentId);
+            Match match = matchDto.ToModel();
+            return match;
         }
 
-        public void StartGame(string matchId, ClientGameState clientGameState)
+        public void StartGame(Match match, string opponentId)
         {
-            _playCoordinator = CreatePlayCoordinator(matchId, clientGameState);
-            _animationOrchestrator.BindAnimations(_playCoordinator);
-            _playCoordinator.RaiseDrawHandEvent();
-            _boardPresenter.OnPositionClicked += HandlePositionClicked;
+            _playCoordinator = CreatePlayCoordinator(match);
+            _playCoordinator.OnValidMoveRequest += async move => await NotifyOpponent(opponentId);
+            _matchId = Option<string>.Some(match.Id);
+            BindToPresentation(_playCoordinator);
         }
 
         private async Task NotifyOpponent(string opponentId)
@@ -83,86 +103,16 @@ namespace Game.Presentation
             }
         }
 
-        private PlayCoordinator CreateLocalPlayCoordinator()
+        private PlayCoordinator CreatePlayCoordinator(Match match)
         {
-            GameState gameState = GameState.CreateInitial();
-
-            ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
-
-            LocalGameServer playerGameServer = CreateLocalGameServer(gameState);
-
-            return new PlayCoordinator(playerGameServer, clientGameState);
-        }
-
-        private async Task<PlayCoordinator> CreateCloudPlayCoordinator(string opponentId)
-        {
-            ClientGameState clientGameState = await CreateCloudClientGameState(opponentId);
-
-            CloudGameServer playerGameServer = CreateCloudBotGameServer();
-
-            return new PlayCoordinator(playerGameServer, clientGameState);
-        }
-
-        private PlayCoordinator CreatePlayCoordinator(string matchId, ClientGameState startingState)
-        {
-            CloudGameServer playerGameServer = CreateCloudGameServer(matchId);
-            return new PlayCoordinator(playerGameServer, startingState);
-        }
-
-        private async Task<ClientGameState> CreateCloudClientGameState(string opponentId)
-        {
-            GameLogicServiceBindings gameLogicServiceBindings = new();
-            var matchDto = await gameLogicServiceBindings.CreateMatch(opponentId);
-            Match match = matchDto.ToModel();
-            _matchId = Option<string>.Some(match.Id);
-            return match.ClientGameState;
-        }
-
-        private CloudGameServer CreateCloudBotGameServer()
-        {
-            if (!_matchId.IsSome(out string matchId))
+            CloudGameServer playerGameServer = CreateCloudGameServer(match.Id);
+            return new PlayCoordinator(playerGameServer, match.ClientGameState);
+            
+            CloudGameServer CreateCloudGameServer(string matchId)
             {
-                throw new Exception("MatchId does not exist");
+                GameLogicServiceBindings gameLogicService = new();
+                return new CloudGameServer(gameLogicService, matchId);
             }
-
-            GameLogicServiceBindings gameLogicServiceBindings = new();
-            CloudGameServer playerGameServer = new(gameLogicServiceBindings, matchId);
-            CloudGameServer botGameServer = new(gameLogicServiceBindings, matchId);
-            // The following is only possible when both clients are on the same machine. 
-            // This is to use remote gameplay without push messages implemented. 
-            playerGameServer.OnCardReceived +=
-                async _ => await PassGameState(botGameServer, matchId, gameLogicServiceBindings);
-            botGameServer.OnCardReceived += async _ =>
-                await PassGameState(playerGameServer, matchId, gameLogicServiceBindings);
-
-            new Bot(botGameServer, new CenterBrain());
-
-            return playerGameServer;
-        }
-
-        private static async Task PassGameState(CloudGameServer otherServer, string matchId,
-            GameLogicServiceBindings gameLogicServiceBindings)
-        {
-            var clientGameState = await gameLogicServiceBindings.GetClientGameState(matchId);
-            otherServer.Receive(clientGameState.ToModel());
-        }
-
-        private LocalGameServer CreateLocalGameServer(GameState gameState)
-        {
-            LocalGameState localGameState = new(gameState);
-            LocalGameServer playerGameServer = new(localGameState);
-            LocalGameServer botGameServer = new(localGameState);
-            playerGameServer.OtherPlayerServer = botGameServer;
-            botGameServer.OtherPlayerServer = playerGameServer;
-            new Bot(botGameServer, new CenterBrain());
-
-            return playerGameServer;
-        }
-
-        private CloudGameServer CreateCloudGameServer(string matchId)
-        {
-            GameLogicServiceBindings gameLogicService = new();
-            return new CloudGameServer(gameLogicService, matchId);
         }
 
         private async void HandlePositionClicked(Position position)

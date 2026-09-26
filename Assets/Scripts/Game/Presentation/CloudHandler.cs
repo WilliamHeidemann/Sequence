@@ -23,7 +23,8 @@ namespace Game.Presentation
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             await FriendsService.Instance.InitializeAsync();
-            await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(CreateSubscriptionEventCallbacks(mainMenu, gameStarter)); 
+            await CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(
+                CreateSubscriptionEventCallbacks(mainMenu, gameStarter));
             BindMainMenu(mainMenu, gameStarter);
         }
 
@@ -44,8 +45,9 @@ namespace Game.Presentation
                 async n => await SendGameRequest(AuthenticationService.Instance.PlayerName, n);
             mainMenu.OnChallengeAccepted += async challengerId => await StartMatch(challengerId, gameStarter, mainMenu);
         }
-        
-        private static SubscriptionEventCallbacks CreateSubscriptionEventCallbacks(MainMenu mainMenu,  GameStarter gameStarter)
+
+        private static SubscriptionEventCallbacks CreateSubscriptionEventCallbacks(MainMenu mainMenu,
+            GameStarter gameStarter)
         {
             SubscriptionEventCallbacks callbacks = new();
 
@@ -63,16 +65,18 @@ namespace Game.Presentation
 
         private static async Task StartMatch(string opponentId, GameStarter gameStarter, MainMenu mainMenu)
         {
-            string matchId = await gameStarter.StartOnlineGame(opponentId);
+            Match match = await gameStarter.CreateMatch(opponentId);
+            gameStarter.StartGame(match, opponentId);
             PushMessagesServiceBindings pushMessagesServiceModule = new();
-            var success = await pushMessagesServiceModule.AcceptChallenge(matchId, opponentId);
+            var success = await pushMessagesServiceModule.AcceptChallenge(match.Id, opponentId);
             if (success) Debug.Log("Push message sent: Match accepted.");
             else Debug.LogError("Failed to send push message: Match accepted.");
             mainMenu.gameObject.SetActive(false);
         }
 
         private static async Task HandlePushMessageReceivedEvent(
-            Unity.Services.CloudCode.Subscriptions.IMessageReceivedEvent messageReceivedEvent, MainMenu mainMenu, GameStarter gameStarter)
+            Unity.Services.CloudCode.Subscriptions.IMessageReceivedEvent messageReceivedEvent, MainMenu mainMenu,
+            GameStarter gameStarter)
         {
             if (Enum.TryParse(messageReceivedEvent.MessageType, true, out PushMessageType messageType))
             {
@@ -83,13 +87,16 @@ namespace Game.Presentation
                         mainMenu.OpenGameRequestModal(user);
                         break;
                     case PushMessageType.ChallengeAccepted:
-                        string matchID = messageReceivedEvent.Message;
-                        Debug.Log($"Challenge accepted by opponent. Received matchID {matchID}.");
+                        MatchAccepted matchAccepted =
+                            JsonConvert.DeserializeObject<MatchAccepted>(messageReceivedEvent.Message);
                         GameLogicServiceBindings gameLogicServiceModule = new();
-                        Debug.Log("Fetching client game state...");
-                        var clientGameState = await gameLogicServiceModule.GetClientGameState(matchID);
-                        Debug.Log("clientGameState fetched. Starting game.");
-                        gameStarter.StartGame(matchID, clientGameState.ToModel());
+                        var clientGameState = await gameLogicServiceModule.GetClientGameState(matchAccepted.MatchID);
+                        Match match = new()
+                        {
+                            ClientGameState = clientGameState.ToModel(),
+                            Id = matchAccepted.MatchID,
+                        };
+                        gameStarter.StartGame(match, matchAccepted.MatchID);
                         mainMenu.gameObject.SetActive(false);
                         break;
                     case PushMessageType.NewMove:

@@ -50,8 +50,21 @@ public class PushMessagesService(IPushClient pushClient)
         {
             const PushMessageType messageType = PushMessageType.ChallengeAccepted;
 
+            if (context.PlayerId == null)
+            {
+                throw new NullReferenceException("PlayerId is null");
+            }
+            
+            MatchAccepted matchAccepted = new()
+            {
+                MatchID = matchId,
+                OpponentID = context.PlayerId
+            };
+            
+            string jsonMatchAccepted = JsonConvert.SerializeObject(matchAccepted);
+            
             SendMessageReply response =
-                await pushClient.SendPlayerMessageAsync(context, matchId, messageType.ToString(), challengerId);
+                await pushClient.SendPlayerMessageAsync(context, jsonMatchAccepted, messageType.ToString(), challengerId);
 
             return true;
         }

@@ -27,7 +27,7 @@ public class GameLogicService(IGameApiClient gameApiClient)
         ApiResponse<SetItemResponse> setTeamsResponse = await SetTeams(context, matchId, teams);
         
         GameState gameState = GameState.CreateInitial();
-        ApiResponse<SetItemResponse> setMatchResponse = await SetMatch(context, matchId, gameState);
+        ApiResponse<SetItemResponse> setMatchResponse = await SetGameState(context, matchId, gameState);
         
         ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
 
@@ -57,7 +57,7 @@ public class GameLogicService(IGameApiClient gameApiClient)
             setGameData);
     }
 
-    private async Task<ApiResponse<SetItemResponse>> SetMatch(IExecutionContext context, string matchId,
+    private async Task<ApiResponse<SetItemResponse>> SetGameState(IExecutionContext context, string matchId,
         GameState gameState)
     {
         SetItemBody setGameData = new("gameState", gameState);
@@ -90,7 +90,7 @@ public class GameLogicService(IGameApiClient gameApiClient)
     private async Task<MoveRequestResult> SuccessMoveRequestResult(IExecutionContext context, string matchId,
         GameState next, Card drawnCard)
     {
-        ApiResponse<SetItemResponse> response = await SetMatch(context, matchId, next);
+        ApiResponse<SetItemResponse> response = await SetGameState(context, matchId, next);
 
         if (response.StatusCode != HttpStatusCode.OK)
         {
@@ -110,8 +110,7 @@ public class GameLogicService(IGameApiClient gameApiClient)
         return gameState.ToClientGameState(team);
     }
 
-    [CloudCodeFunction]
-    public async Task<Team> GetMyTeam(IExecutionContext context, string matchId)
+    private async Task<Team> GetMyTeam(IExecutionContext context, string matchId)
     {
         ApiResponse<GetItemsResponse> response = await gameApiClient.CloudSaveData.GetPrivateCustomItemsAsync(
             context,
