@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Game.Domain.Models.Dto;
+using Newtonsoft.Json;
 using Unity.Services.CloudCode.Core;
 using Unity.Services.CloudCodePush.Model;
 
@@ -16,8 +17,21 @@ public class PushMessagesService(IPushClient pushClient)
         {
             const PushMessageType messageType = PushMessageType.ChallengeRequest;
 
+            if (context.PlayerId == null)
+            {
+                throw new NullReferenceException("PlayerId is null");
+            }
+            
+            User user = new()
+            {
+                Name = challengerName,
+                Id = context.PlayerId
+            };
+            
+            string jsonUser = JsonConvert.SerializeObject(user);
+            
             SendMessageReply response =
-                await pushClient.SendPlayerMessageAsync(context, challengerName, messageType.ToString(),
+                await pushClient.SendPlayerMessageAsync(context, jsonUser, messageType.ToString(),
                     challengedPlayerId);
 
             return true;

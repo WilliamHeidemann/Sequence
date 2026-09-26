@@ -1,4 +1,5 @@
 using System;
+using Game.Domain.Models.Dto;
 using Unity.Services.Friends.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -88,18 +89,18 @@ namespace Game.Presentation
         {
         }
 
-        public void OpenGameRequestModal(string challengerName)
+        public void OpenGameRequestModal(User challenger)
         {
             _challengeRequestOverlay.style.display = DisplayStyle.Flex;
             
             _challengeRequestOverlay.Q<Label>("ChallengeModalHeader").text =
-                $"{challengerName} wants to play with you!";
+                $"{challenger.Name} wants to play with you!";
             
             _challengeRequestOverlay.Q<Button>("AcceptChallengeButton").clicked +=
                 () =>
                 {
                     Debug.Log("Challenge Accepted!");
-                    OnChallengeAccepted?.Invoke(challengerName);
+                    OnChallengeAccepted?.Invoke(challenger.Id);
                     _challengeRequestOverlay.style.display = DisplayStyle.None;
                 };
             

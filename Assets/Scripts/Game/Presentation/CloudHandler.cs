@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Game.Cloud;
 using Game.Domain.Models.Dto;
+using Newtonsoft.Json;
 using Unity.Services.Authentication;
 using Unity.Services.CloudCode;
 using Unity.Services.CloudCode.GeneratedBindings;
@@ -41,7 +42,7 @@ namespace Game.Presentation
             mainMenu.OnSentFriendRequest += async n => await FriendsService.Instance.AddFriendByNameAsync(n);
             mainMenu.OnSentGameRequest +=
                 async n => await SendGameRequest(AuthenticationService.Instance.PlayerName, n);
-            mainMenu.OnChallengeAccepted += async challengerName => await StartMatch(challengerName, gameStarter, mainMenu);
+            mainMenu.OnChallengeAccepted += async challengerId => await StartMatch(challengerId, gameStarter, mainMenu);
         }
         
         private static SubscriptionEventCallbacks CreateSubscriptionEventCallbacks(MainMenu mainMenu,  GameStarter gameStarter)
@@ -50,7 +51,8 @@ namespace Game.Presentation
 
             // The subscribed callback should handle all push message types.
             // 1) GameRequest(playerId)
-            // 2) OpponentPlayedMessage(matchId)
+            // 2) OpponentAcceptedGame(matchId)
+            // 3) OpponentPlayed(matchId)
             callbacks.MessageReceived += async messageReceivedEvent =>
                 await HandlePushMessageReceivedEvent(messageReceivedEvent, mainMenu, gameStarter);
 
@@ -59,9 +61,9 @@ namespace Game.Presentation
             return callbacks;
         }
 
-        private static async Task StartMatch(string opponentName, GameStarter gameStarter, MainMenu mainMenu)
+        private static async Task StartMatch(string opponentId, GameStarter gameStarter, MainMenu mainMenu)
         {
-            string matchId = await gameStarter.StartOnlineGame(opponentName);
+            string matchId = await gameStarter.StartOnlineGame(opponentId);
             PushMessagesServiceBindings pushMessagesServiceModule = new();
             var success = await pushMessagesServiceModule.AcceptChallenge(matchId);
             if (success) Debug.Log("Push message sent: Match accepted.");
@@ -77,8 +79,8 @@ namespace Game.Presentation
                 switch (messageType)
                 {
                     case PushMessageType.ChallengeRequest:
-                        string challengerName = messageReceivedEvent.Message;
-                        mainMenu.OpenGameRequestModal(challengerName);
+                        User user = JsonConvert.DeserializeObject<User>(messageReceivedEvent.Message);
+                        mainMenu.OpenGameRequestModal(user);
                         break;
                     case PushMessageType.ChallengeAccepted:
                         string matchID = messageReceivedEvent.Message;

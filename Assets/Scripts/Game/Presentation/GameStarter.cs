@@ -34,7 +34,7 @@ namespace Game.Presentation
         public async Task<string> StartOnlineGame(string opponentId)
         {
             _playCoordinator = await CreateCloudPlayCoordinator(opponentId);
-            _playCoordinator.OnValidMoveRequest += async move => NotifyOpponent(opponentId);
+            _playCoordinator.OnValidMoveRequest += async move => await NotifyOpponent(opponentId);
             _animationOrchestrator.BindAnimations(_playCoordinator);
             _playCoordinator.RaiseDrawHandEvent();
             _boardPresenter.OnPositionClicked += HandlePositionClicked;

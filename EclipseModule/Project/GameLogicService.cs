@@ -11,14 +11,6 @@ using Unity.Services.CloudSave.Model;
 
 namespace Cloud_Code_Module_Reference;
 
-public interface IGameServiceClient
-{
-    public Task<Match> CreateMatch(IExecutionContext context);
-    public Task<MoveRequestResult> Request(IExecutionContext context, Move move, string matchId);
-    public Task<ClientGameState> GetClientGameState(IExecutionContext context, string matchId, Team team);
-    public Task<bool> DeleteMatch(IExecutionContext context, string matchId);
-}
-
 public class GameLogicService(IGameApiClient gameApiClient)
 {
     private record Teams(string Red, string Yellow);
@@ -119,7 +111,21 @@ public class GameLogicService(IGameApiClient gameApiClient)
 
     private async Task<Team> GetMyTeam(IExecutionContext context, string matchId)
     {
-        throw new NotImplementedException();
+        ApiResponse<GetItemsResponse> response = await gameApiClient.CloudSaveData.GetPrivateCustomItemsAsync(
+            context,
+            context.ServiceToken,
+            context.ProjectId,
+            matchId,
+            ["teams"]);
+        
+        Item item = response.Data.Results[0];
+        string rawJson = JsonConvert.SerializeObject(item.Value);
+        Teams teams = JsonConvert.DeserializeObject<Teams>(rawJson)
+                              ?? throw new JsonException("Could not deserialize teams.");
+
+        if (context.PlayerId == teams.Red) return Team.Red;
+        if (context.PlayerId == teams.Yellow) return Team.Yellow;
+        throw new InvalidOperationException("Player is not on any team.");
     }
 
     private async Task<GameState> GetGameState(IExecutionContext context, string matchId)
@@ -134,7 +140,7 @@ public class GameLogicService(IGameApiClient gameApiClient)
         Item item = response.Data.Results[0];
         string rawJson = JsonConvert.SerializeObject(item.Value);
         GameState gameState = JsonConvert.DeserializeObject<GameState>(rawJson)
-                              ?? throw new JsonException("Could not deserialize game state");
+                              ?? throw new JsonException("Could not deserialize game state.");
 
         return gameState;
     }
