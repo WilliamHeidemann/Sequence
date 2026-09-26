@@ -99,7 +99,6 @@ namespace Game.Presentation
             _challengeRequestOverlay.Q<Button>("AcceptChallengeButton").clicked +=
                 () =>
                 {
-                    Debug.Log("Challenge Accepted!");
                     OnChallengeAccepted?.Invoke(challenger.Id);
                     _challengeRequestOverlay.style.display = DisplayStyle.None;
                 };
@@ -107,7 +106,6 @@ namespace Game.Presentation
             _challengeRequestOverlay.Q<Button>("DeclineChallengeButton").clicked +=
                 () =>
                 {
-                    Debug.Log("Challenge Declined!");
                     _challengeRequestOverlay.style.display = DisplayStyle.None;
                 };
         }

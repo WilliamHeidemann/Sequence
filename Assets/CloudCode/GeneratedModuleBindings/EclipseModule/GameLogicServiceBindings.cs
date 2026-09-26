@@ -50,6 +50,17 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 });
         }
 
+        public async Task<Game.Domain.Models.Team> GetMyTeam(string matchId)
+        {
+            return await k_Service.CallModuleEndpointAsync<Game.Domain.Models.Team>(
+                "EclipseModule",
+                "GetMyTeam",
+                new Dictionary<string, object>()
+                {
+                    {"matchId", matchId},
+                });
+        }
+
         public async Task<bool> DeleteMatch(string matchId)
         {
             return await k_Service.CallModuleEndpointAsync<bool>(

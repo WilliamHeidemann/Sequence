@@ -28,7 +28,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 });
         }
 
-        public async Task<bool> AcceptChallenge(string matchId)
+        public async Task<bool> AcceptChallenge(string matchId, string challengerId)
         {
             return await k_Service.CallModuleEndpointAsync<bool>(
                 "EclipseModule",
@@ -36,6 +36,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings
                 new Dictionary<string, object>()
                 {
                     {"matchId", matchId},
+                    {"challengerId", challengerId},
                 });
         }
 

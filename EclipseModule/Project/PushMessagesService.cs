@@ -44,14 +44,14 @@ public class PushMessagesService(IPushClient pushClient)
     }
 
     [CloudCodeFunction]
-    public async Task<bool> AcceptChallenge(IExecutionContext context, string matchId)
+    public async Task<bool> AcceptChallenge(IExecutionContext context, string matchId, string challengerId)
     {
         try
         {
             const PushMessageType messageType = PushMessageType.ChallengeAccepted;
 
             SendMessageReply response =
-                await pushClient.SendPlayerMessageAsync(context, matchId, messageType.ToString(), matchId);
+                await pushClient.SendPlayerMessageAsync(context, matchId, messageType.ToString(), challengerId);
 
             return true;
         }

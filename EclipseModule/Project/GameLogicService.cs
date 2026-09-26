@@ -13,6 +13,7 @@ namespace Cloud_Code_Module_Reference;
 
 public class GameLogicService(IGameApiClient gameApiClient)
 {
+    [Serializable]
     private record Teams(string Red, string Yellow);
     
     [CloudCodeFunction]
@@ -109,7 +110,8 @@ public class GameLogicService(IGameApiClient gameApiClient)
         return gameState.ToClientGameState(team);
     }
 
-    private async Task<Team> GetMyTeam(IExecutionContext context, string matchId)
+    [CloudCodeFunction]
+    public async Task<Team> GetMyTeam(IExecutionContext context, string matchId)
     {
         ApiResponse<GetItemsResponse> response = await gameApiClient.CloudSaveData.GetPrivateCustomItemsAsync(
             context,

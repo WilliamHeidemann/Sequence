@@ -65,7 +65,7 @@ namespace Game.Presentation
         {
             string matchId = await gameStarter.StartOnlineGame(opponentId);
             PushMessagesServiceBindings pushMessagesServiceModule = new();
-            var success = await pushMessagesServiceModule.AcceptChallenge(matchId);
+            var success = await pushMessagesServiceModule.AcceptChallenge(matchId, opponentId);
             if (success) Debug.Log("Push message sent: Match accepted.");
             else Debug.LogError("Failed to send push message: Match accepted.");
             mainMenu.gameObject.SetActive(false);
@@ -84,8 +84,11 @@ namespace Game.Presentation
                         break;
                     case PushMessageType.ChallengeAccepted:
                         string matchID = messageReceivedEvent.Message;
+                        Debug.Log($"Challenge accepted by opponent. Received matchID {matchID}.");
                         GameLogicServiceBindings gameLogicServiceModule = new();
+                        Debug.Log("Fetching client game state...");
                         var clientGameState = await gameLogicServiceModule.GetClientGameState(matchID);
+                        Debug.Log("clientGameState fetched. Starting game.");
                         gameStarter.StartGame(matchID, clientGameState.ToModel());
                         mainMenu.gameObject.SetActive(false);
                         break;
