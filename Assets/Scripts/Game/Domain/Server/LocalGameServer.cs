@@ -17,7 +17,7 @@ namespace Game.Domain.Server
 
     public class LocalGameServer : IGameServer
     {
-        private LocalGameState _gameState;
+        private readonly LocalGameState _gameState;
         public IGameServer OtherPlayerServer { get; set; }
         public event Action<Card> OnCardReceived;
         public event Action<ClientGameState> OnOpponentPlayed;
@@ -51,6 +51,11 @@ namespace Game.Domain.Server
 
                 OtherPlayerServer.Receive(updatedState.ToClientGameState(move.Team.Opposing()));
             }
+        }
+
+        public Task CheckIfOpponentPlayed(string matchId)
+        {
+            throw new NotImplementedException();
         }
 
         public void Receive(ClientGameState gameState)

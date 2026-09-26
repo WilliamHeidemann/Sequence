@@ -1453,7 +1453,6 @@ GameObject:
   - component: {fileID: 1362680820}
   - component: {fileID: 1362680819}
   - component: {fileID: 1362680818}
-  - component: {fileID: 1362680817}
   m_Layer: 0
   m_Name: Main Menu
   m_TagString: Untagged
@@ -1461,19 +1460,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1362680817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1362680816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33775e2c95a184e428e2d2931dff100d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Eclipse.Presentation::CloudHandler
-  _mainMenu: {fileID: 1362680818}
 --- !u!114 &1362680818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1573,7 +1559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   _startIn: 1
   _mode: 0
-  _mainMenu: {fileID: 1362680816}
+  _mainMenu: {fileID: 1362680818}
   _gameStarter: {fileID: 733830841}
 --- !u!1 &1564673131
 GameObject:

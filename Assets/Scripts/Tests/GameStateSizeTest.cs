@@ -25,6 +25,47 @@ namespace Tests
             Debug.Log($"Estimated GameState size: {totalBytes} bytes");
             Assert.That(totalBytes, Is.GreaterThan(0));
         }
+
+        [Test]
+        public void TestGameStateByteSizeAfter20Moves()
+        {
+            GameState gameState = GameState.CreateInitial();
+            Move[] moves = new Move[20];
+
+            long totalBytes = ObjectSizeEstimator.EstimateSize(gameState) 
+                              + ObjectSizeEstimator.EstimateSize(moves);
+
+            Debug.Log($"Estimated GameState size after 20 moves: {totalBytes} bytes");
+            Assert.That(totalBytes, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void TestClientGameStateByteSize()
+        {
+            GameState gameState = GameState.CreateInitial();
+            
+            ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
+
+            long totalBytes = ObjectSizeEstimator.EstimateSize(clientGameState);
+            
+            Debug.Log($"Estimated ClientGameState size: {totalBytes} bytes");
+            Assert.That(totalBytes, Is.GreaterThan(0));
+        }
+        
+        [Test]
+        public void TestClientGameStateByteSizeAfter20Moves()
+        {
+            GameState gameState = GameState.CreateInitial();
+            Move[] moves = new Move[20];
+            
+            ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
+            
+            long totalBytes = ObjectSizeEstimator.EstimateSize(clientGameState)
+                              + ObjectSizeEstimator.EstimateSize(moves);
+
+            Debug.Log($"Estimated ClientGameState size after 20 moves: {totalBytes} bytes");
+            Assert.That(totalBytes, Is.GreaterThan(0));
+        }
     }
 
     /// <summary>

@@ -1,0 +1,8 @@
+/var/folders/14/yhc33_n91l7blrj4fc2bhvqh0000gp/T/EclipseModule/module-compilation/EclipseModule.dll
+/var/folders/14/yhc33_n91l7blrj4fc2bhvqh0000gp/T/EclipseModule/module-compilation/EclipseModule.deps.json
+/var/folders/14/yhc33_n91l7blrj4fc2bhvqh0000gp/T/EclipseModule/module-compilation/EclipseModule.pdb
+/var/folders/14/yhc33_n91l7blrj4fc2bhvqh0000gp/T/EclipseModule/module-compilation/Unity.Services.CloudCode.Apis.dll
+/var/folders/14/yhc33_n91l7blrj4fc2bhvqh0000gp/T/EclipseModule/module-compilation/Unity.Services.CloudCode.Core.dll
+/var/folders/14/yhc33_n91l7blrj4fc2bhvqh0000gp/T/EclipseModule/module-compilation/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/var/folders/14/yhc33_n91l7blrj4fc2bhvqh0000gp/T/EclipseModule/module-compilation/Microsoft.Extensions.Logging.Abstractions.dll
+/var/folders/14/yhc33_n91l7blrj4fc2bhvqh0000gp/T/EclipseModule/module-compilation/Newtonsoft.Json.dll

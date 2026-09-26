@@ -1,4 +1,5 @@
 using System;
+using Game.Domain.Models.Dto;
 using Unity.Services.Friends.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -23,6 +24,7 @@ namespace Game.Presentation
         public event Action<string> OnSetPlayerName;
         public event Action<string> OnSentFriendRequest;
         public event Action<string> OnSentGameRequest;
+        public event Action<string> OnChallengeAccepted;
 
         private void OnEnable()
         {
@@ -87,24 +89,23 @@ namespace Game.Presentation
         {
         }
 
-        public void OpenGameRequestModal(string challengerName)
+        public void OpenGameRequestModal(User challenger)
         {
             _challengeRequestOverlay.style.display = DisplayStyle.Flex;
             
             _challengeRequestOverlay.Q<Label>("ChallengeModalHeader").text =
-                $"{challengerName} wants to play with you!";
+                $"{challenger.Name} wants to play with you!";
             
             _challengeRequestOverlay.Q<Button>("AcceptChallengeButton").clicked +=
                 () =>
                 {
-                    Debug.Log("Challenge Accepted!");
+                    OnChallengeAccepted?.Invoke(challenger.Id);
                     _challengeRequestOverlay.style.display = DisplayStyle.None;
                 };
             
             _challengeRequestOverlay.Q<Button>("DeclineChallengeButton").clicked +=
                 () =>
                 {
-                    Debug.Log("Challenge Declined!");
                     _challengeRequestOverlay.style.display = DisplayStyle.None;
                 };
         }

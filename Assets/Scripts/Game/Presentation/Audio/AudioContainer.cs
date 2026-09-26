@@ -28,13 +28,4 @@ namespace Game.Presentation.Audio
             return clips.RandomElement();
         }
     }
-
-    public enum Sound
-    {
-        DrawCard,
-        Click,
-        Pop,
-        PutDown,
-        ToHand
-    }
 }
