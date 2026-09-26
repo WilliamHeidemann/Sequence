@@ -12,6 +12,7 @@ namespace Game.Cloud
         private readonly string _matchId;
         public event Action<Card> OnCardReceived;
         public event Action<ClientGameState> OnOpponentPlayed;
+        public event Action<int, Team> OnScored;
 
         public CloudGameServer(GameLogicServiceBindings gameLogicService, string matchId)
         {
@@ -26,6 +27,7 @@ namespace Game.Cloud
             if (cardResult.HasCard)
             {
                 OnCardReceived?.Invoke(cardResult.Card.ToModel());
+                OnScored?.Invoke(cardResult.DeltaScore, move.Team);
             }
         }
 

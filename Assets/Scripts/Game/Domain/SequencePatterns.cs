@@ -6,6 +6,11 @@ namespace Game.Domain
 {
     public static class SequencePatterns
     {
+        public static IEnumerable<Position[]> Around(Position position)
+        {
+            return All().Where(line => line.Contains(position));
+        }
+        
         public static IEnumerable<Position[]> All()
         {
             return RowWiseSequencePatterns()

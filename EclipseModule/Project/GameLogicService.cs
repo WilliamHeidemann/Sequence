@@ -15,20 +15,20 @@ public class GameLogicService(IGameApiClient gameApiClient)
 {
     [Serializable]
     private record Teams(string Red, string Yellow);
-    
+
     [CloudCodeFunction]
     public async Task<Match> CreateMatch(IExecutionContext context, string opponentId)
     {
         string matchId = Guid.NewGuid().ToString();
 
         if (context.PlayerId == null) throw new NullReferenceException("context.PlayerId is null");
-        
+
         Teams teams = AssignTeams(context.PlayerId, opponentId);
         ApiResponse<SetItemResponse> setTeamsResponse = await SetTeams(context, matchId, teams);
-        
+
         GameState gameState = GameState.CreateInitial();
         ApiResponse<SetItemResponse> setMatchResponse = await SetGameState(context, matchId, gameState);
-        
+
         ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
 
         return new Match
@@ -40,8 +40,8 @@ public class GameLogicService(IGameApiClient gameApiClient)
 
     private Teams AssignTeams(string player1, string player2)
     {
-        return Random.Shared.NextDouble() < 0.5 
-            ? new Teams(player1, player2) 
+        return Random.Shared.NextDouble() < 0.5
+            ? new Teams(player1, player2)
             : new Teams(player2, player1);
     }
 
@@ -77,8 +77,8 @@ public class GameLogicService(IGameApiClient gameApiClient)
 
         MoveRequestResult moveRequestResult = MoveValidator.PlayMove(currentGameState, move) switch
         {
-            MoveValidator.MoveResult.Success(var nextGameState, var drawnCard) => await SuccessMoveRequestResult(context,
-                matchId, nextGameState, drawnCard),
+            MoveValidator.MoveResult.Success(var nextGameState, var drawnCard, var deltaScore) => await
+                SuccessMoveRequestResult(context, matchId, nextGameState, drawnCard, deltaScore),
             MoveValidator.MoveResult.Invalid => new MoveRequestResult { HasCard = false, },
             MoveValidator.MoveResult.OutOfSync => new MoveRequestResult { HasCard = false, IsOutOfSync = true },
             _ => throw new ArgumentOutOfRangeException()
@@ -88,7 +88,7 @@ public class GameLogicService(IGameApiClient gameApiClient)
     }
 
     private async Task<MoveRequestResult> SuccessMoveRequestResult(IExecutionContext context, string matchId,
-        GameState next, Card drawnCard)
+        GameState next, Card drawnCard, int deltaScore)
     {
         ApiResponse<SetItemResponse> response = await SetGameState(context, matchId, next);
 
@@ -98,7 +98,7 @@ public class GameLogicService(IGameApiClient gameApiClient)
             return new MoveRequestResult { HasCard = false, IsOutOfSync = true };
         }
 
-        return new MoveRequestResult { Card = drawnCard, HasCard = true };
+        return new MoveRequestResult { Card = drawnCard, HasCard = true, DeltaScore = deltaScore };
     }
 
 
@@ -118,11 +118,11 @@ public class GameLogicService(IGameApiClient gameApiClient)
             context.ProjectId,
             matchId,
             ["teams"]);
-        
+
         Item item = response.Data.Results[0];
         string rawJson = JsonConvert.SerializeObject(item.Value);
         Teams teams = JsonConvert.DeserializeObject<Teams>(rawJson)
-                              ?? throw new JsonException("Could not deserialize teams.");
+                      ?? throw new JsonException("Could not deserialize teams.");
 
         if (context.PlayerId == teams.Red) return Team.Red;
         if (context.PlayerId == teams.Yellow) return Team.Yellow;

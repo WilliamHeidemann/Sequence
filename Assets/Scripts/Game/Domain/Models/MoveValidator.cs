@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UtilityToolkit.Monads;
 
 namespace Game.Domain.Models
@@ -11,11 +12,11 @@ namespace Game.Domain.Models
             {
                 return Option<Move>.None;
             }
-            
+
             Board board = new(clientGameState.Moves);
 
             Hand hand = new(clientGameState.Hand);
-            
+
             Card tabbedCard = BoardLayout.Get(position);
 
             bool fits = board.Fits(position);
@@ -30,7 +31,7 @@ namespace Game.Domain.Models
             if (cardInHand.IsRemover())
             {
                 bool ownerIsPlayer = board.Owner(position).IsSome(out Team owner) && owner == clientGameState.Team;
-                
+
                 if (ownerIsPlayer)
                 {
                     return Option<Move>.None;
@@ -40,17 +41,17 @@ namespace Game.Domain.Models
             Move move = new(position, cardInHand, clientGameState.Team);
 
             Team toPlay = clientGameState.IsMyTurn ? clientGameState.Team : clientGameState.Team.Opposing();
-            
+
             return IsValid(move, board, hand, toPlay) ? Option<Move>.Some(move) : Option<Move>.None;
         }
-        
+
         public static bool IsValid(Move move, Board board, Hand hand, Team toPlay)
         {
             if (move.Team != toPlay)
             {
                 return false;
             }
-            
+
             bool isOpen = board.Fits(move.Position);
 
             var requiredCard = hand.FindCard(move.Card, isOpen);
@@ -64,30 +65,33 @@ namespace Game.Domain.Models
             {
                 return true;
             }
-            
+
             bool playerOwnsPosition = board.Owner(move.Position)
                 .SelectOrDefault(owner => owner == move.Team);
 
             return !playerOwnsPosition;
         }
-        
+
         public abstract class MoveResult
         {
             public class Success : MoveResult
             {
                 public GameState UpdatedState { get; }
                 public Card DrawnCard { get; }
+                public int DeltaScore { get; }
 
-                public Success(GameState updatedState, Card drawnCard)
+                public Success(GameState updatedState, Card drawnCard, int deltaScore)
                 {
                     UpdatedState = updatedState;
                     DrawnCard = drawnCard;
+                    DeltaScore = deltaScore;
                 }
 
-                public void Deconstruct(out GameState updatedState, out Card drawnCard)
+                public void Deconstruct(out GameState updatedState, out Card drawnCard, out int deltaScore)
                 {
                     updatedState = UpdatedState;
                     drawnCard = DrawnCard;
+                    deltaScore = DeltaScore;
                 }
             }
 
@@ -108,7 +112,7 @@ namespace Game.Domain.Models
                 Team.Yellow => gameState.YellowHand,
                 _ => throw new ArgumentOutOfRangeException()
             };
-            
+
             Hand hand = new(cardsInHand);
             Board board = new(gameState.Moves);
 
@@ -116,7 +120,7 @@ namespace Game.Domain.Models
             {
                 return new MoveResult.Invalid();
             }
-            
+
             if (move.Card.IsRemover()) board.Remove(move.Position);
             else board.TryAdd(move.Position, move.Team);
 
@@ -129,20 +133,24 @@ namespace Game.Domain.Models
 
             MoveHistory moveHistory = new(gameState.Moves);
             moveHistory.Add(move);
-            
+
+            var possibleSequences = SequencePatterns.Around(move.Position);
+            var deltaScore = possibleSequences.Count(line =>
+                line.All(p => board.Owner(p).IsSome(out Team owner) && owner == move.Team));
+
             (Card[] redHand, Card[] yellowHand) = move.Team switch
-                {
-                    Team.Red => (hand.GetCards(), gameState.YellowHand),
-                    Team.Yellow => (gameState.RedHand, hand.GetCards()),
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            
+            {
+                Team.Red => (hand.GetCards(), gameState.YellowHand),
+                Team.Yellow => (gameState.RedHand, hand.GetCards()),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
             GameState updatedGameState = new(
-                redHand, yellowHand, 
-                deck.GetCards(), moveHistory.GetMoves(), 
+                redHand, yellowHand,
+                deck.GetCards(), moveHistory.GetMoves(),
                 gameState.Score, move.Team.Opposing());
-            
-            return new MoveResult.Success(updatedGameState, draw);
+
+            return new MoveResult.Success(updatedGameState, draw, deltaScore);
         }
     }
 }

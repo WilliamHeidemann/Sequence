@@ -42,6 +42,8 @@ namespace Game.Presentation
                 ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
 
                 LocalGameServer playerGameServer = CreateLocalGameServer(gameState);
+                
+                playerGameServer.OnScored += (score, team) => Debug.Log($"Scored {score} for team {team}");
 
                 return new PlayCoordinator(playerGameServer, clientGameState);
             
@@ -106,6 +108,9 @@ namespace Game.Presentation
         private PlayCoordinator CreatePlayCoordinator(Match match)
         {
             CloudGameServer playerGameServer = CreateCloudGameServer(match.Id);
+            
+            playerGameServer.OnScored += (score, team) => Debug.Log($"Scored {score} for team {team}");
+            
             return new PlayCoordinator(playerGameServer, match.ClientGameState);
             
             CloudGameServer CreateCloudGameServer(string matchId)

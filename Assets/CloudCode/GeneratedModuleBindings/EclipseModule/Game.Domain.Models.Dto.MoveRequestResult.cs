@@ -9,6 +9,7 @@ namespace Unity.Services.CloudCode.GeneratedBindings.Game.Domain.Models.Dto
         public bool HasCard;
         public bool IsOutOfSync;
         public Card Card;
+        public int DeltaScore;
 
         [Preserve]
         public MoveRequestResult ()

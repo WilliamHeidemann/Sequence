@@ -8,5 +8,6 @@ namespace Game.Domain.Models.Dto
         public bool HasCard { get; set; }
         public bool IsOutOfSync { get; set; }
         public Card Card { get; set; }
+        public int DeltaScore { get; set; }
     }
 }
