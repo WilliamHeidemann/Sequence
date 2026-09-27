@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UtilityToolkit.Monads;
 
@@ -134,9 +135,16 @@ namespace Game.Domain.Models
             MoveHistory moveHistory = new(gameState.Moves);
             moveHistory.Add(move);
 
-            var possibleSequences = SequencePatterns.Around(move.Position);
-            var deltaScore = possibleSequences.Count(line =>
-                line.All(p => board.Owner(p).IsSome(out Team owner) && owner == move.Team));
+            HashSet<Position> locked = new(gameState.Locked);
+            var sequences = Sequences(move, board, locked).ToArray();
+            int deltaScore = sequences.Length;
+            foreach (var sequence in sequences)
+            {
+                foreach (Position position in sequence)
+                {
+                    locked.Add(position);
+                }
+            }
 
             (Card[] redHand, Card[] yellowHand) = move.Team switch
             {
@@ -147,10 +155,83 @@ namespace Game.Domain.Models
 
             GameState updatedGameState = new(
                 redHand, yellowHand,
-                deck.GetCards(), moveHistory.GetMoves(),
+                deck.GetCards(), moveHistory.GetMoves(), locked.ToArray(),
                 gameState.Score, move.Team.Opposing());
 
             return new MoveResult.Success(updatedGameState, draw, deltaScore);
+        }
+
+        public static IEnumerable<Position[]> Sequences(Move move, Board board, HashSet<Position> locked)
+        {
+            IEnumerable<Position[]> possibleSequences = SequencePatterns.Around(move.Position);
+
+            IEnumerable<Position[]> sequences = possibleSequences.Where(line =>
+                line.All(p => p.Equals(move.Position) || board.Owner(p).IsSome(out Team owner) && owner == move.Team));
+
+            IEnumerable<Position[]> sequencesExcludingLocked =
+                sequences.Where(sequence => sequence.Count(locked.Contains) < 2);
+
+            // for every sequence at this point, if they overlap by 2 or more pins, concatenate them.
+            // n^2 operation. But there will be very few here so it is ok. 
+
+            IEnumerable<Position[]> concatenatedSequences = sequencesExcludingLocked.CombineAll((seq1, seq2) =>
+            {
+                int overlap = seq1.Intersect(seq2).Count();
+                if (overlap >= 2)
+                {
+                    return seq1.Concat(seq2).Distinct().ToArray();
+                }
+
+                return seq1;
+            });
+
+            return concatenatedSequences;
+        }
+    }
+
+    public static class SequenceExtension
+    {
+        public static IEnumerable<TResult> CombineAll<T, TResult>(
+            this IEnumerable<T> source, Func<T, T, TResult> combinator)
+        {
+            IEnumerable<T> enumerable = source as T[] ?? source.ToArray();
+
+            foreach (T item1 in enumerable)
+            {
+                foreach (T item2 in enumerable)
+                {
+                    yield return combinator(item1, item2);
+                }
+            }
+        }
+        
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            IEqualityComparer<TKey>? comparer = null)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+
+            return Iterator();
+
+            IEnumerable<TSource> Iterator()
+            {
+                var knownKeys = new HashSet<TKey>(comparer);
+                foreach (TSource element in source)
+                {
+                    if (knownKeys.Add(keySelector(element)))
+                    {
+                        yield return element;
+                    }
+                }
+            }
+        }
+        
+        public static Position[] GetSequences(IEnumerable<Position> positions)
+        {
+            // all lengths
+            throw new NotImplementedException();
         }
     }
 }
