@@ -12,6 +12,8 @@ namespace Game.Presentation.Audio
         [SerializeField] private AudioClip[] _pop;
         [SerializeField] private AudioClip[] _putDown;
         [SerializeField] private AudioClip[] _toHand;
+        [SerializeField] private AudioClip[] _Yes;
+        [SerializeField] private AudioClip[] _No;
         
         public AudioClip Get(Sound sound)
         {
@@ -22,6 +24,8 @@ namespace Game.Presentation.Audio
                 Sound.Pop => _pop,
                 Sound.PutDown => _putDown,
                 Sound.ToHand => _toHand,
+                Sound.Yes => _Yes,
+                Sound.No => _No,
                 _ => throw new ArgumentOutOfRangeException(nameof(sound), sound, null)
             };
 
@@ -35,6 +39,8 @@ namespace Game.Presentation.Audio
         Click,
         Pop,
         PutDown,
-        ToHand
+        ToHand,
+        Yes,
+        No
     }
 }
