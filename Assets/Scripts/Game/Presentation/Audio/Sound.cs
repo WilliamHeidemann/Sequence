@@ -6,6 +6,8 @@ namespace Game.Presentation.Audio
         Click,
         Pop,
         PutDown,
-        ToHand
+        ToHand,
+        Yes,
+        No
     }
 }
