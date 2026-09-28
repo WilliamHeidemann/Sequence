@@ -8,9 +8,7 @@ using Game.Domain.Players;
 using Game.Domain.Players.Bot_Strategies;
 using Game.Domain.Server;
 using Game.Presentation.AnimationSystems;
-using Unity.Services.Authentication;
 using Unity.Services.CloudCode.GeneratedBindings;
-using Unity.Services.Core;
 using UnityEngine;
 using UtilityToolkit.Monads;
 
@@ -24,112 +22,102 @@ namespace Game.Presentation
         private PlayCoordinator _playCoordinator;
         private Option<string> _matchId;
 
-        public async Task StartGame(Mode mode)
+        private void BindToPresentation(PlayCoordinator playCoordinator)
         {
-            if (mode == Mode.Online)
-            {
-                if (UnityServices.State == ServicesInitializationState.Uninitialized)
-                {
-                    await UnityServices.InitializeAsync();
-                }
- 
-                if (!AuthenticationService.Instance.IsSignedIn)
-                {
-                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                }
-            }
-            
-            // IGameServer playerGameServer = CreateCloudGameServer(gameState);
-
-            _playCoordinator = mode switch
-            {
-                Mode.Local => CreateLocalPlayCoordinator(),
-                Mode.Online => await CreateCloudPlayCoordinator(),
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            _animationOrchestrator.BindAnimations(_playCoordinator);
-            _playCoordinator.RaiseDrawHandEvent();
+            _animationOrchestrator.BindAnimations(playCoordinator);
+            playCoordinator.RaiseDrawHandEvent();
             _boardPresenter.OnPositionClicked += HandlePositionClicked;
         }
-
-        private PlayCoordinator CreateLocalPlayCoordinator()
+        
+        public void StartLocalGame()
         {
-            GameState gameState = GameState.CreateInitial();
+            _playCoordinator = CreateLocalPlayCoordinator();
+            BindToPresentation(_playCoordinator);
+            return;
             
-            ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
+            static PlayCoordinator CreateLocalPlayCoordinator()
+            {
+                GameState gameState = GameState.CreateInitial();
+
+                ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
+
+                LocalGameServer playerGameServer = CreateLocalGameServer(gameState);
+                
+                playerGameServer.OnScored += (score, team) => Debug.Log($"Scored {score} for team {team}");
+
+                return new PlayCoordinator(playerGameServer, clientGameState);
             
-            LocalGameServer playerGameServer = CreateLocalGameServer(gameState);
+                static LocalGameServer CreateLocalGameServer(GameState gameState)
+                {
+                    LocalGameState localGameState = new(gameState);
+                    LocalGameServer playerGameServer = new(localGameState);
+                    LocalGameServer botGameServer = new(localGameState);
+                    playerGameServer.OtherPlayerServer = botGameServer;
+                    botGameServer.OtherPlayerServer = playerGameServer;
+                    new Bot(botGameServer, new CenterBrain());
 
-            return new PlayCoordinator(playerGameServer, clientGameState);
+                    return playerGameServer;
+                }
+            }
         }
-
-        private async Task<PlayCoordinator> CreateCloudPlayCoordinator()
-        {
-            ClientGameState clientGameState = await CreateCloudClientGameState();
-
-            CloudGameServer playerGameServer = CreateCloudBotGameServer(clientGameState);
-
-            return new PlayCoordinator(playerGameServer, clientGameState);
-        }
-
-        private async Task<ClientGameState> CreateCloudClientGameState()
+        
+        public async Task<Match> CreateMatch(string opponentId)
         {
             GameLogicServiceBindings gameLogicServiceBindings = new();
-            var matchDto = await gameLogicServiceBindings.CreateMatch();
+            var matchDto = await gameLogicServiceBindings.CreateMatch(opponentId);
             Match match = matchDto.ToModel();
-            _matchId = Option<string>.Some(match.Id);
-            return match.ClientGameState;
+            return match;
         }
 
-        private CloudGameServer CreateCloudBotGameServer(ClientGameState clientGameState)
+        public void StartGame(Match match, string opponentId)
+        {
+            _playCoordinator = CreatePlayCoordinator(match);
+            _playCoordinator.OnValidMoveRequest += async move => await NotifyOpponent(opponentId);
+            _matchId = Option<string>.Some(match.Id);
+            BindToPresentation(_playCoordinator);
+        }
+
+        private async Task NotifyOpponent(string opponentId)
         {
             if (!_matchId.IsSome(out string matchId))
             {
-                throw new Exception("MatchId does not exist");
+                Debug.LogError("MatchId does not exist. Opponent was not notified.");
+                return;
             }
             
-            GameLogicServiceBindings gameLogicServiceBindings = new();
-            CloudGameServer playerGameServer = new(gameLogicServiceBindings, matchId);
-            CloudGameServer botGameServer = new(gameLogicServiceBindings, matchId);
-            // The following is only possible when both clients are on the same machine. 
-            // This is to use remote gameplay without push messages implemented. 
-            playerGameServer.OnCardReceived += async _ =>
-                await PassGameState(botGameServer, matchId, clientGameState.Team.Opposing(),
-                    gameLogicServiceBindings);
-            botGameServer.OnCardReceived += async _ =>
-                await PassGameState(playerGameServer, matchId, clientGameState.Team, gameLogicServiceBindings);
-
-            new Bot(botGameServer, new CenterBrain());
-
-            return playerGameServer;
+            PushMessagesServiceBindings pushMessagesServiceBindings = new();
+            bool success = await pushMessagesServiceBindings.NotifyOpponentOfMove(matchId, opponentId);
+            if (success)
+            {
+                Debug.Log($"Opponent {opponentId} was successfully notified of move.");
+            }
+            else
+            {
+                Debug.LogError($"Opponent {opponentId} was not notified of move.");
+            }
         }
 
-        private static async Task PassGameState(CloudGameServer otherServer, string matchId, Team team,
-            GameLogicServiceBindings gameLogicServiceBindings)
+        public async Task OnNewMovePushMessageReceived(string matchId)
         {
-            var clientGameState = await gameLogicServiceBindings.GetClientGameState(matchId, team.ToDto());
-            otherServer.Receive(clientGameState.ToModel());
+            if (_playCoordinator != null)
+            {
+                await _playCoordinator.CheckIfOpponentPlayed(matchId);
+            }
         }
 
-        private LocalGameServer CreateLocalGameServer(GameState gameState)
+        private PlayCoordinator CreatePlayCoordinator(Match match)
         {
-            LocalGameState localGameState = new(gameState);
-            LocalGameServer playerGameServer = new(localGameState);
-            LocalGameServer botGameServer = new(localGameState);
-            playerGameServer.OtherPlayerServer = botGameServer;
-            botGameServer.OtherPlayerServer = playerGameServer;
-            new Bot(botGameServer, new CenterBrain());
-
-            return playerGameServer;
-        }
-
-        private CloudGameServer CreateCloudGameServer(string matchId)
-        {
-            GameLogicServiceBindings gameLogicService = new();
-            CloudGameServer playerGameServer = new(gameLogicService, matchId);
-
-            return playerGameServer;
+            CloudGameServer playerGameServer = CreateCloudGameServer(match.Id);
+            
+            playerGameServer.OnScored += (score, team) => Debug.Log($"Scored {score} for team {team}");
+            
+            return new PlayCoordinator(playerGameServer, match.ClientGameState);
+            
+            CloudGameServer CreateCloudGameServer(string matchId)
+            {
+                GameLogicServiceBindings gameLogicService = new();
+                return new CloudGameServer(gameLogicService, matchId);
+            }
         }
 
         private async void HandlePositionClicked(Position position)
@@ -150,7 +138,7 @@ namespace Game.Presentation
             {
                 GameLogicServiceBindings gameLogicServiceBindings = new();
                 bool success = await gameLogicServiceBindings.DeleteMatch(matchId);
-                Debug.Log(success);    
+                Debug.Log(success);
             }
         }
     }
