@@ -1,82 +1,92 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game.Domain.Models;
+using UtilityToolkit.Monads;
 
 namespace Game.Domain
 {
     public static class SequencePatterns
     {
         // The 4 axes we need to check: Horizontal, Vertical, Diagonal-Right, Diagonal-Left
-        private static readonly (int dRow, int dCol)[] Directions = 
+        private static readonly (int dRow, int dCol)[] Directions =
         {
-            (0, 1),   // Horizontal (Right)
-            (1, 0),   // Vertical (Down)
-            (1, 1),   // Diagonal (Down-Right)
-            (1, -1)   // Diagonal (Down-Left)
+            (0, 1), // Horizontal (Right)
+            (1, 0), // Vertical (Down)
+            (1, 1), // Diagonal (Down-Right)
+            (1, -1) // Diagonal (Down-Left)
         };
 
         /// <summary>
         /// Finds all contiguous lines of a specific team that meet or exceed the target length.
         /// </summary>
-        public static IEnumerable<Position[]> FindSequences(Board board, Team team, int targetLength = 4)
+        public static IEnumerable<Position[]> FindSequences(Board board, Team team, HashSet<Position> locked)
         {
-            Row[] rows = BoardLayout.AllRows();
-            Column[] cols = BoardLayout.AllColumns();
-
-            foreach (Row row in rows)
+            for (int i = 7; i >= 4; i--)
             {
-                foreach (Column col in cols)
+                foreach (Position position in BoardLayout.AllPositions())
                 {
-                    Position currentPos = new(row, col);
-
-                    // Skip if the current position doesn't belong to the target team
-                    if (board.Owner(currentPos).IsSome(out Team owner) && owner != team) 
-                        continue;
-
-                    foreach ((int dRow, int dCol) in Directions)
+                    foreach (Position[] sequence in FindSequencesOfLength(position, i))
                     {
-                        // 1. Check if this is the START of a line. 
-                        // If the previous position in this direction is the same team, we are in the middle of a line. Skip.
-                        Position? prevPos = GetNeighbor(currentPos, -dRow, -dCol);
-                        if (prevPos.HasValue && board.Owner(prevPos.Value).IsSome(out Team prevOwner) && prevOwner == team)
-                        {
-                            continue;
-                        }
+                        yield return sequence;
+                    }
+                }
+            }
 
-                        // 2. We found a starting piece! Traverse forward to find the full continuous length.
-                        List<Position> currentLine = new() { currentPos };
-                        Position? nextPos = GetNeighbor(currentPos, dRow, dCol);
+            yield break;
 
-                        while (nextPos.HasValue && board.Owner(nextPos.Value).IsSome(out Team nextOwner) && nextOwner == team)
-                        {
-                            currentLine.Add(nextPos.Value);
-                            nextPos = GetNeighbor(nextPos.Value, dRow, dCol);
-                        }
+            IEnumerable<Position[]> FindSequencesOfLength(Position currentPos, int targetLength)
+            {
+                // Skip if the current position doesn't belong to the target team
+                if (board.Owner(currentPos).IsSome(out Team owner) && owner != team)
+                    yield break;
 
-                        // 3. If the total continuous line meets our requirement, yield it.
-                        if (currentLine.Count >= targetLength)
-                        {
-                            yield return currentLine.ToArray();
-                        }
+                foreach ((int dRow, int dCol) in Directions)
+                {
+                    // 1. Check if this is the START of a line. 
+                    // If the previous position in this direction is the same team, we are in the middle of a line. Skip.
+                    Option<Position> prevPos = GetNeighbor(currentPos, -dRow, -dCol);
+                    if (prevPos.IsSome(out Position prevPosition) &&
+                        board.Owner(prevPosition).IsSome(out Team prevOwner) && prevOwner == team)
+                    {
+                        continue;
+                    }
+
+                    // 2. We found a starting piece! Traverse forward to find the full continuous length.
+                    List<Position> currentLine = new() { currentPos };
+                    Option<Position> nextPos = GetNeighbor(currentPos, dRow, dCol);
+
+                    while (nextPos.IsSome(out Position nextPosition) &&
+                           board.Owner(nextPosition).IsSome(out Team nextOwner) && nextOwner == team &&
+                           currentLine.Count(locked.Contains) <= 1)
+                    {
+                        currentLine.Add(nextPosition);
+                        nextPos = GetNeighbor(nextPosition, dRow, dCol);
+                    }
+
+                    // 3. If the total continuous line meets our requirement, yield it.
+                    if (currentLine.Count >= targetLength && currentLine.Count(locked.Contains) <= 1)
+                    {
+                        currentLine.ForEach(p => locked.Add(p));
+                        yield return currentLine.ToArray();
                     }
                 }
             }
         }
 
-        private static Position? GetNeighbor(Position pos, int dRow, int dCol)
+        private static Option<Position> GetNeighbor(Position pos, int dRow, int dCol)
         {
             int newRow = (int)pos.Row + dRow;
             int newCol = (int)pos.Column + dCol;
 
             // Ensure the new coordinates are within the board's enum bounds
-            if (newRow >= 0 && newRow <= 5 && newCol >= 0 && newCol <= 7)
+            if (newRow is >= 0 and <= 5 && newCol is >= 0 and <= 7)
             {
-                return new Position((Row)newRow, (Column)newCol);
+                return Option<Position>.Some(new Position((Row)newRow, (Column)newCol));
             }
 
-            return null;
+            return Option<Position>.None;
         }
-        
+
         // public static IEnumerable<Position[]> Around(Position position)
         // {
         //     return All().Where(line => line.Contains(position));
