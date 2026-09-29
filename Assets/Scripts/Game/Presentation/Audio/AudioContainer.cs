@@ -28,7 +28,6 @@ namespace Game.Presentation.Audio
                 Sound.No => _No,
                 _ => throw new ArgumentOutOfRangeException(nameof(sound), sound, null)
             };
-
             return clips.RandomElement();
         }
     }
