@@ -30,7 +30,7 @@ namespace Game.Presentation.AnimationSystems
         public void PlayInvalidMove(Position position)
         {
             _boardPresenter.Shake(position);
-            // _audioPlayer.Play(Sound.InvalidMove);
+                _audioPlayer.Play(Sound.No); // No is for unsuccessful placement
         }
 
         public async Awaitable PlaySequenceCelebration()
@@ -86,6 +86,7 @@ namespace Game.Presentation.AnimationSystems
                 else
                 {
                     await _boardPresenter.Pin(move.Position, move.Team);
+                    _audioPlayer.Play(Sound.Yes); // Yes is for successful placement
                 }
             }
         }
