@@ -37,7 +37,7 @@ namespace Game.Domain
             IEnumerable<Position[]> FindSequencesOfLength(Position currentPos, int targetLength)
             {
                 // Skip if the current position doesn't belong to the target team
-                if (board.Owner(currentPos).IsSome(out Team owner) && owner != team)
+                if (!board.OwnerIs(currentPos, team))
                     yield break;
 
                 foreach ((int dRow, int dCol) in Directions)
@@ -46,7 +46,7 @@ namespace Game.Domain
                     // If the previous position in this direction is the same team, we are in the middle of a line. Skip.
                     Option<Position> prevPos = GetNeighbor(currentPos, -dRow, -dCol);
                     if (prevPos.IsSome(out Position prevPosition) &&
-                        board.Owner(prevPosition).IsSome(out Team prevOwner) && prevOwner == team)
+                        board.OwnerIs(prevPosition, team))
                     {
                         continue;
                     }
@@ -56,7 +56,7 @@ namespace Game.Domain
                     Option<Position> nextPos = GetNeighbor(currentPos, dRow, dCol);
 
                     while (nextPos.IsSome(out Position nextPosition) &&
-                           board.Owner(nextPosition).IsSome(out Team nextOwner) && nextOwner == team &&
+                           board.OwnerIs(nextPosition, team) &&
                            currentLine.Count(locked.Contains) <= 1)
                     {
                         currentLine.Add(nextPosition);

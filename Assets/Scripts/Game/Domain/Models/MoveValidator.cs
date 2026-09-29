@@ -31,7 +31,7 @@ namespace Game.Domain.Models
 
             if (cardInHand.IsRemover())
             {
-                bool ownerIsPlayer = board.Owner(position).IsSome(out Team owner) && owner == clientGameState.Team;
+                bool ownerIsPlayer = board.OwnerIs(position, clientGameState.Team);
 
                 if (ownerIsPlayer)
                 {
@@ -67,8 +67,7 @@ namespace Game.Domain.Models
                 return true;
             }
 
-            bool playerOwnsPosition = board.Owner(move.Position)
-                .SelectOrDefault(owner => owner == move.Team);
+            bool playerOwnsPosition = board.OwnerIs(move.Position, move.Team);
 
             return !playerOwnsPosition;
         }

@@ -49,7 +49,7 @@ namespace Game.Domain.Models
                 : Option<Team>.None;
         }
 
-        public bool IsOwnedBy(Position position, Team team) => 
+        public bool OwnerIs(Position position, Team team) => 
             _takenSpaces.TryGetValue(position, out Team owner) && owner == team;
     }
 

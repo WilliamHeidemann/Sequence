@@ -13,6 +13,7 @@ namespace Game.Domain.Models
             YellowHand = yellowHand;
             Deck = deck;
             Moves = moves;
+            Locked = locked;
             Score = score;
             ToPlay = toPlay;
         }

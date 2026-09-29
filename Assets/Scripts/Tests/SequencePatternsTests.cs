@@ -70,6 +70,30 @@ namespace Tests
             Assert.That(result, Is.Not.Empty);
             Assert.That(result.First(), Is.EquivalentTo(patternPositions));
         }
+        
+        [Test]
+        public void Sequences_ThreeInARow_ReturnsNoSequence()
+        {
+            // Arrange
+            Position movePos = new(Row.One, Column.One);
+            Move move = new(movePos, CreateDummyCard(), _activeTeam);
+
+            // Assuming (One,One), (One,Two), (One,Three), (One,Four) forms a valid pattern returned by SequencePatterns.Around
+            Position[] patternPositions =
+            {
+                movePos,
+                new(Row.One, Column.Two),
+                new(Row.One, Column.Three)
+            };
+
+            Board board = CreateBoardWithTeamOwnership(patternPositions, _activeTeam);
+
+            // Act
+            Position[][] result = SequencePatterns.FindSequences(board, move.Team, _lockedPositions).ToArray();
+
+            // Assert
+            Assert.That(result, Is.Empty);
+        }
 
         [Test]
         public void Sequences_PatternContainsOpponentPieces_IsFilteredOut()
