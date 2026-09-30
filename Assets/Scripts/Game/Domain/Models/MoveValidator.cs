@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UtilityToolkit.Monads;
 
@@ -30,7 +31,7 @@ namespace Game.Domain.Models
 
             if (cardInHand.IsRemover())
             {
-                bool ownerIsPlayer = board.Owner(position).IsSome(out Team owner) && owner == clientGameState.Team;
+                bool ownerIsPlayer = board.OwnerIs(position, clientGameState.Team);
 
                 if (ownerIsPlayer)
                 {
@@ -66,8 +67,7 @@ namespace Game.Domain.Models
                 return true;
             }
 
-            bool playerOwnsPosition = board.Owner(move.Position)
-                .SelectOrDefault(owner => owner == move.Team);
+            bool playerOwnsPosition = board.OwnerIs(move.Position, move.Team);
 
             return !playerOwnsPosition;
         }
@@ -134,9 +134,9 @@ namespace Game.Domain.Models
             MoveHistory moveHistory = new(gameState.Moves);
             moveHistory.Add(move);
 
-            var possibleSequences = SequencePatterns.Around(move.Position);
-            var deltaScore = possibleSequences.Count(line =>
-                line.All(p => board.Owner(p).IsSome(out Team owner) && owner == move.Team));
+            HashSet<Position> locked = new(gameState.Locked);
+            var sequences = SequencePatterns.FindSequences(board, move.Team, locked).ToArray();
+            int deltaScore = sequences.Length;
 
             (Card[] redHand, Card[] yellowHand) = move.Team switch
             {
@@ -147,10 +147,50 @@ namespace Game.Domain.Models
 
             GameState updatedGameState = new(
                 redHand, yellowHand,
-                deck.GetCards(), moveHistory.GetMoves(),
+                deck.GetCards(), moveHistory.GetMoves(), locked.ToArray(),
                 gameState.Score, move.Team.Opposing());
 
             return new MoveResult.Success(updatedGameState, draw, deltaScore);
+        }
+    }
+
+    public static class SequenceExtension
+    {
+        public static IEnumerable<TResult> CombineAll<T, TResult>(
+            this IEnumerable<T> source, Func<T, T, TResult> combinator)
+        {
+            IEnumerable<T> enumerable = source as T[] ?? source.ToArray();
+
+            foreach (T item1 in enumerable)
+            {
+                foreach (T item2 in enumerable)
+                {
+                    yield return combinator(item1, item2);
+                }
+            }
+        }
+        
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            IEqualityComparer<TKey>? comparer = null)
+        {
+            if (source == null) throw new ArgumentNullException(nameof(source));
+            if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
+
+            return Iterator();
+
+            IEnumerable<TSource> Iterator()
+            {
+                var knownKeys = new HashSet<TKey>(comparer);
+                foreach (TSource element in source)
+                {
+                    if (knownKeys.Add(keySelector(element)))
+                    {
+                        yield return element;
+                    }
+                }
+            }
         }
     }
 }
