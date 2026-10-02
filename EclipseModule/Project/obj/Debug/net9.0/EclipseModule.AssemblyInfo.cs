@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EclipseModule")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6dd266a285c83abed932382afac13f4992021dc9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db6862a2f6e2737665d2fbba0fe5fbfb7334be81")]
 [assembly: System.Reflection.AssemblyProductAttribute("EclipseModule")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EclipseModule")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -80,6 +80,8 @@ namespace Game.Presentation
         {
             if (Enum.TryParse(messageReceivedEvent.MessageType, true, out PushMessageType messageType))
             {
+                Debug.Log($"[{messageReceivedEvent.MessageType}] {messageReceivedEvent.Message}");
+                
                 switch (messageType)
                 {
                     case PushMessageType.ChallengeRequest:

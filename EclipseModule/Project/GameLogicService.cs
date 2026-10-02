@@ -29,7 +29,8 @@ public class GameLogicService(IGameApiClient gameApiClient)
         GameState gameState = GameState.CreateInitial();
         ApiResponse<SetItemResponse> setMatchResponse = await SetGameState(context, matchId, gameState);
 
-        ClientGameState clientGameState = gameState.ToClientGameState(gameState.ToPlay);
+        Team myTeam = GetTeam(context.PlayerId, teams);
+        ClientGameState clientGameState = gameState.ToClientGameState(myTeam);
 
         return new Match
         {
@@ -112,6 +113,8 @@ public class GameLogicService(IGameApiClient gameApiClient)
 
     private async Task<Team> GetMyTeam(IExecutionContext context, string matchId)
     {
+        if (context.PlayerId == null) throw new NullReferenceException("context.PlayerId is null");
+        
         ApiResponse<GetItemsResponse> response = await gameApiClient.CloudSaveData.GetPrivateCustomItemsAsync(
             context,
             context.ServiceToken,
@@ -124,9 +127,17 @@ public class GameLogicService(IGameApiClient gameApiClient)
         Teams teams = JsonConvert.DeserializeObject<Teams>(rawJson)
                       ?? throw new JsonException("Could not deserialize teams.");
 
-        if (context.PlayerId == teams.Red) return Team.Red;
-        if (context.PlayerId == teams.Yellow) return Team.Yellow;
-        throw new InvalidOperationException("Player is not on any team.");
+        return GetTeam(context.PlayerId, teams);
+    }
+
+    private static Team GetTeam(string playerId, Teams teams)
+    {
+        return playerId switch
+        {
+            _ when playerId == teams.Red => Team.Red,
+            _ when playerId == teams.Yellow => Team.Yellow,
+            _ => throw new InvalidOperationException("Player is not on any team.")
+        };
     }
 
     private async Task<GameState> GetGameState(IExecutionContext context, string matchId)
