@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Game.Domain.Models;
+using UtilityToolkit.Monads;
 
 namespace Game.Domain.Server
 {
@@ -28,7 +29,7 @@ namespace Game.Domain.Server
             _gameState = gameState;
         }
 
-        public Task Request(Move move)
+        public Task<Option<ClientGameState>> Request(Move move)
         {
             MoveValidator.MoveResult result = MoveValidator.PlayMove(_gameState.Value, move);
 
@@ -41,7 +42,7 @@ namespace Game.Domain.Server
 
             HandleEvents(result, move);
 
-            return Task.CompletedTask;
+            return Task.FromResult(Option<ClientGameState>.Some(_gameState.Value.ToClientGameState(move.Team)));
         }
 
         private void HandleEvents(MoveValidator.MoveResult result, Move move)
@@ -56,7 +57,7 @@ namespace Game.Domain.Server
             }
         }
 
-        public Task CheckIfOpponentPlayed(string matchId)
+        public Task<ClientGameState> GetClientGameState(string matchId)
         {
             throw new NotImplementedException();
         }
