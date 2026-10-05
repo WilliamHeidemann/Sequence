@@ -77,20 +77,17 @@ namespace Game.Domain.Models
             public class Success : MoveResult
             {
                 public GameState UpdatedState { get; }
-                public Card DrawnCard { get; }
                 public int DeltaScore { get; }
 
-                public Success(GameState updatedState, Card drawnCard, int deltaScore)
+                public Success(GameState updatedState, int deltaScore)
                 {
                     UpdatedState = updatedState;
-                    DrawnCard = drawnCard;
                     DeltaScore = deltaScore;
                 }
 
-                public void Deconstruct(out GameState updatedState, out Card drawnCard, out int deltaScore)
+                public void Deconstruct(out GameState updatedState, out int deltaScore)
                 {
                     updatedState = UpdatedState;
-                    drawnCard = DrawnCard;
                     deltaScore = DeltaScore;
                 }
             }
@@ -150,7 +147,7 @@ namespace Game.Domain.Models
                 deck.GetCards(), moveHistory.GetMoves(), locked.ToArray(),
                 gameState.Score, move.Team.Opposing());
 
-            return new MoveResult.Success(updatedGameState, draw, deltaScore);
+            return new MoveResult.Success(updatedGameState, deltaScore);
         }
     }
 

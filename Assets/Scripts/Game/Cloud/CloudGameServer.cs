@@ -22,12 +22,12 @@ namespace Game.Cloud
 
         public async Task Request(Move move)
         {
-            var cardResult = await _gameLogicService.Request(move.ToDto(), _matchId);
+            var moveResult = await _gameLogicService.Request(move.ToDto(), _matchId);
 
-            if (cardResult.HasCard)
+            if (moveResult.WasValid)
             {
-                OnCardReceived?.Invoke(cardResult.Card.ToModel());
-                OnScored?.Invoke(cardResult.DeltaScore, move.Team);
+                OnCardReceived?.Invoke(moveResult.UpdatedGameState.ToModel().Hand[^1]);
+                OnScored?.Invoke(moveResult.DeltaScore, move.Team);
             }
         }
 

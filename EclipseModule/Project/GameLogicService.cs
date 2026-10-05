@@ -78,10 +78,10 @@ public class GameLogicService(IGameApiClient gameApiClient)
 
         MoveRequestResult moveRequestResult = MoveValidator.PlayMove(currentGameState, move) switch
         {
-            MoveValidator.MoveResult.Success(var nextGameState, var drawnCard, var deltaScore) => await
-                SuccessMoveRequestResult(context, matchId, nextGameState, drawnCard, deltaScore),
-            MoveValidator.MoveResult.Invalid => new MoveRequestResult { HasCard = false, },
-            MoveValidator.MoveResult.OutOfSync => new MoveRequestResult { HasCard = false, IsOutOfSync = true },
+            MoveValidator.MoveResult.Success(var nextGameState, var deltaScore) => await
+                SuccessMoveRequestResult(context, matchId, nextGameState, move.Team, deltaScore),
+            MoveValidator.MoveResult.Invalid => new MoveRequestResult { WasValid = false, },
+            MoveValidator.MoveResult.OutOfSync => new MoveRequestResult { WasValid = false, },
             _ => throw new ArgumentOutOfRangeException()
         };
 
@@ -89,17 +89,17 @@ public class GameLogicService(IGameApiClient gameApiClient)
     }
 
     private async Task<MoveRequestResult> SuccessMoveRequestResult(IExecutionContext context, string matchId,
-        GameState next, Card drawnCard, int deltaScore)
+        GameState next, Team team, int deltaScore)
     {
         ApiResponse<SetItemResponse> response = await SetGameState(context, matchId, next);
 
         if (response.StatusCode != HttpStatusCode.OK)
         {
             // maybe start returning an enum instead? Or an algebraic data type so the card can be return?
-            return new MoveRequestResult { HasCard = false, IsOutOfSync = true };
+            return new MoveRequestResult { WasValid = false };
         }
 
-        return new MoveRequestResult { Card = drawnCard, HasCard = true, DeltaScore = deltaScore };
+        return new MoveRequestResult { WasValid = true, UpdatedGameState = next.ToClientGameState(team), DeltaScore = deltaScore };
     }
 
 
