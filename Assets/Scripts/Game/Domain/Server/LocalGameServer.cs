@@ -31,12 +31,12 @@ namespace Game.Domain.Server
 
         public Task<Option<ClientGameState>> Request(Move move)
         {
-            MoveValidator.MoveResult result = MoveValidator.PlayMove(_gameState.Value, move);
+            MoveResult result = MoveValidator.PlayMove(_gameState.Value, move);
 
             _gameState.Value = result switch
             {
-                MoveValidator.MoveResult.Success(var updatedState, _) => updatedState,
-                MoveValidator.MoveResult.Invalid => _gameState.Value,
+                MoveResult.Success(var updatedState, _) => updatedState,
+                MoveResult.Invalid => _gameState.Value,
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -45,9 +45,9 @@ namespace Game.Domain.Server
             return Task.FromResult(Option<ClientGameState>.Some(_gameState.Value.ToClientGameState(move.Team)));
         }
 
-        private void HandleEvents(MoveValidator.MoveResult result, Move move)
+        private void HandleEvents(MoveResult result, Move move)
         {
-            if (result is MoveValidator.MoveResult.Success(var updatedState, var deltaScore))
+            if (result is MoveResult.Success(var updatedState, var deltaScore))
             {
                 OnCardReceived?.Invoke(updatedState.ToClientGameState(move.Team).Hand[^1]);
                 

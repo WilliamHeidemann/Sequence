@@ -109,15 +109,25 @@ namespace Game.Cloud
             return moves.Select(ToModel).ToArray();
         }
 
+        private static Position[] ToModel(this List<Dto.Position> moves)
+        {
+            return moves.Select(ToModel).ToArray();
+        }
+
+        public static Score ToModel(this Dto.Score score)
+        {
+            return new Score(score.Red, score.Yellow);
+        }
+
         public static ClientGameState ToModel(this Dto.ClientGameState clientGameState)
         {
-            return new ClientGameState
-            {
-                Moves = clientGameState.Moves.ToModel(),
-                Hand = clientGameState.Hand.ToModel(),
-                IsMyTurn = clientGameState.IsMyTurn,
-                Team = clientGameState.Team.ToModel()
-            };
+            return new ClientGameState(
+                clientGameState.Moves.ToModel(),
+                clientGameState.Hand.ToModel(),
+                clientGameState.Locked.ToModel(),
+                clientGameState.Team.ToModel(),
+                clientGameState.Score.ToModel(),
+                clientGameState.IsMyTurn);
         }
 
         public static Match ToModel(this Dto.Dto.Match match)

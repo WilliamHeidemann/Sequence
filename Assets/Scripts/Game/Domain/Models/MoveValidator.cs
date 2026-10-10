@@ -43,10 +43,12 @@ namespace Game.Domain.Models
 
             Team toPlay = clientGameState.IsMyTurn ? clientGameState.Team : clientGameState.Team.Opposing();
 
-            return IsValid(move, board, hand, toPlay) ? Option<Move>.Some(move) : Option<Move>.None;
+            return IsValid(move, board, hand, clientGameState.Locked.ToHashSet(), toPlay)
+                ? Option<Move>.Some(move)
+                : Option<Move>.None;
         }
 
-        public static bool IsValid(Move move, Board board, Hand hand, Team toPlay)
+        public static bool IsValid(Move move, Board board, Hand hand, HashSet<Position> locked, Team toPlay)
         {
             if (move.Team != toPlay)
             {
@@ -62,43 +64,25 @@ namespace Game.Domain.Models
                 return false;
             }
 
-            if (!cardInHand.IsRemover())
+            if (cardInHand.Rank == Rank.Jack)
             {
-                return true;
-            }
-
-            bool playerOwnsPosition = board.OwnerIs(move.Position, move.Team);
-
-            return !playerOwnsPosition;
-        }
-
-        public abstract class MoveResult
-        {
-            public class Success : MoveResult
-            {
-                public GameState UpdatedState { get; }
-                public int DeltaScore { get; }
-
-                public Success(GameState updatedState, int deltaScore)
+                board.TryAdd(move.Position, move.Team);
+                var sequences = SequencePatterns.FindSequences(board, move.Team, locked).ToArray();
+                int deltaScore = sequences.Length;
+                if (deltaScore > 0)
                 {
-                    UpdatedState = updatedState;
-                    DeltaScore = deltaScore;
-                }
-
-                public void Deconstruct(out GameState updatedState, out int deltaScore)
-                {
-                    updatedState = UpdatedState;
-                    deltaScore = DeltaScore;
+                    return false;
                 }
             }
 
-            public class Invalid : MoveResult
+            if (cardInHand.IsRemover())
             {
+                bool playerOwnsPosition = board.OwnerIs(move.Position, move.Team);
+
+                return !playerOwnsPosition && !locked.Contains(move.Position);
             }
 
-            public class OutOfSync : MoveResult
-            {
-            }
+            return true;
         }
 
         public static MoveResult PlayMove(GameState gameState, Move move)
@@ -113,7 +97,7 @@ namespace Game.Domain.Models
             Hand hand = new(cardsInHand);
             Board board = new(gameState.Moves);
 
-            if (!IsValid(move, board, hand, gameState.ToPlay))
+            if (!IsValid(move, board, hand, gameState.Locked.ToHashSet(), gameState.ToPlay))
             {
                 return new MoveResult.Invalid();
             }
@@ -135,6 +119,11 @@ namespace Game.Domain.Models
             var sequences = SequencePatterns.FindSequences(board, move.Team, locked).ToArray();
             int deltaScore = sequences.Length;
 
+            if (move.Card.Rank == Rank.Jack && deltaScore > 0)
+            {
+                return new MoveResult.Invalid();
+            }
+
             (Card[] redHand, Card[] yellowHand) = move.Team switch
             {
                 Team.Red => (hand.GetCards(), gameState.YellowHand),
@@ -148,46 +137,6 @@ namespace Game.Domain.Models
                 gameState.Score, move.Team.Opposing());
 
             return new MoveResult.Success(updatedGameState, deltaScore);
-        }
-    }
-
-    public static class SequenceExtension
-    {
-        public static IEnumerable<TResult> CombineAll<T, TResult>(
-            this IEnumerable<T> source, Func<T, T, TResult> combinator)
-        {
-            IEnumerable<T> enumerable = source as T[] ?? source.ToArray();
-
-            foreach (T item1 in enumerable)
-            {
-                foreach (T item2 in enumerable)
-                {
-                    yield return combinator(item1, item2);
-                }
-            }
-        }
-        
-        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(
-            this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector,
-            IEqualityComparer<TKey>? comparer = null)
-        {
-            if (source == null) throw new ArgumentNullException(nameof(source));
-            if (keySelector == null) throw new ArgumentNullException(nameof(keySelector));
-
-            return Iterator();
-
-            IEnumerable<TSource> Iterator()
-            {
-                var knownKeys = new HashSet<TKey>(comparer);
-                foreach (TSource element in source)
-                {
-                    if (knownKeys.Add(keySelector(element)))
-                    {
-                        yield return element;
-                    }
-                }
-            }
         }
     }
 }

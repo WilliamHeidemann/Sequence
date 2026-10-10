@@ -3,6 +3,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release</Configurations>
+    <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Com.Unity.Services.CloudCode.Apis" Version="0.0.26" />

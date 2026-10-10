@@ -2,11 +2,8 @@ using System;
 
 namespace Game.Domain.Models
 {
-    public class Score
+    public record Score(int Red, int Yellow)
     {
-        public int Red;
-        public int Yellow;
-
         public int Get(Team team) =>
             team switch
             {

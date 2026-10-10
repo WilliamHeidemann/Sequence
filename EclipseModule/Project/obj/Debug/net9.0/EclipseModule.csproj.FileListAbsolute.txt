@@ -11,3 +11,16 @@
 /Users/dkWiSkHe/Unity/SEQUENCE/EclipseModule/Project/obj/Debug/net9.0/refint/EclipseModule.dll
 /Users/dkWiSkHe/Unity/SEQUENCE/EclipseModule/Project/obj/Debug/net9.0/EclipseModule.pdb
 /Users/dkWiSkHe/Unity/SEQUENCE/EclipseModule/Project/obj/Debug/net9.0/ref/EclipseModule.dll
+C:\UnityProjects\Eclipse\EclipseModule\Project\bin\Debug\net9.0\EclipseModule.deps.json
+C:\UnityProjects\Eclipse\EclipseModule\Project\bin\Debug\net9.0\EclipseModule.dll
+C:\UnityProjects\Eclipse\EclipseModule\Project\bin\Debug\net9.0\EclipseModule.pdb
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\EclipseModule.csproj.AssemblyReference.cache
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\EclipseModule.GeneratedMSBuildEditorConfig.editorconfig
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\EclipseModule.AssemblyInfoInputs.cache
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\EclipseModule.AssemblyInfo.cs
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\EclipseModule.csproj.CoreCompileInputs.cache
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\EclipseModule.sourcelink.json
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\EclipseModule.dll
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\refint\EclipseModule.dll
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\EclipseModule.pdb
+C:\UnityProjects\Eclipse\EclipseModule\Project\obj\Debug\net9.0\ref\EclipseModule.dll

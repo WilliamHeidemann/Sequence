@@ -78,10 +78,9 @@ public class GameLogicService(IGameApiClient gameApiClient)
 
         MoveRequestResult moveRequestResult = MoveValidator.PlayMove(currentGameState, move) switch
         {
-            MoveValidator.MoveResult.Success(var nextGameState, var deltaScore) => await
+            MoveResult.Success(var nextGameState, var deltaScore) => await
                 SuccessMoveRequestResult(context, matchId, nextGameState, move.Team, deltaScore),
-            MoveValidator.MoveResult.Invalid => new MoveRequestResult { WasValid = false, },
-            MoveValidator.MoveResult.OutOfSync => new MoveRequestResult { WasValid = false, },
+            MoveResult.Invalid => new MoveRequestResult { WasValid = false, },
             _ => throw new ArgumentOutOfRangeException()
         };
 

@@ -31,15 +31,7 @@ namespace Game.Domain.Models
             Card[] hand = team == Team.Red ? RedHand : YellowHand;
             bool isMyTurn = team == ToPlay;
 
-            return new ClientGameState
-            {
-                Moves = Moves,
-                Hand = hand,
-                Team = team,
-                IsMyTurn = isMyTurn,
-                Locked = Locked,
-                Score = Score,
-            };
+            return new ClientGameState(Moves, hand, Locked, team, Score, isMyTurn);
         }
 
         public static GameState CreateInitial()
@@ -54,7 +46,7 @@ namespace Game.Domain.Models
 
             Position[] locked = Array.Empty<Position>();
 
-            Score score = new();
+            Score score = new(0, 0);
 
             Random random = new();
             Team toPlay = random.NextDouble() < 0.5 ? Team.Red : Team.Yellow;

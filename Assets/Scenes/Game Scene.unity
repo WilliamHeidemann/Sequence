@@ -1233,7 +1233,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Eclipse.Presentation::Game.Presentation.AudioPlayer
   _audioContainer: {fileID: 11400000, guid: ad6817c5b8b908f4fbc2e5c0fc93e1c0, type: 2}
-  _audioSourceTemplate: {fileID: 0}
 --- !u!1 &927048356
 GameObject:
   m_ObjectHideFlags: 0
@@ -1497,8 +1496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa0558cd8a1323c43bb918cf57478656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _startIn: 1
-  _mode: 0
+  _startIn: 0
+  _mode: 1
   _mainMenu: {fileID: 1362680818}
   _gameStarter: {fileID: 733830841}
 --- !u!1 &1564673131

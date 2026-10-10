@@ -1,0 +1,8 @@
+C:\Users\William\AppData\Local\Temp\EclipseModule\module-compilation\EclipseModule.dll
+C:\Users\William\AppData\Local\Temp\EclipseModule\module-compilation\EclipseModule.deps.json
+C:\Users\William\AppData\Local\Temp\EclipseModule\module-compilation\EclipseModule.pdb
+C:\Users\William\AppData\Local\Temp\EclipseModule\module-compilation\Unity.Services.CloudCode.Apis.dll
+C:\Users\William\AppData\Local\Temp\EclipseModule\module-compilation\Unity.Services.CloudCode.Core.dll
+C:\Users\William\AppData\Local\Temp\EclipseModule\module-compilation\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\William\AppData\Local\Temp\EclipseModule\module-compilation\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\William\AppData\Local\Temp\EclipseModule\module-compilation\Newtonsoft.Json.dll
