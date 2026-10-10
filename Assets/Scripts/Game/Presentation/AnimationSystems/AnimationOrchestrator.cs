@@ -65,7 +65,7 @@ namespace Game.Presentation.AnimationSystems
 
         public void PlayDiscardAndPinAnimation(Move move)
         {
-            _animationQueue.Enqueue(Play);
+            Play().Forget();
             return;
 
             async Awaitable Play()
